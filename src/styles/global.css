@@ -139,3 +139,69 @@ body {
     transform: rotate(360deg) translateX(18px) rotate(-360deg);
   }
 }
+
+/* Coming Soon Page  */
+
+.coming-soon-page {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+.coming-soon-card {
+  max-width: 720px;
+  width: 100%;
+  text-align: center;
+  padding: 56px 40px;
+  border-radius: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+}
+
+.coming-soon-card .eyebrow {
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.coming-soon-card h1 {
+  margin: 0 0 16px;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.05;
+  color: #0f172a;
+}
+
+.coming-soon-text {
+  max-width: 520px;
+  margin: 0 auto 32px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.coming-soon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.coming-soon-button:hover {
+  transform: translateY(-2px);
+  background: #1e293b;
+}
+
+/* Coming Soon Page End */
