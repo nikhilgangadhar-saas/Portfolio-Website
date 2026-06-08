@@ -31,3 +31,8 @@ api/config.php
 .env
 node_modules/
 dist/
+
+node_modules/
+dist/
+.env
+.env.local
