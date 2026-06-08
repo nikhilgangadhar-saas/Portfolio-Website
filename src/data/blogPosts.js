@@ -397,7 +397,7 @@ export const blogPosts = [
     date: '2026-06-11',
     day: 'Thursday',
     category: 'Azure Data Platforms',
-    status: 'published',
+    status: 'draft',
     readTime: '6 min read',
     author: 'Nikhil Gangadharappa',
     excerpt:
