@@ -10,13 +10,29 @@ const contactReasons = [
   'Case Study / Similar Work',
   'Content / Collaboration',
 ]
+
 const countryOptions = [
-  'United Arab Emirates','Saudi Arabia',
-  'Qatar','Oman','Bahrain','Kuwait',
-  'Libya','Lebanon','Turkey','India',
-  'United Kingdom','Australia','New Zealand','Japan',
-  'European Union','United States','Canada','Other',
+  '',
+  'United Arab Emirates',
+  'Saudi Arabia',
+  'Qatar',
+  'Oman',
+  'Bahrain',
+  'Kuwait',
+  'Libya',
+  'Lebanon',
+  'Turkey',
+  'India',
+  'United Kingdom',
+  'Australia',
+  'New Zealand',
+  'Japan',
+  'European Union',
+  'United States',
+  'Canada',
+  'Other',
 ]
+
 const nextSteps = [
   'I review the problem and category selected.',
   'I reply with the best next path: product, advisory, design, or implementation.',
@@ -47,6 +63,15 @@ export default function Contact() {
 
   async function handleSubmit(event) {
     event.preventDefault()
+
+    trackEvent('contact_submit_attempt', {
+      event_category: 'contact',
+      event_label: 'Submit Request clicked',
+      form_name: 'contact_form',
+      reason: formData.reason,
+      country: formData.country || 'not_provided',
+    })
+
     setIsSubmitting(true)
     setSubmitStatus(null)
 
@@ -67,7 +92,11 @@ export default function Contact() {
       if (!response.ok || !result.success) {
         throw new Error(result.message || 'Submission failed')
       }
+
       trackEvent('contact_form_submit', {
+        event_category: 'contact',
+        event_label: 'Contact form submitted successfully',
+        form_name: 'contact_form',
         reason: formData.reason,
         country: formData.country || 'not_provided',
       })
@@ -88,6 +117,15 @@ export default function Contact() {
     } catch (error) {
       console.error(error)
 
+      trackEvent('contact_form_error', {
+        event_category: 'contact',
+        event_label: 'Contact form submission failed',
+        form_name: 'contact_form',
+        reason: formData.reason,
+        country: formData.country || 'not_provided',
+        error_message: error.message || 'unknown_error',
+      })
+
       setSubmitStatus({
         type: 'error',
         message:
@@ -103,7 +141,7 @@ export default function Contact() {
       <section className="relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0 bg-premium-grid opacity-70" />
         <div className="motion-blob-one absolute -left-32 top-10 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
-        <div className="motion-blob-two absolute right-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
+        <div className="motion-blob-two absolute bottom-0 right-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-5 py-20 md:py-24">
           <div className="max-w-4xl">
@@ -133,7 +171,7 @@ export default function Contact() {
       <section className="relative overflow-hidden bg-[#f4f7fb]">
         <div className="absolute inset-0 bg-soft-grid opacity-70" />
         <div className="absolute -left-32 top-40 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
-        <div className="absolute right-0 bottom-40 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
+        <div className="absolute bottom-40 right-0 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
 
         <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[0.8fr_1.2fr]">
           <aside className="space-y-6">
@@ -148,7 +186,6 @@ export default function Contact() {
 
               <div className="mt-6 grid gap-2">
                 {contactReasons.map((reason) => (
-                  
                   <button
                     key={reason}
                     type="button"
@@ -181,6 +218,7 @@ export default function Contact() {
                     <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-50 text-xs font-black text-blue-700">
                       {index + 1}
                     </div>
+
                     <div className="text-sm leading-6 text-slate-700">
                       {step}
                     </div>
@@ -193,6 +231,7 @@ export default function Contact() {
               <div className="text-sm font-bold text-white">
                 Direct contact
               </div>
+
               <p className="mt-3 text-sm leading-6 text-slate-400">
                 Later we can add your email, LinkedIn, WhatsApp, booking link,
                 and newsletter signup here.
@@ -244,29 +283,31 @@ export default function Contact() {
                   onChange={handleChange}
                 />
 
-               <div>
-  <label className="text-sm font-bold text-slate-800">
-    Country
-  </label>
-  <select
-    name="country"
-    value={formData.country}
-    onChange={handleChange}
-    className="mt-2 w-full rounded-2xl border border-slate-200 bg-[#f4f7fb] px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white"
-  >
-    {countryOptions.map((country) => (
-      <option key={country || 'empty'} value={country}>
-        {country || 'Select country'}
-      </option>
-    ))}
-  </select>
-</div>
+                <div>
+                  <label className="text-sm font-bold text-slate-800">
+                    Country
+                  </label>
+
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-[#f4f7fb] px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white"
+                  >
+                    {countryOptions.map((country) => (
+                      <option key={country || 'empty'} value={country}>
+                        {country || 'Select country'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
                 <label className="text-sm font-bold text-slate-800">
                   Reason
                 </label>
+
                 <select
                   name="reason"
                   value={formData.reason}
@@ -285,6 +326,7 @@ export default function Contact() {
                 <label className="text-sm font-bold text-slate-800">
                   Message
                 </label>
+
                 <textarea
                   name="message"
                   value={formData.message}
@@ -334,6 +376,7 @@ function Field({
   return (
     <div>
       <label className="text-sm font-bold text-slate-800">{label}</label>
+
       <input
         name={name}
         type={type}

@@ -1,31 +1,40 @@
-export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
+export const GA_MEASUREMENT_ID =
+  import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-DXCXME71XQ'
+
+let isGAInitialized = false
 
 export function initGA() {
   if (!GA_MEASUREMENT_ID) return
-  if (window.gtag) return
+  if (isGAInitialized) return
 
-  const script1 = document.createElement('script')
-  script1.async = true
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
-  document.head.appendChild(script1)
+  if (!window.gtag) {
+    const script = document.createElement('script')
+    script.async = true
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
+    document.head.appendChild(script)
 
-  const script2 = document.createElement('script')
-  script2.innerHTML = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', '${GA_MEASUREMENT_ID}', {
-      send_page_view: false
-    });
-  `
-  document.head.appendChild(script2)
-}
+    window.dataLayer = window.dataLayer || []
 
-export function trackPageView(path) {
-  if (!GA_MEASUREMENT_ID || !window.gtag) return
+    window.gtag = function gtag() {
+      window.dataLayer.push(arguments)
+    }
+
+    window.gtag('js', new Date())
+  }
 
   window.gtag('config', GA_MEASUREMENT_ID, {
+    send_page_view: false,
+  })
+
+  isGAInitialized = true
+}
+
+export function trackPageView(path, title = document.title) {
+  if (!GA_MEASUREMENT_ID || !window.gtag) return
+
+  window.gtag('event', 'page_view', {
+    page_title: title,
+    page_location: window.location.href,
     page_path: path,
   })
 }
@@ -33,5 +42,9 @@ export function trackPageView(path) {
 export function trackEvent(eventName, params = {}) {
   if (!GA_MEASUREMENT_ID || !window.gtag) return
 
-  window.gtag('event', eventName, params)
+  window.gtag('event', eventName, {
+    page_location: window.location.href,
+    page_path: window.location.pathname,
+    ...params,
+  })
 }
