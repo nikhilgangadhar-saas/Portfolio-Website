@@ -22,7 +22,7 @@ export const blogPosts = [
     audience:
       'Business leaders, ERP owners, finance leaders, operations heads, procurement leaders, warehouse / SCM leaders, and transformation teams',
     linkedinUrl: '',
-    coverImage: '/blog/erp-is-an-enterprise-operating-model-not-just-software/erp-implementation-cycle-cover.png',
+    coverImage: '/blog-assets/erp-is-an-enterprise-operating-model-not-just-software/erp-implementation-cycle-cover.png',
     youtubeEmbedUrl: '',
     externalLinks: [],
     sections: [
@@ -228,7 +228,7 @@ export const blogPosts = [
         highlight:
           'SAP is not always the fix. Neither is any other single platform. The correct question is: which solution gives the required control, scalability, usability, integration, and return for this business at this stage?',
         image: {
-          src: '/blog/erp-is-an-enterprise-operating-model-not-just-software/erp-implementation-cycle.png',
+          src: '/blog-assets/erp-is-an-enterprise-operating-model-not-just-software/erp-implementation-cycle.png',
           alt: 'ERP implementation cycle and true ERP cost view',
         },
       },
