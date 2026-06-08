@@ -139,7 +139,7 @@ export default function Contact() {
           <aside className="space-y-6">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
               <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Contact Reasons
+                Let's Talk
               </div>
 
               <h2 className="mt-3 text-3xl font-extrabold text-slate-950">
