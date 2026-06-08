@@ -10,6 +10,7 @@ import BlogDetail from './pages/BlogDetail'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
+import Demos from './pages/Demos'
 
 import GA4RouteTracker from './components/analytics/GA4RouteTracker'
 
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
+          <Route path="/demos" element={<Demos />} />
           <Route path="/contact" element={<Contact />} />
 
           <Route path="*" element={<NotFound />} />
