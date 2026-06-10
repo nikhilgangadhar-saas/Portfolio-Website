@@ -249,214 +249,51 @@ async function loadMarketData() {
 async function loadFuelPrices() {
   try {
     const response = await fetch(fuelApi);
-    const data = await response.json();
+    const apiResponse = await response.json();
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "Fuel failed");
+    if (!response.ok || !apiResponse.success) {
+      throw new Error(apiResponse.message || "Fuel failed");
     }
 
-    const fuelData = data.data;
-    const mappedPrices = normalizeFuelPrices(fuelData);
+    const fuelPayload = apiResponse.data?.data;
+    const fuels = fuelPayload?.fuels || [];
+    const periodLabel = fuelPayload?.period?.label_en || "";
 
-    if (mappedPrices.length === 0) {
+    if (!Array.isArray(fuels) || fuels.length === 0) {
       els.petrolList.innerHTML = `
         <div class="notice red">
-          Fuel API loaded, but response format needs mapping.
+          Fuel API loaded, but no fuel prices found.
         </div>
       `;
       return;
     }
 
+    const order = {
+      "e_plus_91": 1,
+      "special_95": 2,
+      "super_98": 3,
+      "diesel": 4
+    };
+
+    const mappedPrices = fuels
+      .slice()
+      .sort((a, b) => (order[a.code] || 99) - (order[b.code] || 99))
+      .map((fuel) => ({
+        name: fuel.label_en || fuel.code || "Fuel",
+        price: `AED ${Number(fuel.price_aed).toFixed(2)} / L`,
+        meta: periodLabel
+      }));
+
     els.petrolList.innerHTML = mappedPrices
-      .map((item) => quoteRow(item.name, item.price, item.meta || ""))
+      .map((item) => quoteRow(item.name, item.price, item.meta))
       .join("");
-  } catch {
+  } catch (error) {
     els.petrolList.innerHTML = `
       <div class="notice red">
         Fuel prices failed to load.
       </div>
     `;
   }
-}
-
-function normalizeFuelPrices(input) {
-  if (!input) return [];
-
-  const rows = [];
-  const seen = new Set();
-
-  function addRow(label, value, meta = "") {
-    const price = formatFuelPrice(value);
-
-    if (!label || price === "--") return;
-
-    const key = label.toLowerCase();
-
-    if (seen.has(key)) return;
-
-    seen.add(key);
-
-    rows.push({
-      name: label,
-      price,
-      meta
-    });
-  }
-
-  function detectFuelLabel(text) {
-    const value = String(text || "").toLowerCase();
-
-    if (
-      (value.includes("e-plus") || value.includes("eplus") || value.includes("e plus")) &&
-      value.includes("91")
-    ) {
-      return "E-Plus 91";
-    }
-
-    if (value.includes("special") && value.includes("95")) {
-      return "Special 95";
-    }
-
-    if (value.includes("super") && value.includes("98")) {
-      return "Super 98";
-    }
-
-    if (value.includes("diesel")) {
-      return "Diesel";
-    }
-
-    return null;
-  }
-
-  function findPriceValue(obj) {
-    if (obj === null || obj === undefined) return null;
-
-    if (typeof obj === "number" || typeof obj === "string") {
-      return obj;
-    }
-
-    if (typeof obj !== "object") return null;
-
-    const priceKeys = [
-      "price",
-      "value",
-      "rate",
-      "amount",
-      "current",
-      "currentPrice",
-      "priceAED",
-      "aed",
-      "per_litre",
-      "perLiter",
-      "perLitre"
-    ];
-
-    for (const key of priceKeys) {
-      if (obj[key] !== undefined && obj[key] !== null) {
-        return obj[key];
-      }
-    }
-
-    return null;
-  }
-
-  function findMeta(obj) {
-    if (!obj || typeof obj !== "object") return "";
-
-    return (
-      obj.month ||
-      obj.period ||
-      obj.effective_month ||
-      obj.effectiveMonth ||
-      obj.date ||
-      input.month ||
-      input.period ||
-      ""
-    );
-  }
-
-  function walk(node, parentKey = "") {
-    if (node === null || node === undefined) return;
-
-    if (Array.isArray(node)) {
-      node.forEach((item) => walk(item, parentKey));
-      return;
-    }
-
-    if (typeof node !== "object") {
-      const label = detectFuelLabel(parentKey);
-
-      if (label) {
-        addRow(label, node);
-      }
-
-      return;
-    }
-
-    const objectLabel =
-      detectFuelLabel(parentKey) ||
-      detectFuelLabel(node.name) ||
-      detectFuelLabel(node.type) ||
-      detectFuelLabel(node.fuel_type) ||
-      detectFuelLabel(node.fuelType) ||
-      detectFuelLabel(node.product) ||
-      detectFuelLabel(node.title) ||
-      detectFuelLabel(node.label);
-
-    if (objectLabel) {
-      addRow(objectLabel, findPriceValue(node), findMeta(node));
-    }
-
-    Object.entries(node).forEach(([key, value]) => {
-      const keyLabel = detectFuelLabel(key);
-
-      if (keyLabel) {
-        addRow(keyLabel, findPriceValue(value), findMeta(value));
-      }
-
-      walk(value, key);
-    });
-  }
-
-  walk(input);
-
-  const order = {
-    "E-Plus 91": 1,
-    "Special 95": 2,
-    "Super 98": 3,
-    "Diesel": 4
-  };
-
-  return rows.sort((a, b) => (order[a.name] || 99) - (order[b.name] || 99));
-}
-
-function formatFuelPrice(value) {
-  if (value === null || value === undefined || value === "") return "--";
-
-  if (typeof value === "object") {
-    const nestedValue =
-      value.price ||
-      value.value ||
-      value.rate ||
-      value.amount ||
-      value.current ||
-      value.currentPrice ||
-      value.priceAED ||
-      value.aed ||
-      value.per_litre ||
-      value.perLiter ||
-      value.perLitre;
-
-    return formatFuelPrice(nestedValue);
-  }
-
-  const number = Number(String(value).replace(/[^\d.]/g, ""));
-
-  if (Number.isNaN(number)) {
-    return String(value);
-  }
-
-  return `AED ${number.toFixed(2)} / L`;
 }
 
 /* -----------------------------
