@@ -25,88 +25,89 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit;
 }
 
-function fetchStooqQuote($symbol) {
-    $url = "https://stooq.com/q/l/?s=" . urlencode($symbol) . "&f=sd2t2ohlcv&h&e=csv";
+function fetchYahooQuote($symbol, $name) {
+    $url = "https://query1.finance.yahoo.com/v8/finance/chart/" . urlencode($symbol) . "?range=1d&interval=1d";
 
-    $context = stream_context_create([
-        "http" => [
-            "timeout" => 8,
-            "header" => "User-Agent: Mozilla/5.0\r\n"
+    $ch = curl_init($url);
+
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 12,
+        CURLOPT_HTTPHEADER => [
+            "User-Agent: Mozilla/5.0",
+            "Accept: application/json"
         ]
     ]);
 
-    $csv = @file_get_contents($url, false, $context);
+    $body = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    if (!$csv) {
-        return null;
+    curl_close($ch);
+
+    if (!$body || $httpCode < 200 || $httpCode >= 300) {
+        return [
+            "symbol" => $symbol,
+            "name" => $name,
+            "price" => null,
+            "changePercent" => null,
+            "status" => "failed"
+        ];
     }
 
-    $lines = array_map("trim", explode("\n", trim($csv)));
+    $data = json_decode($body, true);
+    $result = $data["chart"]["result"][0] ?? null;
 
-    if (count($lines) < 2) {
-        return null;
+    if (!$result) {
+        return [
+            "symbol" => $symbol,
+            "name" => $name,
+            "price" => null,
+            "changePercent" => null,
+            "status" => "no_data"
+        ];
     }
 
-    $headers = str_getcsv($lines[0]);
-    $values = str_getcsv($lines[1]);
+    $meta = $result["meta"] ?? [];
 
-    if (count($headers) !== count($values)) {
-        return null;
-    }
-
-    $row = array_combine($headers, $values);
-
-    if (!$row || ($row["Close"] ?? "N/D") === "N/D") {
-        return null;
-    }
-
-    $open = is_numeric($row["Open"] ?? null) ? (float)$row["Open"] : null;
-    $close = is_numeric($row["Close"] ?? null) ? (float)$row["Close"] : null;
+    $price = $meta["regularMarketPrice"] ?? null;
+    $previousClose = $meta["chartPreviousClose"] ?? null;
 
     $changePercent = null;
 
-    if ($open && $close) {
-        $changePercent = (($close - $open) / $open) * 100;
+    if ($price && $previousClose) {
+        $changePercent = (($price - $previousClose) / $previousClose) * 100;
     }
 
     return [
         "symbol" => $symbol,
-        "date" => $row["Date"] ?? null,
-        "time" => $row["Time"] ?? null,
-        "open" => $open,
-        "high" => is_numeric($row["High"] ?? null) ? (float)$row["High"] : null,
-        "low" => is_numeric($row["Low"] ?? null) ? (float)$row["Low"] : null,
-        "close" => $close,
-        "volume" => $row["Volume"] ?? null,
-        "changePercent" => $changePercent
+        "name" => $name,
+        "price" => $price,
+        "previousClose" => $previousClose,
+        "changePercent" => $changePercent,
+        "currency" => $meta["currency"] ?? "USD",
+        "status" => "ok"
     ];
 }
 
-$symbols = [
-    "gld.us" => "GLD",
-    "slv.us" => "SLV",
-    "voo.us" => "VOO",
-    "qqq.us" => "QQQ",
-    "bnd.us" => "BND",
-    "xauusd" => "Gold Spot",
-    "xagusd" => "Silver Spot"
+$assets = [
+    ["symbol" => "GLD", "name" => "GLD"],
+    ["symbol" => "SLV", "name" => "SLV"],
+    ["symbol" => "VOO", "name" => "VOO"],
+    ["symbol" => "QQQ", "name" => "QQQ"],
+    ["symbol" => "BND", "name" => "BND"],
+    ["symbol" => "GC=F", "name" => "Gold Futures"],
+    ["symbol" => "SI=F", "name" => "Silver Futures"]
 ];
 
 $quotes = [];
 
-foreach ($symbols as $stooqSymbol => $displayName) {
-    $quote = fetchStooqQuote($stooqSymbol);
-
-    $quotes[] = [
-        "key" => $stooqSymbol,
-        "name" => $displayName,
-        "quote" => $quote
-    ];
+foreach ($assets as $asset) {
+    $quotes[] = fetchYahooQuote($asset["symbol"], $asset["name"]);
 }
 
 echo json_encode([
     "success" => true,
-    "provider" => "stooq",
+    "provider" => "yahoo-chart",
     "quotes" => $quotes,
     "fetchedAt" => gmdate("c")
 ]);
