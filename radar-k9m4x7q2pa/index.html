@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Radar</title>
+    <link rel="stylesheet" href="./radar.css" />
+  </head>
+  <body>
+    <main class="radar-page">
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">Daily Radar</p>
+          <h1 id="todayTitle">Loading...</h1>
+          <p id="refreshTime" class="muted">Last refreshed: --</p>
+        </div>
+      </section>
+
+      <section class="radar-card attention-card">
+        <h2>Attention Needed</h2>
+        <div id="attentionList" class="attention-list">
+          Loading...
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>Weather</h2>
+        <div class="placeholder-grid">
+          <div>Current</div>
+          <strong>Manual/API later</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>Market Watch</h2>
+        <div class="simple-table">
+          <div>GLD</div><strong>--</strong>
+          <div>SLV</div><strong>--</strong>
+          <div>VOO</div><strong>--</strong>
+          <div>QQQ</div><strong>--</strong>
+          <div>BND</div><strong>--</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>Currency Watch</h2>
+        <div class="simple-table">
+          <div>AED-INR</div><strong>--</strong>
+          <div>USD-INR</div><strong>--</strong>
+          <div>AED-EUR</div><strong>--</strong>
+          <div>EUR-INR</div><strong>--</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>UAE Petrol Prices</h2>
+        <div class="simple-table">
+          <div>E-Plus 91</div><strong>--</strong>
+          <div>Special 95</div><strong>--</strong>
+          <div>Super 98</div><strong>--</strong>
+          <div>Diesel</div><strong>--</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>UAE Gold & Silver</h2>
+        <div class="simple-table">
+          <div>24K Gold</div><strong>--</strong>
+          <div>22K Gold</div><strong>--</strong>
+          <div>21K Gold</div><strong>--</strong>
+          <div>18K Gold</div><strong>--</strong>
+          <div>Silver</div><strong>--</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <h2>India Gold & Silver</h2>
+        <div class="simple-table">
+          <div>24K Gold</div><strong>--</strong>
+          <div>22K Gold</div><strong>--</strong>
+          <div>18K Gold</div><strong>--</strong>
+          <div>Silver</div><strong>--</strong>
+        </div>
+      </section>
+
+      <section class="radar-card">
+        <div class="section-header">
+          <div>
+            <h2>Payments Tracker</h2>
+            <p id="paymentMonth" class="muted">Month: --</p>
+          </div>
+          <button id="reloadPaymentsBtn" class="secondary-btn">Refresh</button>
+        </div>
+
+        <div id="paymentsList" class="payments-list">
+          Loading payments...
+        </div>
+      </section>
+    </main>
+
+    <script src="./radar.js"></script>
+  </body>
+</html>
