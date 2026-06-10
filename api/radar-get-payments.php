@@ -28,24 +28,34 @@ try {
         ]
     );
 
-    $stmt = $pdo->query("
+    $uaeDate = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+    $currentMonth = $uaeDate->format("Y-m");
+
+    $stmt = $pdo->prepare("
         SELECT
-            item_code AS code,
-            item_title AS title,
-            item_type AS itemType,
-            description,
-            delivery_mode AS deliveryMode
-        FROM demo_items
+            payment_key,
+            payment_name,
+            due_day,
+            completed_month,
+            CASE
+                WHEN completed_month = :currentMonth THEN 1
+                ELSE 0
+            END AS is_completed,
+            sort_order,
+            updated_at
+        FROM radar_payment_status
         WHERE is_active = 1
-          AND is_coming_soon = 0
-        ORDER BY sort_order ASC, item_title ASC
+        ORDER BY sort_order ASC
     ");
 
-    $items = $stmt->fetchAll();
+    $stmt->execute([
+        ":currentMonth" => $currentMonth
+    ]);
 
     echo json_encode([
         "success" => true,
-        "items" => $items
+        "currentMonth" => $currentMonth,
+        "payments" => $stmt->fetchAll()
     ]);
 } catch (Exception $e) {
     http_response_code(500);

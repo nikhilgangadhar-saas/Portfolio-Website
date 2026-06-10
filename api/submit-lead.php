@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-require_once __DIR__ . '/home/u312587281/ng-config.php';
+require_once '/home/u312587281/domains/nikhilgangadhar.com/ng-config.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);

@@ -1,0 +1,208 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 32rem),
+    #0f172a;
+}
+
+.radar-page {
+  width: min(980px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 28px 0 48px;
+}
+
+.hero-card,
+.radar-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.84);
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+}
+
+.hero-card h1 {
+  margin: 4px 0 6px;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  letter-spacing: -0.04em;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.muted {
+  color: #94a3b8;
+  margin: 0;
+}
+
+h2 {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.simple-table,
+.placeholder-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 16px;
+  color: #cbd5e1;
+}
+
+.simple-table strong,
+.placeholder-grid strong {
+  color: #f8fafc;
+}
+
+.attention-list {
+  display: grid;
+  gap: 10px;
+}
+
+.attention-item,
+.green-note,
+.error-note {
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(30, 41, 59, 0.72);
+}
+
+.attention-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.attention-item small {
+  color: #fecaca;
+}
+
+.green-note {
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #bbf7d0;
+}
+
+.error-note {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+}
+
+.payments-list {
+  display: grid;
+  gap: 12px;
+}
+
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(30, 41, 59, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.payment-row strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.payment-row span {
+  color: #94a3b8;
+}
+
+.payment-row.red {
+  border-color: rgba(248, 113, 113, 0.44);
+}
+
+.payment-row.green {
+  border-color: rgba(74, 222, 128, 0.32);
+}
+
+.payment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.status-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.status-pill.red {
+  background: rgba(127, 29, 29, 0.55);
+  color: #fecaca;
+}
+
+.status-pill.green {
+  background: rgba(20, 83, 45, 0.55);
+  color: #bbf7d0;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 9px 13px;
+}
+
+.mark-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.secondary-btn {
+  background: rgba(148, 163, 184, 0.16);
+  color: #e5e7eb;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .payment-row,
+  .section-header,
+  .attention-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .payment-actions {
+    justify-content: flex-start;
+  }
+}
