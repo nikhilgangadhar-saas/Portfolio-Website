@@ -98,7 +98,7 @@ async function loadWeather() {
     const current = data.current;
 
     els.currentTemp.textContent = `${round(current.temperature_2m)}°C`;
-    els.currentWeather.textContent = weatherCodeToText(current.weather_code);
+    els.currentWeather.textContent = "Current temperature";
     els.feelsLike.textContent = `${round(current.apparent_temperature)}°C`;
     els.humidity.textContent = `${round(current.relative_humidity_2m)}%`;
     els.windSpeed.textContent = `${round(current.wind_speed_10m)} km/h`;
@@ -282,127 +282,152 @@ async function loadFuelPrices() {
 function normalizeFuelPrices(input) {
   if (!input) return [];
 
-  /*
-    Supports multiple possible provider response shapes.
-    If this does not map cleanly after deploy, open:
-    /api/radar-fuel-prices.php
-    and send the JSON response.
-  */
+  const rows = [];
+  const seen = new Set();
 
-  const candidate =
-    input.prices ||
-    input.data ||
-    input.fuelPrices ||
-    input.fuel_prices ||
-    input.result ||
-    input;
+  function addRow(label, value, meta = "") {
+    const price = formatFuelPrice(value);
 
-  if (Array.isArray(candidate)) {
-    return candidate
-      .map((item) => ({
-        name:
-          item.name ||
-          item.type ||
-          item.fuel_type ||
-          item.fuelType ||
-          item.product ||
-          item.title ||
-          "Fuel",
-        price: formatFuelPrice(
-          item.price ||
-          item.value ||
-          item.rate ||
-          item.amount ||
-          item.current
-        ),
-        meta:
-          item.month ||
-          item.period ||
-          item.date ||
-          input.month ||
-          input.period ||
-          ""
-      }))
-      .filter((item) => item.price !== "--");
+    if (!label || price === "--") return;
+
+    const key = label.toLowerCase();
+
+    if (seen.has(key)) return;
+
+    seen.add(key);
+
+    rows.push({
+      name: label,
+      price,
+      meta
+    });
   }
 
-  if (typeof candidate !== "object") return [];
+  function detectFuelLabel(text) {
+    const value = String(text || "").toLowerCase();
 
-  const rows = [];
-
-  const possibleKeys = [
-    ["eplus91", "E-Plus 91"],
-    ["e_plus_91", "E-Plus 91"],
-    ["ePlus91", "E-Plus 91"],
-    ["eplus_91", "E-Plus 91"],
-    ["EPlus91", "E-Plus 91"],
-    ["e-plus-91", "E-Plus 91"],
-
-    ["special95", "Special 95"],
-    ["special_95", "Special 95"],
-    ["special95Price", "Special 95"],
-    ["Special95", "Special 95"],
-    ["special-95", "Special 95"],
-
-    ["super98", "Super 98"],
-    ["super_98", "Super 98"],
-    ["super98Price", "Super 98"],
-    ["Super98", "Super 98"],
-    ["super-98", "Super 98"],
-
-    ["diesel", "Diesel"],
-    ["dieselPrice", "Diesel"],
-    ["Diesel", "Diesel"]
-  ];
-
-  possibleKeys.forEach(([key, label]) => {
-    if (candidate[key] !== undefined && candidate[key] !== null) {
-      rows.push({
-        name: label,
-        price: formatFuelPrice(candidate[key]),
-        meta: candidate.month || candidate.period || input.month || input.period || ""
-      });
+    if (
+      (value.includes("e-plus") || value.includes("eplus") || value.includes("e plus")) &&
+      value.includes("91")
+    ) {
+      return "E-Plus 91";
     }
-  });
 
-  /*
-    Some APIs return nested objects like:
-    {
-      "Super 98": { price: 2.58 },
-      "Special 95": { price: 2.47 }
+    if (value.includes("special") && value.includes("95")) {
+      return "Special 95";
     }
-  */
-  Object.entries(candidate).forEach(([key, value]) => {
-    const normalizedKey = key.toLowerCase();
 
-    const alreadyAdded = rows.some((row) =>
-      normalizedKey.includes(row.name.toLowerCase().replace(" ", ""))
+    if (value.includes("super") && value.includes("98")) {
+      return "Super 98";
+    }
+
+    if (value.includes("diesel")) {
+      return "Diesel";
+    }
+
+    return null;
+  }
+
+  function findPriceValue(obj) {
+    if (obj === null || obj === undefined) return null;
+
+    if (typeof obj === "number" || typeof obj === "string") {
+      return obj;
+    }
+
+    if (typeof obj !== "object") return null;
+
+    const priceKeys = [
+      "price",
+      "value",
+      "rate",
+      "amount",
+      "current",
+      "currentPrice",
+      "priceAED",
+      "aed",
+      "per_litre",
+      "perLiter",
+      "perLitre"
+    ];
+
+    for (const key of priceKeys) {
+      if (obj[key] !== undefined && obj[key] !== null) {
+        return obj[key];
+      }
+    }
+
+    return null;
+  }
+
+  function findMeta(obj) {
+    if (!obj || typeof obj !== "object") return "";
+
+    return (
+      obj.month ||
+      obj.period ||
+      obj.effective_month ||
+      obj.effectiveMonth ||
+      obj.date ||
+      input.month ||
+      input.period ||
+      ""
     );
+  }
 
-    if (alreadyAdded) return;
+  function walk(node, parentKey = "") {
+    if (node === null || node === undefined) return;
 
-    let label = null;
-
-    if (normalizedKey.includes("e") && normalizedKey.includes("91")) {
-      label = "E-Plus 91";
-    } else if (normalizedKey.includes("special") && normalizedKey.includes("95")) {
-      label = "Special 95";
-    } else if (normalizedKey.includes("super") && normalizedKey.includes("98")) {
-      label = "Super 98";
-    } else if (normalizedKey.includes("diesel")) {
-      label = "Diesel";
+    if (Array.isArray(node)) {
+      node.forEach((item) => walk(item, parentKey));
+      return;
     }
 
-    if (label) {
-      rows.push({
-        name: label,
-        price: formatFuelPrice(value),
-        meta: candidate.month || candidate.period || input.month || input.period || ""
-      });
-    }
-  });
+    if (typeof node !== "object") {
+      const label = detectFuelLabel(parentKey);
 
-  return rows;
+      if (label) {
+        addRow(label, node);
+      }
+
+      return;
+    }
+
+    const objectLabel =
+      detectFuelLabel(parentKey) ||
+      detectFuelLabel(node.name) ||
+      detectFuelLabel(node.type) ||
+      detectFuelLabel(node.fuel_type) ||
+      detectFuelLabel(node.fuelType) ||
+      detectFuelLabel(node.product) ||
+      detectFuelLabel(node.title) ||
+      detectFuelLabel(node.label);
+
+    if (objectLabel) {
+      addRow(objectLabel, findPriceValue(node), findMeta(node));
+    }
+
+    Object.entries(node).forEach(([key, value]) => {
+      const keyLabel = detectFuelLabel(key);
+
+      if (keyLabel) {
+        addRow(keyLabel, findPriceValue(value), findMeta(value));
+      }
+
+      walk(value, key);
+    });
+  }
+
+  walk(input);
+
+  const order = {
+    "E-Plus 91": 1,
+    "Special 95": 2,
+    "Super 98": 3,
+    "Diesel": 4
+  };
+
+  return rows.sort((a, b) => (order[a.name] || 99) - (order[b.name] || 99));
 }
 
 function formatFuelPrice(value) {
@@ -415,7 +440,12 @@ function formatFuelPrice(value) {
       value.rate ||
       value.amount ||
       value.current ||
-      value.aed;
+      value.currentPrice ||
+      value.priceAED ||
+      value.aed ||
+      value.per_litre ||
+      value.perLiter ||
+      value.perLitre;
 
     return formatFuelPrice(nestedValue);
   }
@@ -545,7 +575,7 @@ async function loadPayments() {
 }
 
 function renderAttention(payments) {
-  const pending = payments.filter((payment) => Number(payment.is_completed) !== 1);
+  const pending = payments.filter((payment) => !isPaymentCompleted(payment));
 
   els.heroPendingCount.textContent = `${pending.length} red`;
 
@@ -563,7 +593,7 @@ function renderAttention(payments) {
       (payment) => `
         <div class="attention-item">
           <strong>🔴 ${escapeHtml(payment.payment_name)}</strong>
-          <span>${getDueLabel(payment.due_day)}</span>
+          <span>${getDueLabel(payment.due_day, payment.payment_key)}</span>
         </div>
       `
     )
@@ -573,13 +603,13 @@ function renderAttention(payments) {
 function renderPayments(payments) {
   els.paymentsList.innerHTML = payments
     .map((payment) => {
-      const isCompleted = Number(payment.is_completed) === 1;
+      const isCompleted = isPaymentCompleted(payment);
 
       return `
         <div class="payment-row ${isCompleted ? "green" : "red"}">
           <div>
             <strong>${escapeHtml(payment.payment_name)}</strong>
-            <span>${getDueLabel(payment.due_day)}</span>
+            <span>${getDueLabel(payment.due_day, payment.payment_key)}</span>
           </div>
 
           <div class="payment-actions">
@@ -658,7 +688,11 @@ function metalTile(name, value) {
   `;
 }
 
-function getDueLabel(dueDay) {
+function getDueLabel(dueDay, paymentKey = "") {
+  if (paymentKey === "cc_uae" || Number(dueDay) === 31) {
+    return "Due last day of month";
+  }
+
   return `Due ${dueDay}${getDaySuffix(Number(dueDay))}`;
 }
 
@@ -677,30 +711,20 @@ function getDaySuffix(day) {
   }
 }
 
-function weatherCodeToText(code) {
-  const map = {
-    0: "Clear",
-    1: "Mostly clear",
-    2: "Partly cloudy",
-    3: "Cloudy",
-    45: "Fog",
-    48: "Rime fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Heavy drizzle",
-    61: "Light rain",
-    63: "Rain",
-    65: "Heavy rain",
-    71: "Snow",
-    80: "Light showers",
-    81: "Showers",
-    82: "Heavy showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm",
-    99: "Thunderstorm"
-  };
+function isPaymentCompleted(payment) {
+  const isCompletedFromDb = Number(payment.is_completed) === 1;
 
-  return map[code] || "Weather";
+  if (payment.payment_key === "rent") {
+    const currentMonthNumber = new Date().getMonth() + 1;
+
+    // Rent is due only on odd months.
+    // Even months should auto show green.
+    if (currentMonthNumber % 2 === 0) {
+      return true;
+    }
+  }
+
+  return isCompletedFromDb;
 }
 
 function formatChange(value) {
