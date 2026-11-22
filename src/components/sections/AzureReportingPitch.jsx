@@ -39,7 +39,15 @@ const outcomes = [
   ['Management needed repeatable reporting', 'The Azure reporting layer supported sales and production reporting and reduced dependence on repeated SAP extracts. Scheduled delivery was used for selected daily reports.'],
 ]
 
-const sectionClass = 'border-b border-slate-200 px-5 py-10 sm:px-8 sm:py-14'
+const sectionLinks = [
+  ['challenge', 'Challenge'],
+  ['approach', 'Project approach'],
+  ['architecture', 'Architecture'],
+  ['implementation', 'What we built'],
+  ['outcomes', 'Outcomes'],
+]
+
+const sectionClass = 'scroll-mt-24 border-b border-slate-200 px-5 py-10 sm:px-8 sm:py-14'
 const contentClass = 'mx-auto max-w-6xl'
 const headingClass = 'text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl'
 
@@ -67,19 +75,31 @@ export default function AzureReportingPitch() {
         </div>
       </header>
 
-      <section className={sectionClass}>
+      <nav aria-label="On this page" className="border-b border-slate-200 bg-slate-50 px-5 py-3 sm:px-8">
+        <ul className={`${contentClass} flex flex-wrap gap-x-2 gap-y-1`}>
+          {sectionLinks.map(([id, label]) => (
+            <li key={id}>
+              <a href={`#${id}`} className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-white hover:text-blue-900 focus-visible:outline-2 focus-visible:outline-blue-700">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <section id="challenge" className={sectionClass}>
         <div className={`${contentClass} grid gap-4 md:grid-cols-[1fr_2fr]`}>
           <h2 className={headingClass}>The challenge</h2>
           <p className="max-w-3xl leading-7 text-slate-700">The data already exists, but the people who need it can wait days for an extract or spend hours preparing one. The source may be an on-premises database, access may be limited to a few specialists, or regulatory rules may restrict where data can be stored or shared. In this project, management reporting depended on SAP exports, Excel files, and repeated preparation.</p>
         </div>
       </section>
 
-      <section className={`${sectionClass} bg-slate-50`}>
+      <section id="approach" className={`${sectionClass} bg-slate-50`}>
         <div className={contentClass}>
           <h2 className={headingClass}>How we’d approach your project</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {stakeholders.map(([title, description]) => (
-              <div key={title} className="rounded-xl border border-slate-200 bg-white p-5">
+              <div key={title} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                 <h3 className="text-lg font-bold">{title}</h3>
                 <p className="mt-2 leading-7 text-slate-700">{description}</p>
               </div>
@@ -99,7 +119,7 @@ export default function AzureReportingPitch() {
         </div>
       </section>
 
-      <section className="bg-slate-900 px-5 py-10 text-white sm:px-8 sm:py-14">
+      <section id="architecture" className="scroll-mt-24 bg-slate-900 px-5 py-10 text-white sm:px-8 sm:py-14">
         <div className={contentClass}>
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">How the platform fits together</h2>
           <p className="mt-3 max-w-3xl leading-7 text-slate-300">In the SAP Business One project, the warehouse gave reporting and delivery tools a curated source they could share.</p>
@@ -107,7 +127,7 @@ export default function AzureReportingPitch() {
         </div>
       </section>
 
-      <section className={sectionClass}>
+      <section id="implementation" className={sectionClass}>
         <div className={contentClass}>
           <h2 className={headingClass}>What we built</h2>
           <p className="mt-3 max-w-3xl leading-7 text-slate-700">Once your charter is approved, we turn the agreed requirements into a build plan. Here’s how that work takes shape, using the SAP Business One project as an example.</p>
@@ -122,7 +142,7 @@ export default function AzureReportingPitch() {
         </div>
       </section>
 
-      <section className={`${sectionClass} bg-slate-50`}>
+      <section id="outcomes" className={`${sectionClass} bg-slate-50`}>
         <div className={contentClass}>
           <h2 className={headingClass}>What teams could do</h2>
           <dl className="mt-4 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white px-5">

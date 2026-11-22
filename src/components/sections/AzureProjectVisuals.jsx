@@ -75,7 +75,7 @@ function DiagramNode({ node: [title, description, logo] }) {
 export function AzureProjectPlan() {
   return (
     <div className="mt-8 grid min-w-0 gap-4 xl:grid-cols-2">
-      <figure className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+      <figure className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <figcaption id="azure-raci" className="text-lg font-bold">Example RACI matrix</figcaption>
         <div className="mt-3 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2" role="region" aria-labelledby="azure-raci" tabIndex={0}>
           <table aria-labelledby="azure-raci" className="w-full min-w-88 border-collapse text-sm">
@@ -102,12 +102,12 @@ export function AzureProjectPlan() {
             </tbody>
           </table>
         </div>
-        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600">
+        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
           {Object.entries(responsibility).map(([code, { label }]) => <li key={code}><strong>{code}</strong> {label}</li>)}
         </ul>
       </figure>
 
-      <figure className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+      <figure className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <figcaption id="azure-timeline" className="text-lg font-bold">Example eight-week plan</figcaption>
         <div className="mt-3 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2" role="region" aria-labelledby="azure-timeline" tabIndex={0}>
           <table aria-labelledby="azure-timeline" className="w-full min-w-88 border-collapse text-sm">
@@ -140,7 +140,7 @@ export function AzureProjectPlan() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-xs text-slate-600">Timing depends on source access, data quality, and sign-off.</p>
+        <p className="mt-3 text-sm text-slate-600">Timing depends on source access, data quality, and sign-off.</p>
       </figure>
     </div>
   )
