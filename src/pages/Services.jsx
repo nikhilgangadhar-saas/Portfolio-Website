@@ -27,19 +27,19 @@ export default function Services() {
       <section aria-label="Our services" className="bg-slate-100 bg-linear-to-b from-slate-200/60 to-slate-50 px-5 py-8 text-slate-950 sm:px-8 lg:py-12">
         <div className="mx-auto grid max-w-[100rem] gap-4 sm:grid-cols-2 lg:grid-cols-6">
           {services.map(({ id, title, description, focus, href }, index) => (
-            <article key={id} className={`flex flex-col rounded-2xl border border-slate-200 border-t-4 border-t-slate-900 bg-white shadow-sm ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
-              <div className="flex-1 p-5 xl:p-6">
+            <article key={id} className={`row-span-4 grid grid-rows-subgrid gap-y-0 rounded-2xl border border-slate-200 border-t-4 border-t-slate-900 bg-white shadow-sm ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
+              <div className="px-5 pt-5 xl:px-6 xl:pt-6">
                 <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
                 <p className="mt-3 leading-7 text-slate-700">{description}</p>
-                <p className="mt-4 text-sm font-semibold text-slate-800">{focus}</p>
-                <div aria-hidden="true" className="mt-4 flex flex-wrap items-center gap-3 empty:hidden">
-                  {applications.filter((app) => serviceLogos[id].apps?.includes(app.id)).map((app) => (
-                    <ApplicationLogo key={app.id} application={app} className="size-10 rounded-lg text-sm" suffixClassName="text-[8px]" />
-                  ))}
-                  {serviceLogos[id].files.map((file) => (
-                    <AssetLogo key={file} file={file} className="size-10 object-contain" />
-                  ))}
-                </div>
+              </div>
+              <p className="self-end px-5 pt-4 text-sm font-semibold text-slate-800 xl:px-6">{focus}</p>
+              <div aria-hidden="true" className="flex flex-wrap items-start content-start gap-3 px-5 pt-4 pb-5 xl:px-6 xl:pb-6">
+                {applications.filter((app) => serviceLogos[id].apps?.includes(app.id)).map((app) => (
+                  <ApplicationLogo key={app.id} application={app} className="size-10 rounded-lg text-sm" suffixClassName="text-[8px]" />
+                ))}
+                {serviceLogos[id].files.map((file) => (
+                  <AssetLogo key={file} file={file} className="size-10 object-contain" />
+                ))}
               </div>
               <div className="flex justify-center border-t border-slate-200 px-5 py-4">
                 <Button to={href} variant="dark">View service</Button>
