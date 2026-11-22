@@ -78,7 +78,7 @@ export default function Products() {
               {applications.map(({ name, initials, suffix, description, tone, href }) => {
                 const Logo = href ? 'a' : 'button'
                 return (
-                  <div key={name} className="flex flex-col items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+                  <div key={name} className="flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 text-center">
                     <Logo
                       {...(href ? { href } : {
                         type: 'button',
@@ -89,7 +89,7 @@ export default function Products() {
                         },
                       })}
                       aria-label={name}
-                      className={`flex h-24 w-full shrink-0 flex-col items-center justify-center gap-1 rounded-xl border border-white/20 text-center font-[Georgia] font-bold leading-none transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 ${tone}`}
+                      className={`flex size-[128px] shrink-0 self-center flex-col items-center justify-center gap-1 rounded-xl border border-white/20 text-center font-[Georgia] font-bold leading-none transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 ${tone}`}
                     >
                       <span className="text-3xl">{initials}</span>
                       <span className="text-sm tracking-wider">{suffix}</span>
