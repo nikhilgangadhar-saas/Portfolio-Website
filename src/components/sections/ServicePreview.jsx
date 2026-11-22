@@ -33,24 +33,57 @@ export default function ServicePreview() {
   const carousel = useRef(null)
   const gesture = useRef(null)
   const suppressClick = useRef(false)
+  const animation = useRef(0)
 
   useEffect(() => {
     const track = carousel.current
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let direction = 1
     const timer = window.setInterval(() => {
       if (reducedMotion.matches || document.hidden || track.matches(':hover, :focus-within') || gesture.current) return
 
-      const step = track.children[1].offsetLeft - track.children[0].offsetLeft
-      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
-      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: 'smooth' })
-    }, 4200)
+      const start = track.scrollLeft
+      const end = track.scrollWidth - track.clientWidth
+      if (start >= end - 2) direction = -1
+      if (start <= 2) direction = 1
 
-    return () => window.clearInterval(timer)
+      const stops = [...track.children].map((card) => Math.min(card.offsetLeft, end))
+      const target = direction === 1
+        ? stops.find((stop) => stop > start + 2)
+        : stops.findLast((stop) => stop < start - 2)
+      if (target === undefined) return
+
+      const startedAt = performance.now()
+      track.dataset.animating = 'true'
+
+      function animate(now) {
+        const progress = Math.min((now - startedAt) / 680, 1)
+        const eased = progress * progress * (3 - 2 * progress)
+        track.scrollLeft = start + (target - start) * eased
+
+        if (progress < 1) {
+          animation.current = window.requestAnimationFrame(animate)
+          return
+        }
+
+        delete track.dataset.animating
+      }
+
+      animation.current = window.requestAnimationFrame(animate)
+    }, 2250)
+
+    return () => {
+      window.clearInterval(timer)
+      window.cancelAnimationFrame(animation.current)
+      delete track.dataset.animating
+    }
   }, [])
 
   function startDrag(event) {
     suppressClick.current = false
     if (!event.isPrimary || event.button !== 0) return
+    window.cancelAnimationFrame(animation.current)
+    delete event.currentTarget.dataset.animating
     gesture.current = {
       pointer: event.pointerId,
       x: event.clientX,
@@ -88,11 +121,8 @@ export default function ServicePreview() {
   }
 
   return (
-    <section aria-labelledby="home-services-title" className="relative overflow-hidden bg-[#f4f7fb]">
-      <div className="absolute inset-0 bg-soft-grid opacity-70" />
-      <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-emerald-200/40 blur-3xl" />
-
-      <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
+    <section aria-labelledby="home-services-title" className="bg-[#f4f7fb]">
+      <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
         <h2 id="home-services-title" className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
           How we help
         </h2>
@@ -112,17 +142,17 @@ export default function ServicePreview() {
           }}
           onClickCapture={preventDragClick}
           onDragStart={(event) => event.preventDefault()}
-          className="relative mt-6 grid cursor-grab snap-x snap-mandatory auto-cols-[minmax(0,1fr)] grid-flow-col gap-4 overflow-x-auto pb-2 select-none focus-visible:outline-2 focus-visible:outline-slate-500 data-[dragging=true]:cursor-grabbing data-[dragging=true]:snap-none md:auto-cols-[calc((100%-1rem)/2)] lg:auto-cols-[calc((100%-2rem)/3)]"
+          className="relative mt-5 grid cursor-grab snap-x snap-mandatory auto-cols-[88%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 data-[animating=true]:snap-none data-[dragging=true]:cursor-grabbing data-[dragging=true]:snap-none sm:auto-cols-[46%] lg:auto-cols-[31%]"
         >
           {services.map(({ title, description, focus }) => (
-            <li key={title} className="group relative flex min-w-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="text-xl font-extrabold tracking-tight text-slate-950">{title}</h3>
-                <p className="mt-3 flex-1 text-base leading-6 text-slate-600">{description}</p>
-                <p className="mt-4 border-t border-slate-200 pt-3 text-sm font-semibold leading-5 text-slate-700">{focus}</p>
+            <li key={title} className="group relative flex min-w-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-700 bg-linear-to-br from-slate-800 to-slate-950">
+              <div className="flex flex-1 flex-col p-5 sm:p-6">
+                <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{title}</h3>
+                <p className="mt-3 flex-1 text-base leading-6 text-slate-300">{description}</p>
+                <p className="mt-4 border-t border-white/15 pt-3 text-sm font-medium leading-5 text-slate-300">{focus}</p>
               </div>
-              <div className="px-5 pb-5 [@media(hover:hover)_and_(pointer:fine)]:pointer-events-none [@media(hover:hover)_and_(pointer:fine)]:absolute [@media(hover:hover)_and_(pointer:fine)]:inset-0 [@media(hover:hover)_and_(pointer:fine)]:grid [@media(hover:hover)_and_(pointer:fine)]:place-items-center [@media(hover:hover)_and_(pointer:fine)]:bg-slate-950/25 [@media(hover:hover)_and_(pointer:fine)]:p-0 [@media(hover:hover)_and_(pointer:fine)]:opacity-0 [@media(hover:hover)_and_(pointer:fine)]:backdrop-blur-sm [@media(hover:hover)_and_(pointer:fine)]:transition-opacity [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100">
-                  <Button to="/contact" variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              <div className="px-5 pb-5 [@media(hover:hover)_and_(pointer:fine)]:pointer-events-none [@media(hover:hover)_and_(pointer:fine)]:absolute [@media(hover:hover)_and_(pointer:fine)]:inset-0 [@media(hover:hover)_and_(pointer:fine)]:grid [@media(hover:hover)_and_(pointer:fine)]:place-items-center [@media(hover:hover)_and_(pointer:fine)]:bg-slate-950/45 [@media(hover:hover)_and_(pointer:fine)]:p-0 [@media(hover:hover)_and_(pointer:fine)]:opacity-0 [@media(hover:hover)_and_(pointer:fine)]:backdrop-blur-sm [@media(hover:hover)_and_(pointer:fine)]:transition-opacity [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100">
+                  <Button to="/contact" variant="light" className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                     Discuss a project
                   </Button>
               </div>
