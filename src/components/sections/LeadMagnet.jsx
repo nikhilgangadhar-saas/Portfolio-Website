@@ -6,15 +6,11 @@ export default function LeadMagnet() {
       <div className="absolute inset-0 bg-soft-grid opacity-70" />
       <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-20">
+      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-20">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5 md:p-8">
           <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-center">
             <div>
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Free Resource
-              </div>
-
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
                 Start with a practical business control checklist.
               </h2>
 

@@ -29,13 +29,12 @@ export default function ServicePreview() {
       <div className="absolute inset-0 bg-soft-grid opacity-70" />
       <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-emerald-200/40 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-20">
+      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-20">
         <SectionHeader
-          eyebrow="Services"
           title="How we help"
         />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <Card key={service.title}>
               <h3 className="text-lg font-extrabold text-slate-950">

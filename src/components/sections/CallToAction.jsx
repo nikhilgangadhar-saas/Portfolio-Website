@@ -7,7 +7,7 @@ export default function CallToAction() {
       <div className="motion-blob-one absolute -left-32 top-10 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
       <div className="motion-blob-two absolute right-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-20">
+      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-20">
         <div className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-2xl shadow-black/20 backdrop-blur md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
