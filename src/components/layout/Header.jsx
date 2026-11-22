@@ -6,6 +6,7 @@ import MobileNav from './MobileNav'
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(null)
   const headerRef = useRef(null)
+  const menuTrigger = useRef(null)
   useEffect(() => {
     function handleClickOutside(event) {
       if (openMenu && headerRef.current && !headerRef.current.contains(event.target)) {
@@ -14,8 +15,9 @@ export default function Header() {
     }
 
     function handleEscape(event) {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && openMenu && headerRef.current.contains(document.activeElement)) {
         setOpenMenu(null)
+        menuTrigger.current?.focus()
       }
     }
 
@@ -37,7 +39,7 @@ export default function Header() {
       ref={headerRef}
       className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl"
     >
-      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between px-5 sm:px-8 py-4">
+      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-5 px-5 py-3 sm:px-8">
         <Link to="/" onClick={closeMenu}>
           <div className="flex items-center gap-3">
             <BrandMark size="header" />
@@ -46,31 +48,55 @@ export default function Header() {
               <div className="font-[Georgia] text-xl font-semibold tracking-tight text-white">
                 NG Advisory Co.
               </div>
-              <div className="text-xs text-slate-400">
+              <div className="hidden text-xs text-slate-400 sm:block">
                 Business Control · Data Products · Practical Systems
               </div>
             </div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-1 lg:flex">
           {headerLinks.map(({ label, path, menu }) => menu ? (
-            <button
-              key={menu}
-              type="button"
-              aria-expanded={openMenu === menu}
-              aria-controls={openMenu === menu ? 'desktop-homepage-menu' : undefined}
-              onClick={() => setOpenMenu(openMenu === menu ? null : menu)}
-              className={`text-sm font-semibold transition ${openMenu === menu ? 'text-blue-300' : 'text-slate-300 hover:text-white'}`}
-            >
-              {label} <span aria-hidden="true" className="text-[10px]">▼</span>
-            </button>
+            <div key={menu} className="relative">
+              <button
+                type="button"
+                aria-expanded={openMenu === menu}
+                aria-controls={openMenu === menu ? `header-menu-${menu}` : undefined}
+                onClick={(event) => {
+                  menuTrigger.current = event.currentTarget
+                  setOpenMenu(openMenu === menu ? null : menu)
+                }}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition-colors ${openMenu === menu ? 'bg-white text-slate-950' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
+              >
+                {label}
+                <span aria-hidden="true" className={`mb-0.5 size-1.5 border-b border-r border-current transition-transform ${openMenu === menu ? 'rotate-[225deg]' : 'rotate-45'}`} />
+              </button>
+              {openMenu === menu && (
+                <div id={`header-menu-${menu}`} className="absolute left-1/2 top-full z-10 mt-3 w-[34rem] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-black/25">
+                  <ul className="grid grid-cols-2 gap-1">
+                    {homepageMenus[menu].map((item) => (
+                      <li key={item.id}>
+                        <Link
+                          to={`/#${item.id}`}
+                          onClick={closeMenu}
+                          className="block h-full rounded-xl p-3.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
+                        >
+                          <span className="block text-sm font-semibold text-slate-950">{item.title}</span>
+                          <span className="mt-1 block text-sm leading-5 text-slate-600">{item.focus || item.examples[0]}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           ) : (
             <NavLink
               key={path}
               to={path}
+              end={path === '/'}
               onClick={closeMenu}
-              className={({ isActive }) => `text-sm font-semibold transition ${isActive && !openMenu ? 'text-blue-300' : 'text-slate-300 hover:text-white'}`}
+              className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isActive && !openMenu ? 'bg-white/12 text-white' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
             >
               {label}
             </NavLink>
@@ -81,7 +107,7 @@ export default function Header() {
           <Link
             to="/contact"
             onClick={closeMenu}
-            className="rounded-full bg-blue-500 px-5 sm:px-8 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-400"
+            className="whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-slate-200"
           >
             Discuss a project
           </Link>
@@ -90,17 +116,6 @@ export default function Header() {
         <MobileNav />
       </div>
 
-      {openMenu && (
-        <div id="desktop-homepage-menu" className="absolute left-0 top-full hidden w-full border-t border-white/10 bg-slate-950 shadow-2xl lg:block">
-          <div className="mx-auto grid max-w-[100rem] grid-cols-3 gap-3 px-8 py-6">
-            {homepageMenus[openMenu].map((item) => (
-              <Link key={item.id} to={`/#${item.id}`} onClick={closeMenu} className="rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white hover:border-white/30 hover:bg-white/10">
-                {item.title}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </header>
   )
 }
