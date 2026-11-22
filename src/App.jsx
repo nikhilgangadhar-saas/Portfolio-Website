@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigationType } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 
 import Home from './pages/Home'
@@ -8,7 +8,6 @@ import CaseStudyDetail from './pages/CaseStudyDetail'
 import Team from './pages/Team'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
-import ComingSoon from './pages/ComingSoon'
 import Products from './pages/Products'
 import ProductCategory from './pages/ProductCategory'
 import ProductDetail from './pages/ProductDetail'
@@ -61,12 +60,12 @@ export default function App() {
 
           <Route
             path="/services"
-            element={<ComingSoon title="Services Coming Soon" />}
+            element={<Navigate to="/#home-services-title" replace />}
           />
 
           <Route
             path="/expertise"
-            element={<ComingSoon title="Expertise Coming Soon" />}
+            element={<Navigate to="/#home-services-title" replace />}
           />
 
           <Route path="/case-studies" element={<CaseStudies />} />
