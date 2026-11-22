@@ -1,26 +1,25 @@
 import Button from '../ui/Button'
 
-const tools = [
+const offerings = [
   {
-    title: 'Stock Count & Reconciliation Workbook',
-    format: 'Excel workbook',
-    description: 'Compare physical counts with system stock, explain variances, and track adjustment approvals.',
-    included: 'Count sheet, variance register, and adjustment approval log.',
-    example: 'System stock: 120 units. Physical count: 116. Variance: −4. Adjustment: pending approval.',
+    title: 'Documents & Templates',
+    description: 'Word and PDF packs for teams that need to document how work gets done and how controls are checked.',
+    examples: ['Warehouse SOP packs', 'Audit plans and checklists', 'Approval matrices'],
   },
   {
-    title: 'Warehouse SOP Starter Pack',
-    format: 'Editable procedures and checklists',
-    description: 'Standardize receiving, storage, transfers, stock counts, and dispatch.',
-    included: 'Editable SOPs, role assignments, and checklists for each warehouse process.',
-    example: 'Receiving checklist: match the delivery to the purchase order, count items, check for damage, and record discrepancies before posting the receipt.',
+    title: 'Excel Tools',
+    description: 'Excel workbooks for recurring operational tasks, with a clear place to record inputs, review results, and follow up.',
+    examples: ['Stock count and reconciliation', 'Inventory ageing', 'Audit action tracking'],
   },
   {
-    title: 'Audit Action Tracker',
-    format: 'Tracking workbook',
-    description: 'Assign audit findings, monitor deadlines, and record closure evidence and follow-up reviews.',
-    included: 'Findings register, action owners, due dates, evidence references, and re-audit status.',
-    example: 'Finding: unsigned stock adjustments. Owner: warehouse lead. Evidence required: approved adjustments. Status: awaiting review.',
+    title: 'Data & Reporting Services',
+    description: 'We build data pipelines, connect ERP and other business systems, and deliver reports through the channels your team already uses.',
+    examples: ['Azure data engineering and ERP pipelines', 'WhatsApp reporting and alerts', 'SequenceBI'],
+  },
+  {
+    title: 'Business Applications',
+    description: 'We build and deploy applications for people operations, internal audit, and business controls.',
+    examples: ['HR application for onboarding, learning and development', 'Audit & Control App for findings, actions, and follow-up'],
   },
 ]
 
@@ -28,27 +27,22 @@ export default function ProductCategories() {
   return (
     <section className="bg-slate-950 text-white">
       <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
-        <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">Tools &amp; Templates</h2>
+        <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">Products &amp; Solutions</h2>
 
-        <div className="mt-6 grid items-start gap-4 md:grid-cols-3">
-          {tools.map((tool) => (
-            <article key={tool.title} className="rounded-2xl border border-white/15 bg-slate-900 p-5">
-              <p className="text-sm font-medium text-slate-300">{tool.format}</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-tight">{tool.title}</h3>
-              <p className="mt-3 text-base leading-6 text-slate-300">{tool.description}</p>
-              <details className="mt-4 border-t border-white/15 pt-3">
-                <summary className="cursor-pointer font-semibold focus-visible:outline-2 focus-visible:outline-offset-4">
-                  View product
-                </summary>
-                <p className="mt-3 text-sm leading-6 text-slate-200">{tool.included}</p>
-                <div className="my-4 rounded-xl bg-slate-950 p-3">
-                  <p className="text-sm font-semibold">Sample preview</p>
-                  <p className="mt-1 text-sm leading-6 text-slate-300">{tool.example}</p>
-                </div>
-                <Button to="/contact" variant="light">Request access</Button>
-              </details>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {offerings.map(({ title, description, examples }) => (
+            <article key={title} className="flex flex-col rounded-2xl border border-white/15 bg-slate-900 p-5">
+              <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+              <p className="mt-3 flex-1 text-base leading-6 text-slate-300">{description}</p>
+              <ul className="mt-4 space-y-2 border-t border-white/15 pt-4 text-sm leading-5 text-slate-200">
+                {examples.map((example) => <li key={example}>{example}</li>)}
+              </ul>
             </article>
           ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <Button to="/contact" variant="light">Ask about an offering</Button>
         </div>
       </div>
     </section>
