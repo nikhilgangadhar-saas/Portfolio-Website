@@ -6,10 +6,10 @@ import { services } from '../data/homepageOfferings'
 
 const serviceLogos = {
   'business-analysis-strategy': { files: ['strategy.png', 'ppt.png', 'excel.png'] },
-  'operations-sops-audit': { files: ['word.png', 'pdf.png', 'watsapp.png'], apps: ['internal-audit'] },
-  'azure-data-erp-reporting': { files: ['Azure.png', 'sql.png', 'adf.png', 'pbi.png', 'watsapp.png', 'db.png'] },
-  'custom-business-applications': { files: ['business-apps.png', 'python.png', 'js.png', 'Azure.png', 'git.png'], apps: applications.map(({ id }) => id) },
-  'enterprise-ai-agents': { files: ['ai-agents.png', 'ms.png', 'sap.png', 'watsapp.png', 'outlook.png'] },
+  'operations-sops-audit': { files: ['word.png', 'pdf.png', 'WhatsApp.png'], apps: ['internal-audit'] },
+  'azure-data-erp-reporting': { files: ['Azure.png', 'sql.png', 'adf.png', 'pbi.png', 'WhatsApp.png', 'Database.png'] },
+  'custom-business-applications': { files: ['business-apps.png', 'Python.png', 'JavaScript.png', 'Azure.png', 'Git.png'], apps: applications.map(({ id }) => id) },
+  'enterprise-ai-agents': { files: ['ai-agents.png', 'Microsoft.png', 'SAP.png', 'WhatsApp.png', 'Outlook.png'] },
 }
 
 export default function Services() {
