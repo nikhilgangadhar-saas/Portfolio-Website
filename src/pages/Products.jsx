@@ -54,13 +54,7 @@ export default function Products() {
               <p className="mb-6 mt-3 flex-1 leading-7 text-slate-700">{description}</p>
               <div className="mb-5 flex items-center justify-start gap-3">
                 {logos.map((logo) => (
-                  <img
-                    key={logo}
-                    src={`/assets/${logo}`}
-                    alt=""
-                    className="size-10 object-contain"
-                    onError={(event) => { event.currentTarget.style.display = 'none' }}
-                  />
+                  <AssetLogo key={logo} file={logo} className="size-10 object-contain" />
                 ))}
               </div>
               <div className="flex justify-center">
@@ -75,7 +69,7 @@ export default function Products() {
             <ul aria-label="Reporting technologies" className="my-6 grid grid-cols-4 gap-2">
               {technologies.map(({ name, image }) => (
                 <li key={name} className="flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-slate-200 bg-slate-50 p-1.5 text-center">
-                  <img src={`/assets/${image}`} alt="" className="h-10 w-full object-contain" onError={(event) => { event.currentTarget.style.display = 'none' }} />
+                  <AssetLogo file={image} className="h-10 w-full object-contain" />
                   <span className="text-xs font-semibold text-slate-700">{name}</span>
                 </li>
               ))}
@@ -117,7 +111,9 @@ export default function Products() {
                 )
               })}
             </div>
-            <div className="flex justify-center"><Button to="/contact" variant="light">Discuss a Project</Button></div>
+            <div className="flex justify-center">
+              <Button to="/contact" variant="light">Discuss a Project</Button>
+            </div>
           </article>
         </div>
       </section>
@@ -134,5 +130,20 @@ export default function Products() {
         </div>
       </dialog>
     </>
+  )
+}
+
+
+function AssetLogo({ file, className }) {
+  const [unavailable, setUnavailable] = useState(false)
+  if (unavailable) return null
+
+  return (
+    <img
+      src={`/assets/${file}`}
+      alt=""
+      className={className}
+      onError={() => setUnavailable(true)}
+    />
   )
 }
