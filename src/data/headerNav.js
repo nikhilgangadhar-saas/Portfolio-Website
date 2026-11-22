@@ -1,6 +1,7 @@
-import { offerings, services } from './homepageOfferings'
+import { services } from './homepageOfferings'
+import { productCategories } from './products'
 
-export const homepageMenus = { products: offerings, services }
+export const homepageMenus = { products: productCategories.map((category) => ({ ...category, href: `/products/${category.id}` })), services }
 
 export const headerLinks = [
   { label: 'Home', path: '/' },

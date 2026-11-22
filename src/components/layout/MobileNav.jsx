@@ -40,7 +40,7 @@ export default function MobileNav() {
               {openSection === menu && (
                 <div className="mx-3 mb-2 grid gap-1 rounded-xl bg-slate-100 p-1">
                   {homepageMenus[menu].map((item) => (
-                    <Link key={item.id} to={`/#${item.id}`} onClick={closeMenu} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-800 hover:bg-white">
+                    <Link key={item.id} to={item.href ?? `/#${item.id}`} onClick={closeMenu} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-800 hover:bg-white">
                       {item.title}
                     </Link>
                   ))}

@@ -77,7 +77,7 @@ export default function Header() {
                     {homepageMenus[menu].map((item) => (
                       <li key={item.id}>
                         <Link
-                          to={`/#${item.id}`}
+                          to={item.href ?? `/#${item.id}`}
                           onClick={closeMenu}
                           className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
                         >

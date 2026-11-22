@@ -9,6 +9,9 @@ import Team from './pages/Team'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
+import Products from './pages/Products'
+import ProductCategory from './pages/ProductCategory'
+import ProductDetail from './pages/ProductDetail'
 
 import GA4RouteTracker from './components/analytics/GA4RouteTracker'
 
@@ -41,15 +44,15 @@ export default function App() {
 
           <Route
             path="/products"
-            element={<ComingSoon title="Products Coming Soon" />}
+            element={<Products />}
           />
           <Route
             path="/products/:categoryId"
-            element={<ComingSoon title="Products Coming Soon" />}
+            element={<ProductCategory />}
           />
           <Route
             path="/products/:categoryId/:productSlug"
-            element={<ComingSoon title="Products Coming Soon" />}
+            element={<ProductDetail />}
           />
 
           <Route
