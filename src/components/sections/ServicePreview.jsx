@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Button from '../ui/Button'
 
 const services = [
@@ -6,97 +6,125 @@ const services = [
     title: 'Business Analysis & Strategy',
     description: 'We assess markets, customers, and competitors to help you decide which opportunities to pursue. We turn that research into a SWOT analysis, clear priorities, and a go-to-market plan.',
     focus: 'Market research · SWOT · Go-to-market',
-    accent: 'bg-blue-600',
   },
   {
     title: 'Operations, SOPs & Audit',
     description: 'We map how work moves through your business, identify gaps in inventory controls and approvals, and document who owns each step. We build SOPs and audit plans your team can use to check that controls are working.',
     focus: 'Inventory controls · SOPs · Internal audit',
-    accent: 'bg-teal-600',
   },
   {
     title: 'Azure Data & ERP Reporting',
     description: 'We connect ERP data to Azure databases and pipelines, then build reporting for finance, sales, inventory, and operations. We can deliver reports and alerts in dashboards, WhatsApp, Microsoft Teams, or Slack.',
     focus: 'Azure databases · Data pipelines · Reporting',
-    accent: 'bg-indigo-600',
   },
   {
     title: 'Custom Business Applications',
     description: 'We build and deploy applications around the way your teams work. Examples include HR onboarding, learning and development, audit action tracking, and approval workflows.',
     focus: 'HR onboarding · Learning & development · Audit',
-    accent: 'bg-violet-600',
   },
   {
     title: 'Enterprise AI Agents',
     description: 'We build AI agents that use ERP data to answer business questions, flag exceptions, and guide teams through defined workflows. We design them around a specific use case and the data each team is allowed to access.',
     focus: 'ERP data · Exception monitoring · Workflow support',
-    accent: 'bg-cyan-700',
   },
 ]
 
 export default function ServicePreview() {
   const carousel = useRef(null)
-  const [edges, setEdges] = useState({ start: true, end: false })
+  const gesture = useRef(null)
+  const suppressClick = useRef(false)
 
-  function move(direction) {
+  useEffect(() => {
     const track = carousel.current
-    const firstCard = track.children[0]
-    const secondCard = track.children[1]
-    const step = secondCard.offsetLeft - firstCard.offsetLeft
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const timer = window.setInterval(() => {
+      if (reducedMotion.matches || document.hidden || track.matches(':hover, :focus-within') || gesture.current) return
 
-    track.scrollBy({ left: direction * step })
+      const step = track.children[1].offsetLeft - track.children[0].offsetLeft
+      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
+      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: 'smooth' })
+    }, 4200)
+
+    return () => window.clearInterval(timer)
+  }, [])
+
+  function startDrag(event) {
+    suppressClick.current = false
+    if (!event.isPrimary || event.button !== 0) return
+    gesture.current = {
+      pointer: event.pointerId,
+      x: event.clientX,
+      left: event.currentTarget.scrollLeft,
+    }
   }
 
-  function updateEdges(event) {
-    const { scrollLeft, scrollWidth, clientWidth } = event.currentTarget
-    const start = scrollLeft <= 1
-    const end = scrollWidth - clientWidth - scrollLeft <= 1
+  function drag(event) {
+    const active = gesture.current
+    if (!active || active.pointer !== event.pointerId || event.pointerType !== 'mouse') return
+    const distance = event.clientX - active.x
+    if (!suppressClick.current && Math.abs(distance) < 6) return
 
-    setEdges((previous) => (
-      previous.start === start && previous.end === end ? previous : { start, end }
-    ))
+    const track = event.currentTarget
+    if (!suppressClick.current) {
+      suppressClick.current = true
+      track.setPointerCapture(event.pointerId)
+      track.dataset.dragging = 'true'
+    }
+    track.scrollLeft = active.left - distance
   }
 
-  const controlClass = 'rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-blue-500 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600 disabled:cursor-default disabled:opacity-40'
+  function endDrag(event) {
+    if (gesture.current?.pointer !== event.pointerId) return
+    gesture.current = null
+    delete event.currentTarget.dataset.dragging
+  }
+
+  function preventDragClick(event) {
+    if (suppressClick.current && event.detail !== 0) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    suppressClick.current = false
+  }
 
   return (
     <section aria-labelledby="home-services-title" className="relative overflow-hidden bg-[#f4f7fb]">
       <div className="absolute inset-0 bg-soft-grid opacity-70" />
       <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-emerald-200/40 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 id="home-services-title" className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
-            How we help
-          </h2>
-          <div className="flex gap-2">
-            <button type="button" aria-controls="home-service-cards" disabled={edges.start} onClick={() => move(-1)} className={controlClass}>
-              Previous
-            </button>
-            <button type="button" aria-controls="home-service-cards" disabled={edges.end} onClick={() => move(1)} className={controlClass}>
-              Next
-            </button>
-          </div>
-        </div>
+      <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
+        <h2 id="home-services-title" className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
+          How we help
+        </h2>
 
         <ul
           id="home-service-cards"
           ref={carousel}
-          onScroll={updateEdges}
-          className="relative mt-8 grid snap-x snap-mandatory auto-cols-[minmax(0,1fr)] grid-flow-col gap-4 overflow-x-auto scroll-smooth pb-4 motion-reduce:scroll-auto md:auto-cols-[calc((100%-1rem)/2)] lg:auto-cols-[calc((100%-2rem)/3)]"
+          tabIndex={0}
+          aria-label="Services. Swipe, drag, or use the arrow keys to browse."
+          onPointerDown={startDrag}
+          onPointerMove={drag}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onLostPointerCapture={endDrag}
+          onPointerLeave={(event) => {
+            if (!suppressClick.current) endDrag(event)
+          }}
+          onClickCapture={preventDragClick}
+          onDragStart={(event) => event.preventDefault()}
+          className="relative mt-6 grid cursor-grab snap-x snap-mandatory auto-cols-[minmax(0,1fr)] grid-flow-col gap-4 overflow-x-auto pb-2 select-none focus-visible:outline-2 focus-visible:outline-slate-500 data-[dragging=true]:cursor-grabbing data-[dragging=true]:snap-none md:auto-cols-[calc((100%-1rem)/2)] lg:auto-cols-[calc((100%-2rem)/3)]"
         >
-          {services.map(({ title, description, focus, accent }) => (
-            <li key={title} className="group flex min-w-0 snap-start flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:border-blue-300 focus-within:border-blue-300">
-              <div aria-hidden="true" className={`h-1.5 ${accent}`} />
-              <div className="flex flex-1 flex-col p-5 sm:p-7">
+          {services.map(({ title, description, focus }) => (
+            <li key={title} className="group relative flex min-w-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="flex flex-1 flex-col p-5">
                 <h3 className="text-xl font-extrabold tracking-tight text-slate-950">{title}</h3>
-                <p className="mt-4 flex-1 text-base leading-7 text-slate-600">{description}</p>
-                <p className="mt-6 border-t border-slate-200 pt-4 text-sm font-semibold leading-6 text-slate-700">{focus}</p>
-                <div className="mt-4 transition-opacity [@media(hover:hover)_and_(pointer:fine)]:opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:opacity-100">
+                <p className="mt-3 flex-1 text-base leading-6 text-slate-600">{description}</p>
+                <p className="mt-4 border-t border-slate-200 pt-3 text-sm font-semibold leading-5 text-slate-700">{focus}</p>
+              </div>
+              <div className="px-5 pb-5 [@media(hover:hover)_and_(pointer:fine)]:pointer-events-none [@media(hover:hover)_and_(pointer:fine)]:absolute [@media(hover:hover)_and_(pointer:fine)]:inset-0 [@media(hover:hover)_and_(pointer:fine)]:grid [@media(hover:hover)_and_(pointer:fine)]:place-items-center [@media(hover:hover)_and_(pointer:fine)]:bg-slate-950/25 [@media(hover:hover)_and_(pointer:fine)]:p-0 [@media(hover:hover)_and_(pointer:fine)]:opacity-0 [@media(hover:hover)_and_(pointer:fine)]:backdrop-blur-sm [@media(hover:hover)_and_(pointer:fine)]:transition-opacity [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100">
                   <Button to="/contact" variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                     Discuss a project
                   </Button>
-                </div>
               </div>
             </li>
           ))}
