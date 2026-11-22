@@ -25,10 +25,6 @@ export default function LeadMagnet() {
             </div>
 
             <div className="rounded-3xl border border-slate-200 bg-[#f4f7fb] p-6">
-              <div className="mb-4 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                Lead Magnet
-              </div>
-
               <h3 className="text-xl font-extrabold text-slate-950">
                 SME Control Starter Checklist
               </h3>

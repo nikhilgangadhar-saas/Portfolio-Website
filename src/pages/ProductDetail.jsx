@@ -107,8 +107,7 @@ export default function ProductDetail() {
                   Want early access or a custom version?
                 </h2>
                 <p className="mt-4 max-w-2xl text-slate-300">
-                  Request access now. This also helps validate which products
-                  should be built first.
+                  Send an inquiry about product access or a version tailored to your team.
                 </p>
               </div>
 

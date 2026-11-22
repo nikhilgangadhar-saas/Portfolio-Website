@@ -225,17 +225,6 @@ export default function Contact() {
                 ))}
               </div>
             </div>
-
-            <div className="rounded-3xl bg-slate-950 p-6 text-white shadow-2xl shadow-slate-900/20">
-              <div className="text-sm font-bold text-white">
-                Direct contact
-              </div>
-
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Later we can add your email, LinkedIn, WhatsApp, booking link,
-                and newsletter signup here.
-              </p>
-            </div>
           </aside>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5 md:p-8">
