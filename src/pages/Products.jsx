@@ -7,12 +7,14 @@ const assetLibraries = [
     title: 'Documents & Templates',
     description: 'Targeted SOPs, audit plans, checklists, and approval templates for warehouse operations and internal controls.',
     action: 'View document assets',
+    logos: ['word.png', 'pdf.png'],
   },
   {
     id: 'excel-tools',
     title: 'Excel Tools',
     description: 'Practical Excel workbooks for stock counts and reconciliation, inventory ageing, and tracking audit actions.',
     action: 'View Excel tools',
+    logos: ['excel.png'],
   },
 ]
 
@@ -46,11 +48,24 @@ export default function Products() {
 
       <section aria-label="Products and solutions" className="bg-slate-100 bg-linear-to-b from-slate-200/60 to-slate-50 px-5 py-8 text-slate-950 sm:px-8 lg:py-12">
         <div className="mx-auto grid max-w-[100rem] gap-4 md:grid-cols-3">
-          {assetLibraries.map(({ id, title, description, action }) => (
+          {assetLibraries.map(({ id, title, description, action, logos }) => (
             <article key={id} className="flex flex-col rounded-2xl border border-slate-200 border-t-4 border-t-slate-900 bg-white p-5 shadow-sm xl:p-6">
               <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
               <p className="mb-6 mt-3 flex-1 leading-7 text-slate-700">{description}</p>
-              <div><Button to={`/products/${id}`} variant="dark">{action}</Button></div>
+              <div className="mb-5 flex items-center justify-start gap-3">
+                {logos.map((logo) => (
+                  <img
+                    key={logo}
+                    src={`/assets/${logo}`}
+                    alt=""
+                    className="size-10 object-contain"
+                    onError={(event) => { event.currentTarget.style.display = 'none' }}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <Button to={`/products/${id}`} variant="dark">{action}</Button>
+              </div>
             </article>
           ))}
 
