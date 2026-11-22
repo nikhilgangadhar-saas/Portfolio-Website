@@ -74,15 +74,17 @@ export default function Header() {
               {openMenu === menu && (
                 <div id={`header-menu-${menu}`} className="absolute left-1/2 top-full z-10 mt-3 w-80 -translate-x-1/2 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-black/25">
                   <ul className="divide-y divide-slate-100">
-                    {homepageMenus[menu].map((item) => (
-                      <li key={item.id}>
+                    {homepageMenus[menu].map(({ id, href, title, focus, examples }) => (
+                      <li key={id}>
                         <Link
-                          to={item.href ?? `/#${item.id}`}
+                          to={href ?? `/#${id}`}
                           onClick={closeMenu}
                           className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
                         >
-                          <span className="block text-sm font-semibold text-slate-950">{item.title}</span>
-                          <span className="mt-1 block text-sm leading-5 text-slate-600">{item.focus || item.examples[0]}</span>
+                          <span className="block text-sm font-semibold text-slate-950">{title}</span>
+                          {(focus || examples?.[0]) && (
+                            <span className="mt-1 block text-sm leading-5 text-slate-600">{focus || examples[0]}</span>
+                          )}
                         </Link>
                       </li>
                     ))}

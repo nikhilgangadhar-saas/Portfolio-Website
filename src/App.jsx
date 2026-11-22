@@ -9,6 +9,8 @@ import Team from './pages/Team'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import Products from './pages/Products'
+import Services from './pages/Services'
+import ServiceDetail from './pages/ServiceDetail'
 import ProductCategory from './pages/ProductCategory'
 import ProductDetail from './pages/ProductDetail'
 
@@ -58,15 +60,9 @@ export default function App() {
             element={<ProductDetail />}
           />
 
-          <Route
-            path="/services"
-            element={<Navigate to="/#home-services-title" replace />}
-          />
-
-          <Route
-            path="/expertise"
-            element={<Navigate to="/#home-services-title" replace />}
-          />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/:serviceId" element={<ServiceDetail />} />
+          <Route path="/expertise" element={<Navigate to="/services" replace />} />
 
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route

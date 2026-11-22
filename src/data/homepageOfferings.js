@@ -60,4 +60,4 @@ export const services = [
     description: 'We build AI agents that use ERP data to answer business questions, flag exceptions, and guide teams through defined workflows. We design them around a specific use case and the data each team is allowed to access.',
     focus: 'ERP data · Exception monitoring · Workflow support',
   },
-]
+].map((service) => ({ ...service, href: `/services/${service.id}` }))

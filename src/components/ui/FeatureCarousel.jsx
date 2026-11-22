@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 
-export default function FeatureCarousel({ id, heading, items, actionLabel, allLink, light = false }) {
+export default function FeatureCarousel({ id, heading, items, actionLabel, allLink, allLinkLabel = 'View all case studies', light = false }) {
   const carousel = useRef(null)
   const gesture = useRef(null)
   const suppressClick = useRef(false)
@@ -169,7 +169,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
         </dialog>
         {allLink && (
           <div className="mt-5 flex justify-center">
-            <Button to={allLink} variant="secondary">View all case studies</Button>
+            <Button to={allLink} variant="secondary">{allLinkLabel}</Button>
           </div>
         )}
       </div>
