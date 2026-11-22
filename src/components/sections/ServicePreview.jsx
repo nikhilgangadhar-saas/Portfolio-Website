@@ -34,6 +34,7 @@ export default function ServicePreview() {
   const gesture = useRef(null)
   const suppressClick = useRef(false)
   const dialog = useRef(null)
+  const resumedAfterDialog = useRef(false)
   const [selectedService, setSelectedService] = useState(null)
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function ServicePreview() {
       lastTime = time
 
       if (!reducedMotion.matches && !document.hidden && !dialog.current?.open &&
-          !track.matches(':hover, :focus-within') && !gesture.current) {
+          (resumedAfterDialog.current || !track.matches(':focus-visible, :has(:focus-visible)')) && !gesture.current) {
         const loopWidth = track.children[services.length].offsetLeft
         let position = track.scrollLeft
         if (position >= loopWidth * 2) position -= loopWidth
@@ -119,6 +120,7 @@ export default function ServicePreview() {
           id="home-service-cards"
           ref={carousel}
           tabIndex={0}
+          onKeyDown={() => { resumedAfterDialog.current = false }}
           aria-label="Services. Swipe, drag, or use the arrow keys to browse."
           onPointerDown={startDrag}
           onPointerMove={drag}
@@ -137,13 +139,12 @@ export default function ServicePreview() {
             const duplicate = index >= services.length
             return (
               <li key={index} aria-hidden={duplicate || undefined} className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-white transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-300">
-                <header className="flex min-h-24 items-center border-b border-white/15 bg-slate-800 px-5 py-4">
+                <header className="flex min-h-24 items-center justify-center text-center border-b border-white/15 bg-slate-800 px-5 py-4">
                   <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
                 </header>
                 <p className="flex-1 px-5 py-4 text-base leading-6 text-slate-300">{description}</p>
-                <footer className="flex items-center justify-between gap-3 border-t border-white/15 bg-slate-950 px-5 py-3">
+                <footer className="border-t border-white/15 bg-slate-950 px-5 py-3 text-center">
                   <span className="text-sm font-medium text-slate-300">{focus}</span>
-                  <span className="shrink-0 text-sm font-semibold text-white">Details</span>
                 </footer>
                 <button
                   type="button"
@@ -160,27 +161,30 @@ export default function ServicePreview() {
         <dialog
           ref={dialog}
           aria-labelledby="service-dialog-title"
-          onClose={() => setSelectedService(null)}
+          onClose={() => {
+            resumedAfterDialog.current = true
+            setSelectedService(null)
+          }}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) event.currentTarget.close()
+          }}
           className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
         >
           {selectedService && (
-            <>
-              <header className="flex items-start justify-between gap-4 border-b border-white/15 bg-slate-900 p-5 text-white sm:p-6">
+            <div>
+              <header className="text-center border-b border-white/15 bg-slate-900 p-5 text-white sm:p-6">
                 <h2 id="service-dialog-title" className="text-2xl font-semibold tracking-tight">{selectedService.title}</h2>
-                <form method="dialog">
-                  <button type="submit" className="rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold hover:bg-white/15">Close</button>
-                </form>
               </header>
               <div className="space-y-4 p-5 sm:p-6">
                 <p className="text-base leading-7 text-slate-700">{selectedService.description}</p>
                 <p className="text-sm font-semibold text-slate-900">{selectedService.focus}</p>
               </div>
-              <footer className="border-t border-slate-200 bg-slate-50 p-5 sm:px-6">
+              <footer className="border-t border-slate-200 bg-slate-50 p-5 text-center sm:px-6">
                 <Button to="/contact" variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2">
                   Discuss a project
                 </Button>
               </footer>
-            </>
+            </div>
           )}
         </dialog>
       </div>
