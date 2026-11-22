@@ -5,12 +5,9 @@ import Home from './pages/Home'
 import CaseStudies from './pages/CaseStudies'
 import CaseStudyDetail from './pages/CaseStudyDetail'
 import Team from './pages/Team'
-import Blog from './pages/Blog'
-import BlogDetail from './pages/BlogDetail'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ComingSoon from './pages/ComingSoon'
-import Demos from './pages/Demos'
 
 import GA4RouteTracker from './components/analytics/GA4RouteTracker'
 
@@ -53,9 +50,6 @@ export default function App() {
           />
 
           <Route path="/team" element={<Team />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogDetail />} />
-          <Route path="/demos" element={<Demos />} />
           <Route path="/contact" element={<Contact />} />
 
           <Route path="*" element={<NotFound />} />
