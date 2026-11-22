@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 
-export default function FeatureCarousel({ id, heading, items, actionLabel, allLink }) {
+export default function FeatureCarousel({ id, heading, items, actionLabel, allLink, light = false }) {
   const carousel = useRef(null)
   const gesture = useRef(null)
   const suppressClick = useRef(false)
@@ -106,17 +106,17 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
           onDragStart={(event) => event.preventDefault()}
           className="relative mt-5 grid cursor-grab auto-cols-[88%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[46%] lg:auto-cols-[31%]"
         >
-          {[...items, ...items, ...items].map((service, index) => {
+          {[...items, ...items, ...items, ...items].map((service, index) => {
             const { title, description, focus } = service
             const duplicate = index >= items.length
             return (
-              <li key={index} aria-hidden={duplicate || undefined} className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-white transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-300">
-                <header className="flex min-h-24 items-center justify-center text-center border-b border-white/15 bg-slate-800 px-5 py-4">
+              <li key={index} aria-hidden={duplicate || undefined} className={`relative flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-500 ${light ? "border-slate-300 bg-white text-slate-950" : "border-slate-700 bg-slate-900 text-white"}`}>
+                <header className={`flex min-h-24 items-center justify-center border-b px-5 py-4 text-center ${light ? "border-slate-200 bg-slate-100" : "border-white/15 bg-slate-800"}`}>
                   <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
                 </header>
-                <p className="flex-1 px-5 py-4 text-base leading-6 text-slate-300">{description}</p>
-                <footer className="border-t border-white/15 bg-slate-950 px-5 py-3 text-center">
-                  <span className="text-sm font-medium text-slate-300">{focus}</span>
+                <p className={`flex-1 px-5 py-4 text-base leading-6 ${light ? "text-slate-700" : "text-slate-300"}`}>{description}</p>
+                <footer className={`border-t px-5 py-3 text-center ${light ? "border-slate-200 bg-slate-50 text-slate-700" : "border-white/15 bg-slate-950 text-slate-300"}`}>
+                  <span className="text-sm font-medium">{focus}</span>
                 </footer>
                 <button
                   type="button"
@@ -160,7 +160,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
           )}
         </dialog>
         {allLink && (
-          <div className="mt-5">
+          <div className="mt-5 flex justify-center">
             <Button to={allLink} variant="secondary">View all case studies</Button>
           </div>
         )}

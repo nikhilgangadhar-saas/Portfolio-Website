@@ -33,6 +33,7 @@ export default function CaseStudyPreview() {
       items={featured}
       actionLabel="Read the case study"
       allLink="/case-studies"
+      light
     />
   )
 }
