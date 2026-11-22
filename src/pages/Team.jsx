@@ -128,18 +128,21 @@ export default function Team() {
               </button>
             </header>
 
-            <div className="grid gap-4 p-4 text-base leading-6 text-slate-700 sm:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-              <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                <h3 className="border-b border-slate-200 bg-slate-50 px-5 py-4 font-bold text-slate-950">Skills</h3>
-                <dl className="divide-y divide-slate-100 px-5">
-                  {selected.skills.map(([area, strength]) => (
-                    <div key={area} className="grid gap-1 py-3 sm:grid-cols-[8.5rem_1fr] sm:gap-3">
-                      <dt className="font-semibold text-slate-950">{area}</dt>
-                      <dd>{strength}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
+            <div className="grid gap-4 p-4 text-base leading-6 text-slate-700 sm:p-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+              <div className="grid content-start gap-4">
+                <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <h3 className="border-b border-slate-200 bg-slate-50 px-5 py-4 font-bold text-slate-950">Skills</h3>
+                  <dl className="divide-y divide-slate-100 px-5">
+                    {selected.skills.map(([area, strength]) => (
+                      <div key={area} className="grid gap-1 py-3 lg:grid-cols-[8.5rem_1fr] lg:gap-3">
+                        <dt className="font-semibold text-slate-950">{area}</dt>
+                        <dd>{strength}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+                <ProfileList title="Background" items={selected.education} />
+              </div>
 
               <div className="grid content-start gap-4">
                 <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
@@ -151,7 +154,6 @@ export default function Team() {
                   </ul>
                 </section>
                 <ProfileList title="Experience highlights" items={selected.experience} />
-                <ProfileList title="Background" items={selected.education} />
               </div>
             </div>
           </div>
