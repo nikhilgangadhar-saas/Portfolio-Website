@@ -1,5 +1,18 @@
 export const caseStudies = [
   {
+    slug: 'operational-audit-control-roadmap',
+    title: 'Operational Audit & Control Roadmap',
+    tag: 'Operations & Governance',
+    summary: 'We reviewed operations across plants, warehouses, and offices and secured board approval for a roadmap covering ERP, procurement, inventory, and warehouse operations.',
+    problem: 'Leadership needed a clear view of operational gaps and a prioritized plan for improving controls across sites.',
+    solution: 'We led a four-week operational audit, presented the findings to the board, and developed SOPs to support implementation.',
+    tools: ['Operational audit', 'Process review', 'SOPs'],
+    impact: [
+      'Secured board approval for the improvement roadmap',
+      'Helped train more than 120 staff',
+    ],
+  },
+  {
     slug: 'sap-b1-to-azure-data-warehouse',
     title: 'SAP B1 to Azure Data Warehouse',
     tag: 'Data Engineering',
