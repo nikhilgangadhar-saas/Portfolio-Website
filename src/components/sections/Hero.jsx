@@ -20,30 +20,24 @@ export default function Hero() {
 
       <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-20 md:py-28 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
-          <Badge>Practical Business Systems for SMEs</Badge>
+          <Badge>NG Advisory Co.</Badge>
 
           <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-white md:text-6xl">
-            Build better business control without overcomplicating operations.
+            Business advisory, operational improvement, and technology implementation
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            SOPs, warehouse controls, reporting automation, data products, and
-            lightweight applications for growing businesses that need clarity,
-            structure, and measurable control.
+            We help growing businesses decide where to focus, improve how they operate,
+            and build the systems to support that work.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button to="/products">Explore Products</Button>
+            <Button to="/contact">Discuss a project</Button>
             <Button to="/case-studies" variant="glass">
-              View Case Studies
+              View case studies
             </Button>
           </div>
 
-          <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
-            <MiniStat title="SOP" text="Control systems" />
-            <MiniStat title="Data" text="Reporting products" />
-            <MiniStat title="Apps" text="Workflow tools" />
-          </div>
         </div>
 
         <div className="relative">
@@ -80,7 +74,7 @@ export default function Hero() {
                   </div>
                 </div>
                 <div className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-                  Live System
+                  Illustrative example
                 </div>
               </div>
 
@@ -125,15 +119,6 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  )
-}
-
-function MiniStat({ title, text }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/8 p-4 shadow-sm backdrop-blur">
-      <div className="text-xl font-extrabold text-white">{title}</div>
-      <div className="mt-1 text-xs font-medium text-slate-400">{text}</div>
-    </div>
   )
 }
 

@@ -1,5 +1,4 @@
 import Hero from '../components/sections/Hero'
-import ExpertiseGrid from '../components/sections/ExpertiseGrid'
 import ProductCategories from '../components/sections/ProductCategories'
 import ServicePreview from '../components/sections/ServicePreview'
 import CaseStudyPreview from '../components/sections/CaseStudyPreview'
@@ -10,10 +9,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <ExpertiseGrid />
-      <ProductCategories />
       <ServicePreview />
       <CaseStudyPreview />
+      <ProductCategories />
       <LeadMagnet />
       <CallToAction />
     </>

@@ -1,7 +1,27 @@
 import SectionHeader from '../ui/SectionHeader'
 import Card from '../ui/Card'
-import Button from '../ui/Button'
-import { services } from '../../data/services'
+const services = [
+  {
+    title: 'Business Analysis & Strategy',
+    description: 'We support business decisions with SWOT analysis, market research, and go-to-market planning.',
+  },
+  {
+    title: 'Operations, SOPs & Audit',
+    description: 'We improve inventory controls and day-to-day workflows, document SOPs, and design internal audit plans.',
+  },
+  {
+    title: 'Azure Data & ERP Reporting',
+    description: 'We build Azure databases and data pipelines, connect ERP data, and deliver reports and alerts through dashboards, WhatsApp, Microsoft Teams, or Slack.',
+  },
+  {
+    title: 'Custom Business Applications',
+    description: 'We build or deploy applications for HR onboarding, learning and development, internal audit, and approvals.',
+  },
+  {
+    title: 'Enterprise AI Agents',
+    description: 'We build agents that use ERP data to answer business questions, flag exceptions, and support defined workflows.',
+  },
+]
 
 export default function ServicePreview() {
   return (
@@ -12,11 +32,10 @@ export default function ServicePreview() {
       <div className="relative mx-auto max-w-7xl px-5 py-20">
         <SectionHeader
           eyebrow="Services"
-          title="Support when templates are not enough."
-          subtitle="Advisory, design, mentorship, and implementation support for business, data, and operations problems."
+          title="How we help"
         />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <Card key={service.title}>
               <h3 className="text-lg font-extrabold text-slate-950">
@@ -30,9 +49,6 @@ export default function ServicePreview() {
           ))}
         </div>
 
-        <div className="mt-10">
-          <Button to="/services">Explore Services</Button>
-        </div>
       </div>
     </section>
   )
