@@ -39,8 +39,8 @@ export default function Header() {
       ref={headerRef}
       className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl"
     >
-      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-5 px-5 py-3 sm:px-8">
-        <Link to="/" onClick={closeMenu}>
+      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-4 px-5 py-3 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+        <Link to="/" onClick={closeMenu} className="min-w-0 lg:justify-self-start">
           <div className="flex items-center gap-3">
             <BrandMark size="header" />
 
@@ -48,14 +48,14 @@ export default function Header() {
               <div className="font-[Georgia] text-xl font-semibold tracking-tight text-white">
                 NG Advisory Co.
               </div>
-              <div className="hidden text-xs text-slate-400 sm:block">
+              <div className="hidden text-xs text-slate-400 sm:block lg:hidden xl:block">
                 Business Control · Data Products · Practical Systems
               </div>
             </div>
           </div>
         </Link>
 
-        <nav aria-label="Main navigation" className="hidden items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-1 lg:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 lg:flex lg:justify-self-center">
           {headerLinks.map(({ label, path, menu }) => menu ? (
             <div key={menu} className="relative">
               <button
@@ -66,20 +66,20 @@ export default function Header() {
                   menuTrigger.current = event.currentTarget
                   setOpenMenu(openMenu === menu ? null : menu)
                 }}
-                className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition-colors ${openMenu === menu ? 'bg-white text-slate-950' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors ${openMenu === menu ? 'bg-white/15 text-white' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
               >
                 {label}
                 <span aria-hidden="true" className={`mb-0.5 size-1.5 border-b border-r border-current transition-transform ${openMenu === menu ? 'rotate-[225deg]' : 'rotate-45'}`} />
               </button>
               {openMenu === menu && (
-                <div id={`header-menu-${menu}`} className="absolute left-1/2 top-full z-10 mt-3 w-[34rem] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-black/25">
-                  <ul className="grid grid-cols-2 gap-1">
+                <div id={`header-menu-${menu}`} className="absolute left-1/2 top-full z-10 mt-3 w-80 -translate-x-1/2 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-black/25">
+                  <ul className="divide-y divide-slate-100">
                     {homepageMenus[menu].map((item) => (
                       <li key={item.id}>
                         <Link
                           to={`/#${item.id}`}
                           onClick={closeMenu}
-                          className="block h-full rounded-xl p-3.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
+                          className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
                         >
                           <span className="block text-sm font-semibold text-slate-950">{item.title}</span>
                           <span className="mt-1 block text-sm leading-5 text-slate-600">{item.focus || item.examples[0]}</span>
@@ -96,18 +96,18 @@ export default function Header() {
               to={path}
               end={path === '/'}
               onClick={closeMenu}
-              className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${isActive && !openMenu ? 'bg-white/12 text-white' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
+              className={({ isActive }) => `rounded-full px-3 py-2 text-sm font-medium transition-colors ${isActive && !openMenu ? 'bg-white/12 text-white' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
             >
               {label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden lg:block lg:justify-self-end">
           <Link
             to="/contact"
             onClick={closeMenu}
-            className="whitespace-nowrap rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-slate-200"
+            className="inline-block whitespace-nowrap rounded-full border border-blue-400/35 bg-blue-950 px-4 py-2.5 text-sm font-semibold text-blue-100 transition-colors hover:border-blue-300/60 hover:bg-blue-900"
           >
             Discuss a project
           </Link>

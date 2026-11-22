@@ -53,7 +53,7 @@ export default function MobileNav() {
             </NavLink>
           ))}
 
-          <Link to="/contact" onClick={closeMenu} className="mt-1 rounded-xl bg-slate-950 px-5 py-3 text-center text-sm font-semibold text-white">
+          <Link to="/contact" onClick={closeMenu} className="mt-1 rounded-xl border border-blue-800 bg-blue-950 px-5 py-3 text-center text-sm font-semibold text-blue-100 hover:bg-blue-900">
             Discuss a project
           </Link>
         </nav>
