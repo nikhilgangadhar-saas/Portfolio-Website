@@ -7,19 +7,30 @@ const assetLibraries = [
     title: 'Documents & Templates',
     description: 'Targeted SOPs, audit plans, checklists, and approval templates for warehouse operations and internal controls.',
     action: 'View document assets',
+    accent: 'border-t-blue-600',
   },
   {
     id: 'excel-tools',
     title: 'Excel Tools',
     description: 'Practical Excel workbooks for stock counts and reconciliation, inventory ageing, and tracking audit actions.',
     action: 'View Excel tools',
+    accent: 'border-t-emerald-600',
   },
 ]
 
+const technologies = [
+  { name: 'Azure', image: 'Azure.png' },
+  { name: 'Power BI', image: 'pbi.png' },
+  { name: 'Azure Data Factory', image: 'adf.png' },
+  { name: 'SQL', image: 'sql.png' },
+]
+
+const auditDescription = 'Create, assign, and run audits. Raise incident reports, assign actions, and track follow-up.'
+
 const applications = [
-  { name: 'People Review', tone: 'bg-linear-to-br from-sky-500 to-blue-950' },
-  { name: 'IA&C', tone: 'bg-linear-to-br from-slate-950 via-blue-950 to-red-900' },
-  { name: 'Sequence BI', tone: 'bg-black font-mono text-green-400' },
+  { name: 'HR - People Review', initials: 'HR & PR', description: 'Onboarding and L&D solution.', tone: 'bg-linear-to-br from-[#315cff] to-[#132238] text-white' },
+  { name: 'Internal Audit and Control', initials: 'IA&C', description: auditDescription, tone: 'bg-linear-to-br from-[#132238] via-[#132238] to-[#a12727] text-white' },
+  { name: 'Sequence BI', initials: 'Seq BI', description: auditDescription, tone: 'bg-[#11130f] font-mono text-[#d9ff43]' },
 ]
 
 export default function Products() {
@@ -29,28 +40,31 @@ export default function Products() {
   return (
     <>
       <section className="bg-slate-950 px-5 py-12 text-white sm:px-8 lg:py-16">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[100rem]">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">Products &amp; Solutions</h1>
           <p className="mt-4 max-w-2xl text-lg leading-7 text-slate-300">Browse ready-to-use business tools, or work with us on reporting and software for your team.</p>
         </div>
       </section>
 
-      <section aria-label="Products and solutions" className="bg-slate-100 px-5 py-8 text-slate-950 sm:px-8 lg:py-12">
-        <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
-          {assetLibraries.map(({ id, title, description, action }) => (
-            <article key={id} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+      <section aria-label="Products and solutions" className="bg-slate-100 bg-linear-to-b from-slate-200/60 to-slate-50 px-5 py-8 text-slate-950 sm:px-8 lg:py-12">
+        <div className="mx-auto grid max-w-[100rem] gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {assetLibraries.map(({ id, title, description, action, accent }) => (
+            <article key={id} className={`flex flex-col rounded-2xl border border-slate-200 border-t-4 bg-white p-5 shadow-sm xl:p-6 ${accent}`}>
               <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
               <p className="mb-6 mt-3 flex-1 leading-7 text-slate-700">{description}</p>
               <div><Button to={`/products/${id}`} variant="dark">{action}</Button></div>
             </article>
           ))}
 
-          <article id="data-reporting-services" className="flex scroll-mt-24 flex-col rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <article id="data-reporting-services" className="flex scroll-mt-24 flex-col rounded-2xl border border-slate-200 border-t-4 border-t-indigo-600 bg-white shadow-sm p-5 xl:p-6">
             <h2 className="text-2xl font-bold tracking-tight">Data &amp; Reporting Services</h2>
             <p className="mt-3 flex-1 leading-7 text-slate-700">Work with us to connect your ERP and business data, build reliable pipelines, and give teams the reports they need through dashboards or automated alerts.</p>
             <ul aria-label="Reporting technologies" className="my-6 flex flex-wrap gap-2">
-              {['Azure', 'Power BI', 'Azure Data Factory', 'Azure SQL'].map((technology) => (
-                <li key={technology} className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">{technology}</li>
+              {technologies.map(({ name, image }) => (
+                <li key={name} className="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                  <img src={`/assets/${image}`} alt={name} title={name} className="size-8 object-contain" onError={(event) => { event.currentTarget.style.display = 'none' }} />
+                  <span className="text-xs font-semibold text-slate-700">{name}</span>
+                </li>
               ))}
             </ul>
             <div className="flex flex-wrap gap-3">
@@ -62,25 +76,30 @@ export default function Products() {
           <article id="business-applications" className="flex scroll-mt-24 flex-col rounded-2xl bg-slate-900 p-6 text-white sm:p-8">
             <h2 className="text-2xl font-bold tracking-tight">Business Applications</h2>
             <p className="mt-3 flex-1 leading-7 text-slate-300">Explore software for people operations, audit and control, and business intelligence. We can help scope and implement a solution for your workflow.</p>
-            <div className="my-6 grid grid-cols-3 gap-2 sm:gap-3">
-              {applications.map(({ name, tone, href }) => {
+            <div className="my-5 grid gap-3">
+              {applications.map(({ name, initials, description, tone, href }) => {
                 const Logo = href ? 'a' : 'button'
                 return (
-                  <Logo
-                    key={name}
-                    {...(href ? { href } : {
-                      type: 'button',
-                      'aria-haspopup': 'dialog',
-                      onClick: () => {
-                        setSelectedApp(name)
-                        announcement.current.showModal()
-                      },
-                    })}
-                    className={`flex min-h-20 min-w-0 flex-col items-center justify-center rounded-xl border border-white/20 px-2 py-2 text-center text-sm transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 ${tone}`}
-                  >
-                    <span aria-hidden="true" className="flex flex-col font-serif text-base font-bold leading-none">NG<span className="mt-0.5 text-xs">&amp;Co.</span></span>
-                    <span className="mt-1 font-semibold">{name}</span>
-                  </Logo>
+                  <div key={name} className="flex flex-col items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-3">
+                    <Logo
+                      {...(href ? { href } : {
+                        type: 'button',
+                        'aria-haspopup': 'dialog',
+                        onClick: () => {
+                          setSelectedApp(name)
+                          announcement.current.showModal()
+                        },
+                      })}
+                      aria-label={name}
+                      className={`grid size-14 shrink-0 place-items-center rounded-xl border border-white/20 text-center text-xs font-bold transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 ${tone}`}
+                    >
+                      {initials}
+                    </Logo>
+                    <div>
+                      <p className="text-sm font-semibold">{name}</p>
+                      <p className="mt-0.5 text-sm leading-5 text-slate-300">{description}</p>
+                    </div>
+                  </div>
                 )
               })}
             </div>
