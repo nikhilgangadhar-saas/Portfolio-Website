@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { useLayoutEffect } from 'react'
+import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 
 import Home from './pages/Home'
@@ -12,6 +13,15 @@ import ComingSoon from './pages/ComingSoon'
 import GA4RouteTracker from './components/analytics/GA4RouteTracker'
 
 export default function App() {
+  const { pathname, hash } = useLocation()
+  const navigationType = useNavigationType()
+
+  useLayoutEffect(() => {
+    if (navigationType !== 'POP' && !hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    }
+  }, [pathname, hash, navigationType])
+
   return (
     <>
       <GA4RouteTracker />
