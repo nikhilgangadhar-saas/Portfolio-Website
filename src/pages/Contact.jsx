@@ -34,8 +34,8 @@ const countryOptions = [
 ]
 
 const nextSteps = [
-  'I review the problem and category selected.',
-  'I reply with the best next path: product, advisory, design, or implementation.',
+  'We review your enquiry and the details you share.',
+  'We reply with the best next step for your project.',
   'If useful, we schedule a focused discussion.',
 ]
 
@@ -142,27 +142,15 @@ export default function Contact() {
         <div className="motion-blob-one absolute -left-32 top-10 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
         <div className="motion-blob-two absolute bottom-0 right-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <div className="relative mx-auto w-full max-w-[100rem] px-5 py-10 sm:px-8 lg:py-12">
           <div className="max-w-4xl">
-            <div className="mb-4 inline-flex rounded-full border border-blue-300/25 bg-blue-400/10 px-4 py-2 text-sm font-bold text-blue-200">
-              Contact
-            </div>
-
             <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-              Tell me the business problem you want to solve.
+              Tell us about your project.
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Use this page for advisory, product access, mentorship, custom
-              implementation, or discussing similar work.
+              Share what you need help with. We’ll get back to you to discuss the next step.
             </p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button to="/products/sop-control">Explore Products</Button>
-              <Button to="/services" variant="glass">
-                View Services
-              </Button>
-            </div>
           </div>
         </div>
       </section>
@@ -172,74 +160,15 @@ export default function Contact() {
         <div className="absolute -left-32 top-40 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
         <div className="absolute bottom-40 right-0 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
 
-        <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[0.8fr_1.2fr]">
-          <aside className="space-y-6">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Let's Talk
-              </div>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-slate-950">
-                Start with the right intent.
-              </h2>
-
-              <div className="mt-6 grid gap-2">
-                {contactReasons.map((reason) => (
-                  <button
-                    key={reason}
-                    type="button"
-                    onClick={() =>
-                      setFormData((current) => ({
-                        ...current,
-                        reason,
-                      }))
-                    }
-                    className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
-                      formData.reason === reason
-                        ? 'border-blue-600 bg-blue-600 text-white'
-                        : 'border-slate-200 bg-[#f4f7fb] text-slate-700 hover:border-blue-200 hover:text-blue-700'
-                    }`}
-                  >
-                    {reason}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                What Happens Next
-              </div>
-
-              <div className="mt-5 grid gap-4">
-                {nextSteps.map((step, index) => (
-                  <div key={step} className="flex items-start gap-3">
-                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-50 text-xs font-black text-blue-700">
-                      {index + 1}
-                    </div>
-
-                    <div className="text-sm leading-6 text-slate-700">
-                      {step}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </aside>
-
+        <div className="relative mx-auto grid w-full max-w-[100rem] gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5 md:p-8">
             <div className="max-w-2xl">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Lead Form
-              </div>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-slate-950 md:text-4xl">
-                Send the details.
+              <h2 className="text-3xl font-extrabold text-slate-950 md:text-4xl">
+                Project enquiry
               </h2>
 
               <p className="mt-4 text-base leading-7 text-slate-600">
-                Keep it simple. Describe the problem, what you have today, and
-                what you want to improve.
+                Tell us how things work today and what you’d like to improve.
               </p>
             </div>
 
@@ -321,7 +250,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   rows="7"
-                  placeholder="Example: I need help creating a warehouse SOP and stock count control process..."
+                  placeholder="Example: We need help documenting our warehouse procedures and improving stock counts."
                   className="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-[#f4f7fb] px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white"
                 />
               </div>
@@ -347,6 +276,56 @@ export default function Contact() {
               </button>
             </form>
           </div>
+
+          <aside className="space-y-6">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
+              <h2 className="text-3xl font-extrabold text-slate-950">
+                How can we help?
+              </h2>
+
+              <div className="mt-6 grid gap-2">
+                {contactReasons.map((reason) => (
+                  <button
+                    key={reason}
+                    type="button"
+                    onClick={() =>
+                      setFormData((current) => ({
+                        ...current,
+                        reason,
+                      }))
+                    }
+                    className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
+                      formData.reason === reason
+                        ? 'border-blue-600 bg-blue-600 text-white'
+                        : 'border-slate-200 bg-[#f4f7fb] text-slate-700 hover:border-blue-200 hover:text-blue-700'
+                    }`}
+                  >
+                    {reason}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
+              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+                What Happens Next
+              </div>
+
+              <div className="mt-5 grid gap-4">
+                {nextSteps.map((step, index) => (
+                  <div key={step} className="flex items-start gap-3">
+                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-50 text-xs font-black text-blue-700">
+                      {index + 1}
+                    </div>
+
+                    <div className="text-sm leading-6 text-slate-700">
+                      {step}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
     </>

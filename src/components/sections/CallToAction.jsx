@@ -3,7 +3,7 @@ import Button from '../ui/Button'
 export default function CallToAction() {
   return (
     <section aria-labelledby="home-contact-title" className="bg-slate-100 text-slate-950">
-      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
+      <div className="mx-auto w-full max-w-[100rem] px-5 py-10 sm:px-8 lg:py-12">
         <div className="flex flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 id="home-contact-title" className="text-3xl font-extrabold tracking-tight md:text-4xl">

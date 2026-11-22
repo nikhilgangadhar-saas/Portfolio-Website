@@ -52,7 +52,7 @@ export default function Header() {
       ref={headerRef}
       className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between px-5 sm:px-8 py-4">
         <Link to="/" onClick={closeMenu}>
           <div className="flex items-center gap-3">
             <BrandMark size="header" />
@@ -172,7 +172,7 @@ export default function Header() {
           <Link
             to="/contact"
             onClick={closeMenu}
-            className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+            className="rounded-full border border-white/15 px-5 sm:px-8 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
           >
             Contact
           </Link>
@@ -180,7 +180,7 @@ export default function Header() {
           <Link
             to="/contact"
             onClick={closeMenu}
-            className="rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-400"
+            className="rounded-full bg-blue-500 px-5 sm:px-8 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-400"
           >
             Book Advisory
           </Link>
@@ -230,7 +230,7 @@ function BrandMark({ size = 'header' }) {
 function ProductMegaMenu({ onClose }) {
   return (
     <div className="absolute left-0 top-full w-full border-t border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
-      <div className="mx-auto max-w-7xl px-5 py-8">
+      <div className="mx-auto w-full max-w-[100rem] px-5 sm:px-8 py-8">
         <MegaMenuHeader
           eyebrow="Products"
           title="Choose what you want to improve"
@@ -291,7 +291,7 @@ function ProductMegaMenu({ onClose }) {
 function ServicesMegaMenu({ onClose }) {
   return (
     <div className="absolute left-0 top-full w-full border-t border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
-      <div className="mx-auto max-w-7xl px-5 py-7">
+      <div className="mx-auto w-full max-w-[100rem] px-5 sm:px-8 py-7">
         <MegaMenuHeader
           eyebrow="Services"
           title="Choose the support level"
@@ -349,7 +349,7 @@ function ServicesMegaMenu({ onClose }) {
 function ExpertiseMegaMenu({ onClose }) {
   return (
     <div className="absolute left-0 top-full w-full border-t border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
-      <div className="mx-auto max-w-7xl px-5 py-7">
+      <div className="mx-auto w-full max-w-[100rem] px-5 sm:px-8 py-7">
         <MegaMenuHeader
           eyebrow="Expertise"
           title="Choose the business capability"
@@ -399,7 +399,7 @@ function ExpertiseMegaMenu({ onClose }) {
 function CaseStudiesMegaMenu({ onClose }) {
   return (
     <div className="absolute left-0 top-full w-full border-t border-white/10 bg-slate-950 shadow-2xl shadow-black/30">
-      <div className="mx-auto max-w-7xl px-5 py-7">
+      <div className="mx-auto w-full max-w-[100rem] px-5 sm:px-8 py-7">
         <MegaMenuHeader
           eyebrow="Case Studies"
           title="Proof through real business systems"
@@ -516,7 +516,7 @@ function BrandingBox({ onClose }) {
         <Link
           to="/contact"
           onClick={onClose}
-          className="mt-5 inline-flex w-full justify-center rounded-full bg-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-400"
+          className="mt-5 inline-flex w-full justify-center rounded-full bg-blue-500 px-5 sm:px-8 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-400"
         >
           Ask for Recommendation
         </Link>

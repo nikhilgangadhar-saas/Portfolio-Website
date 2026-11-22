@@ -17,7 +17,7 @@ export default function Hero() {
         <div className="motion-orbit h-3 w-3 rounded-full bg-emerald-300 shadow-lg shadow-emerald-300/40" />
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:gap-12 lg:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div className="relative mx-auto grid w-full max-w-[100rem] gap-10 px-5 py-14 sm:px-8 lg:gap-12 lg:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div>
           <h1 className="max-w-4xl text-4xl font-extrabold tracking-tight text-white md:text-6xl">
             Business advisory, operational improvement, and technology implementation

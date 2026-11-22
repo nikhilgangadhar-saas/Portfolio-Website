@@ -83,7 +83,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
 
   return (
     <section aria-labelledby={`${id}-title`} className="bg-[#f4f7fb]">
-      <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
+      <div className="mx-auto w-full max-w-[100rem] px-5 py-8 sm:px-8 lg:py-10">
         <h2 id={`${id}-title`} className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
           {heading}
         </h2>
