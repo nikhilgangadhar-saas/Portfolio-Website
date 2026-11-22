@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
+import AssetLogo from '../ui/AssetLogo'
 import Button from '../ui/Button'
+import { AzureArchitecture, AzureProjectPlan } from './AzureProjectVisuals'
+import './azure-reporting-pitch.css'
 
 const stakeholders = [
   ['Operations', 'Which decisions and daily tasks need better data? We agree on the figures, the level of detail, and where teams want to receive them, whether that’s Power BI, Excel, or email.'],
@@ -16,11 +19,11 @@ const charter = [
   ['Cost–benefit analysis', 'Compare build and running costs with expected time savings, reduced manual effort, and better access to information.'],
 ]
 
-const architecture = [
-  ['SAP Business One', 'Source transactions and master data'],
-  ['Azure Data Factory', 'Scheduled extraction and loading'],
-  ['Azure SQL', 'Curated warehouse and reporting views'],
-  ['Reporting and delivery', 'Power BI, operational reports, and scheduled distribution'],
+const technologies = [
+  ['SAP Business One', 'SAP.png'],
+  ['Azure', 'Azure.png'],
+  ['Azure Data Factory', 'adf.png'],
+  ['Power BI', 'pbi.png'],
 ]
 
 const implementation = [
@@ -43,19 +46,31 @@ const headingClass = 'text-2xl font-bold tracking-tight text-slate-950 sm:text-3
 export default function AzureReportingPitch() {
   return (
     <article className="bg-white text-slate-950">
-      <header className="bg-slate-950 px-5 py-10 text-white sm:px-8 sm:py-14">
-        <div className={contentClass}>
-          <Link to="/services" className="text-sm font-semibold text-slate-300 underline underline-offset-4 hover:text-white">All services</Link>
-          <h1 className="mt-5 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl">Azure Data &amp; ERP Reporting</h1>
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">Give teams reliable access to the ERP data they need. See how we’d scope your project and what we built for a manufacturing and distribution business using SAP Business One.</p>
-          <Button to="/contact" variant="light" className="mt-6">Discuss a similar project</Button>
+      <header className="bg-slate-950 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 px-5 py-10 text-white sm:px-8 sm:py-16">
+        <div className={`${contentClass} grid items-end gap-8 lg:grid-cols-[1fr_18rem]`}>
+          <div className="azure-pitch-intro">
+            <Link to="/services" className="text-sm font-semibold text-slate-300 underline underline-offset-4 hover:text-white">All services</Link>
+            <h1 className="mt-5 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl">Azure Data &amp; ERP Reporting</h1>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">Give teams reliable access to the ERP data they need. See how we’d scope your project and what we built for a manufacturing and distribution business using SAP Business One.</p>
+            <Button to="/contact" variant="light" className="mt-6">Discuss a similar project</Button>
+          </div>
+          <ul aria-label="Core project technologies" className="grid grid-cols-2 gap-2 rounded-2xl border border-white/15 bg-white/5 p-3">
+            {technologies.map(([name, file]) => (
+              <li key={name} className="flex flex-col items-center gap-2 rounded-xl bg-slate-950/65 p-3 text-center text-xs font-semibold text-white">
+                <span className="grid size-10 place-items-center rounded-lg bg-white p-1.5">
+                  <AssetLogo file={file} className="max-h-full w-full object-contain" />
+                </span>
+                {name}
+              </li>
+            ))}
+          </ul>
         </div>
       </header>
 
       <section className={sectionClass}>
-        <div className={contentClass}>
+        <div className={`${contentClass} grid gap-4 md:grid-cols-[1fr_2fr]`}>
           <h2 className={headingClass}>The challenge</h2>
-          <p className="mt-4 max-w-3xl leading-7 text-slate-700">The data already exists, but the people who need it can wait days for an extract or spend hours preparing one. The source may be an on-premises database, access may be limited to a few specialists, or regulatory rules may restrict where data can be stored or shared. In this project, management reporting depended on SAP exports, Excel files, and repeated preparation.</p>
+          <p className="max-w-3xl leading-7 text-slate-700">The data already exists, but the people who need it can wait days for an extract or spend hours preparing one. The source may be an on-premises database, access may be limited to a few specialists, or regulatory rules may restrict where data can be stored or shared. In this project, management reporting depended on SAP exports, Excel files, and repeated preparation.</p>
         </div>
       </section>
 
@@ -72,14 +87,15 @@ export default function AzureReportingPitch() {
           </div>
           <h3 className="mt-8 text-xl font-bold">Agree the project charter</h3>
           <p className="mt-2 max-w-3xl leading-7 text-slate-700">We turn discovery into a charter that teams can review and approve before implementation.</p>
-          <dl className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          <dl className="mt-4 grid gap-x-8 gap-y-4 rounded-2xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:grid-cols-3">
             {charter.map(([title, description]) => (
-              <div key={title} className="border-t border-slate-200 pt-3">
+              <div key={title} className="border-l-2 border-blue-700/40 pl-3">
                 <dt className="font-semibold">{title}</dt>
                 <dd className="mt-1 leading-7 text-slate-700">{description}</dd>
               </div>
             ))}
           </dl>
+          <AzureProjectPlan />
         </div>
       </section>
 
@@ -87,14 +103,7 @@ export default function AzureReportingPitch() {
         <div className={contentClass}>
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">How the platform fits together</h2>
           <p className="mt-3 max-w-3xl leading-7 text-slate-300">In the SAP Business One project, the warehouse gave reporting and delivery tools a curated source they could share.</p>
-          <ol className="mt-5 grid list-none gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {architecture.map(([title, description], index) => (
-              <li key={title} className="rounded-xl border border-white/20 bg-white/5 p-4">
-                <h3 className="font-semibold"><span aria-hidden="true" className="mr-2 text-slate-300">{index + 1}.</span>{title}</h3>
-                <p className="mt-1 text-sm leading-6 text-slate-300">{description}</p>
-              </li>
-            ))}
-          </ol>
+          <AzureArchitecture />
         </div>
       </section>
 
@@ -104,7 +113,7 @@ export default function AzureReportingPitch() {
           <p className="mt-3 max-w-3xl leading-7 text-slate-700">Once your charter is approved, we turn the agreed requirements into a build plan. Here’s how that work takes shape, using the SAP Business One project as an example.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {implementation.map(([title, description]) => (
-              <div key={title} className="rounded-xl border border-slate-200 p-5">
+              <div key={title} className="rounded-xl border border-slate-200 bg-slate-50 p-5">
                 <h3 className="text-lg font-bold">{title}</h3>
                 <p className="mt-2 leading-7 text-slate-700">{description}</p>
               </div>
@@ -116,7 +125,7 @@ export default function AzureReportingPitch() {
       <section className={`${sectionClass} bg-slate-50`}>
         <div className={contentClass}>
           <h2 className={headingClass}>What teams could do</h2>
-          <dl className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
+          <dl className="mt-4 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white px-5">
             {outcomes.map(([requirement, result]) => (
               <div key={requirement} className="grid gap-1 py-4 sm:grid-cols-[1fr_2fr] sm:gap-6">
                 <dt className="font-semibold">{requirement}</dt>
@@ -128,10 +137,10 @@ export default function AzureReportingPitch() {
       </section>
 
       <section className="px-5 py-10 sm:px-8 sm:py-14">
-        <div className={`${contentClass} rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8`}>
-          <h2 className={headingClass}>Start with one reporting problem</h2>
-          <p className="mt-3 max-w-3xl leading-7 text-slate-700">Tell us which reports are hard to produce, who needs them, and which systems you use. You can start with a description of the problem and keep your data and credentials private. We’ll help you identify a first release and explain what access, effort, and budget it would take.</p>
-          <Button to="/contact" variant="dark" className="mt-5">Discuss a similar project</Button>
+        <div className={`${contentClass} rounded-2xl bg-slate-950 p-6 text-white sm:p-8`}>
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Start with one reporting problem</h2>
+          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Tell us which reports are hard to produce, who needs them, and which systems you use. You can start with a description of the problem and keep your data and credentials private. We’ll help you identify a first release and explain what access, effort, and budget it would take.</p>
+          <Button to="/contact" variant="light" className="mt-5">Discuss a similar project</Button>
         </div>
       </section>
     </article>

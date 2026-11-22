@@ -1,0 +1,106 @@
+.azure-flow {
+  --connector: #7dd3fc;
+  display: grid;
+  gap: 1rem;
+}
+
+.azure-flow-main,
+.azure-flow-delivery {
+  display: grid;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.azure-flow-main > li::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 1rem;
+  background: var(--connector);
+}
+
+.azure-flow-delivery {
+  position: relative;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+  padding-left: 1.5rem;
+}
+
+.azure-flow-delivery::before {
+  content: "";
+  position: absolute;
+  inset: 0 50% auto 0;
+  height: 1px;
+  background: var(--connector);
+}
+
+.azure-flow-delivery > li::before,
+.azure-flow-delivery > li::after {
+  content: "";
+  position: absolute;
+  background: var(--connector);
+}
+
+.azure-flow-delivery > li::before {
+  top: 50%;
+  right: 100%;
+  width: 1.5rem;
+  height: 1px;
+}
+
+.azure-flow-delivery > li::after {
+  top: 50%;
+  left: -1.5rem;
+  width: 1px;
+  height: calc(100% + 1rem + 2px);
+}
+
+.azure-flow-delivery > li:first-child::after {
+  top: -1px;
+  height: calc(150% + 1rem + 2px);
+}
+
+.azure-flow-delivery > li:last-child::after {
+  content: none;
+}
+
+@media (width >= 64rem) {
+  .azure-flow {
+    grid-template-columns: 3fr 1.18fr;
+  }
+
+  .azure-flow-main {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .azure-flow-main > li::after {
+    inset: 50% auto auto 100%;
+    width: 1rem;
+    height: 1px;
+  }
+
+  .azure-flow-delivery::before {
+    content: none;
+  }
+
+  .azure-flow-delivery > li:first-child::after {
+    top: 50%;
+    height: calc(100% + 1rem + 2px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .azure-pitch-intro {
+    animation: azure-pitch-enter 480ms ease-out both;
+  }
+}
+
+@keyframes azure-pitch-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
