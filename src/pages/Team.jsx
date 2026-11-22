@@ -110,36 +110,49 @@ export default function Team() {
         onClick={(event) => {
           if (event.target === event.currentTarget) event.currentTarget.close()
         }}
-        className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-2xl overflow-auto rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
+        className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-5xl overflow-auto rounded-2xl border border-slate-200 bg-slate-100 text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
       >
         {selected && (
           <div>
-            <header className="flex items-start justify-between gap-4 bg-slate-950 p-5 text-white sm:p-6">
-              <div>
-                <h2 id="team-profile-title" className="text-2xl font-bold tracking-tight">{selected.name}</h2>
+            <header className="flex items-start gap-4 bg-linear-to-r from-slate-950 to-blue-950 p-5 text-white sm:p-7">
+              <span aria-hidden="true" className="grid size-14 shrink-0 place-items-center rounded-2xl border border-white/20 bg-white/10 font-serif text-xl">
+                {selected.initials}
+              </span>
+              <div className="flex-1">
+                <h2 id="team-profile-title" className="text-2xl font-bold tracking-tight sm:text-3xl">{selected.name}</h2>
                 <p className="mt-1 text-sm text-slate-300">{selected.role}</p>
+                <p className="mt-3 max-w-2xl text-base leading-6 text-slate-200">{selected.intro}</p>
               </div>
-              <button type="button" aria-label="Close profile" onClick={() => dialog.current.close()} className="rounded-full border border-white/20 px-3 py-1 text-xl leading-none hover:bg-white/10">
+              <button type="button" aria-label="Close profile" onClick={() => dialog.current.close()} className="shrink-0 rounded-full border border-white/20 px-3 py-1 text-xl leading-none hover:bg-white/10">
                 ×
               </button>
             </header>
 
-            <div className="space-y-5 p-5 text-base leading-6 text-slate-700 sm:p-6">
-              <p>{selected.intro}</p>
-              <ProfileList title="Areas of focus" items={selected.focus} />
-              <section>
-                <h3 className="font-bold text-slate-950">Skills</h3>
-                <dl className="mt-2 divide-y divide-slate-200 border-y border-slate-200">
+            <div className="grid gap-4 p-4 text-base leading-6 text-slate-700 sm:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+              <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                <h3 className="border-b border-slate-200 bg-slate-50 px-5 py-4 font-bold text-slate-950">Skills</h3>
+                <dl className="divide-y divide-slate-100 px-5">
                   {selected.skills.map(([area, strength]) => (
-                    <div key={area} className="grid gap-1 py-2 sm:grid-cols-[9rem_1fr]">
+                    <div key={area} className="grid gap-1 py-3 sm:grid-cols-[8.5rem_1fr] sm:gap-3">
                       <dt className="font-semibold text-slate-950">{area}</dt>
                       <dd>{strength}</dd>
                     </div>
                   ))}
                 </dl>
               </section>
-              <ProfileList title="Experience highlights" items={selected.experience} />
-              <ProfileList title="Background" items={selected.education} />
+
+              <div className="grid content-start gap-4">
+                <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+                  <h3 className="font-bold text-blue-950">Areas of focus</h3>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {selected.focus.map((item) => (
+                      <li key={item} className="rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-sm leading-5 text-blue-950">{item}</li>
+                    ))}
+                  </ul>
+                </section>
+                <ProfileList title="Experience highlights" items={selected.experience} />
+                <ProfileList title="Background" items={selected.education} />
+              </div>
             </div>
           </div>
         )}
@@ -150,7 +163,7 @@ export default function Team() {
 
 function ProfileList({ title, items }) {
   return (
-    <section>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5">
       <h3 className="font-bold text-slate-950">{title}</h3>
       <ul className="mt-2 list-disc space-y-1 pl-5">
         {items.map((item) => <li key={item}>{item}</li>)}
