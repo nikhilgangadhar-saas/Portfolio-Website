@@ -34,8 +34,8 @@ const warehouseFlow = [
 
 const delivery = [
   ['Power BI', 'Management dashboards', 'pbi.png'],
-  ['Web reports', 'Operational reports and drill-downs'],
-  ['Logic Apps', 'Scheduled email distribution', 'Outlook.png'],
+  ['Web reports', 'Operational reports and drill-downs', 'WebReports.png'],
+  ['Logic Apps', 'Scheduled email distribution', 'LogicApps.png'],
 ]
 
 export function AzureArchitecture() {
