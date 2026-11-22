@@ -4,8 +4,6 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-require_once __DIR__ . '/home/u312587281/ng-config.php';
-
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);
     exit;
@@ -48,6 +46,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
+    $configPath = '/home/u312587281/domains/nikhilgangadhar.com/ng-config.php';
+    if (!is_readable($configPath)) {
+        throw new RuntimeException('Contact configuration is missing or unreadable');
+    }
+    require $configPath;
+
     $pdo = new PDO(
         "mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4",
         $DB_USER,
@@ -97,17 +101,23 @@ $sourcePage
     $headers = "From: no-reply@nikhilgangadhar.com\r\n";
     $headers .= "Reply-To: $email\r\n";
 
-    @mail($NOTIFY_EMAIL, $subject, $emailBody, $headers);
+    try {
+        if (!@mail($NOTIFY_EMAIL, $subject, $emailBody, $headers)) {
+            error_log('Contact lead saved, but notification mail was not accepted.');
+        }
+    } catch (Throwable $error) {
+        error_log('Contact lead saved, but notification mail failed: ' . get_class($error));
+    }
 
     echo json_encode([
         "success" => true,
         "message" => "Lead submitted successfully"
     ]);
-} catch (Exception $e) {
+} catch (Throwable $error) {
+    error_log('Contact lead could not be saved: ' . get_class($error) . ' (' . $error->getCode() . ')');
     http_response_code(500);
     echo json_encode([
         "success" => false,
         "message" => "Server error"
     ]);
 }
-?>
