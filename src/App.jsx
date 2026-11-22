@@ -13,14 +13,23 @@ import ComingSoon from './pages/ComingSoon'
 import GA4RouteTracker from './components/analytics/GA4RouteTracker'
 
 export default function App() {
-  const { pathname, hash } = useLocation()
+  const { pathname, hash, key } = useLocation()
   const navigationType = useNavigationType()
 
   useLayoutEffect(() => {
-    if (navigationType !== 'POP' && !hash) {
+    if (hash && pathname === '/') {
+      const target = document.getElementById(hash.slice(1))
+      if (target) {
+        const section = target.closest('section') ?? target
+        const headerHeight = document.querySelector('header')?.offsetHeight ?? 0
+        window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - headerHeight, behavior: 'instant' })
+      }
+      return
+    }
+    if (!hash && navigationType !== 'POP') {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     }
-  }, [pathname, hash, navigationType])
+  }, [pathname, hash, key, navigationType])
 
   return (
     <>

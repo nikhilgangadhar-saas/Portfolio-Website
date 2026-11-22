@@ -1,36 +1,18 @@
+import { useLocation } from 'react-router-dom'
+import { offerings } from '../../data/homepageOfferings'
 import { useEffect, useRef, useState } from 'react'
 import Button from '../ui/Button'
-
-const offerings = [
-  {
-    title: 'Documents & Templates',
-    enquiry: 'Tell us which document you need and whether you want a template or a version tailored to your process.',
-    description: 'Word and PDF packs for teams that need to document how work gets done and how controls are checked.',
-    examples: ['warehouse SOP packs', 'audit plans and checklists', 'approval matrices'],
-  },
-  {
-    title: 'Excel Tools',
-    enquiry: 'Tell us what you need to track, what data you have, and which workbook you would like to review.',
-    description: 'Excel workbooks for recurring operational tasks, with a clear place to record inputs, review results, and follow up.',
-    examples: ['stock count and reconciliation workbooks', 'inventory ageing workbooks', 'audit action trackers'],
-  },
-  {
-    title: 'Data & Reporting Services',
-    enquiry: 'Tell us which ERP or data sources you use, what you want to report, and where your team needs to receive it. For SequenceBI, tell us what you are looking to evaluate.',
-    description: 'We build data pipelines, connect ERP and other business systems, and deliver reports through the channels your team already uses.',
-    examples: ['Azure data engineering and ERP pipelines', 'WhatsApp reporting and alerts', 'SequenceBI'],
-  },
-  {
-    title: 'Business Applications',
-    enquiry: 'Tell us which app you are interested in, who will use it, and which workflow you want to cover. You can request a walkthrough or discuss a custom deployment.',
-    description: 'We build and deploy applications for people operations, internal audit, and business controls.',
-    examples: ['an HR application for onboarding, learning and development', 'an Audit & Control App for findings, actions, and follow-up'],
-  },
-]
 
 export default function ProductCategories() {
   const dialog = useRef(null)
   const [offering, setOffering] = useState(null)
+
+  const location = useLocation()
+
+  useEffect(() => {
+    const item = offerings.find(({ id }) => location.hash === `#${id}`)
+    if (item) setOffering(item)
+  }, [location])
 
   useEffect(() => {
     if (offering && !dialog.current.open) dialog.current.showModal()
@@ -43,7 +25,7 @@ export default function ProductCategories() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {offerings.map((item) => (
-            <article key={item.title} className="relative flex flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-center transition-colors hover:border-slate-400 hover:bg-slate-800 focus-within:ring-2 focus-within:ring-slate-300">
+            <article id={item.id} key={item.id} className="relative flex flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-center transition-colors hover:border-slate-400 hover:bg-slate-800 focus-within:ring-2 focus-within:ring-slate-300">
               <header className="flex min-h-20 items-center justify-center px-5 pt-5">
                 <h3 className="text-xl font-semibold tracking-tight">{item.title}</h3>
               </header>

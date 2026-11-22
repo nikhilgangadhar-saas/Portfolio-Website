@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 
@@ -8,6 +9,13 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
   const dialog = useRef(null)
   const resumedAfterDialog = useRef(false)
   const [selectedItem, setSelectedItem] = useState(null)
+
+  const location = useLocation()
+
+  useEffect(() => {
+    const item = location.hash && items.find((entry) => entry.id && location.hash === `#${entry.id}`)
+    if (item) setSelectedItem(item)
+  }, [items, location])
 
   useEffect(() => {
     const track = carousel.current
@@ -110,7 +118,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
             const { title, description, focus } = service
             const duplicate = index >= items.length
             return (
-              <li key={index} aria-hidden={duplicate || undefined} className={`relative flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-500 ${light ? "border-slate-300 bg-white text-slate-950" : "border-slate-700 bg-slate-900 text-white"}`}>
+              <li id={duplicate ? undefined : service.id} key={index} aria-hidden={duplicate || undefined} className={`relative flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-500 ${light ? "border-slate-300 bg-white text-slate-950" : "border-slate-700 bg-slate-900 text-white"}`}>
                 <header className={`flex min-h-24 items-center justify-center border-b px-5 py-4 text-center ${light ? "border-slate-200 bg-slate-100" : "border-white/15 bg-slate-800"}`}>
                   <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
                 </header>
