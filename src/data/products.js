@@ -11,6 +11,9 @@ const categoryIds = {
 export const productCategories = offerings.map((offering) => ({
   ...offering,
   homepageId: offering.id,
+  href: ['data-reporting-services', 'business-applications'].includes(offering.id)
+    ? `/products#${offering.id}`
+    : `/products/${categoryIds[offering.id]}`,
   id: categoryIds[offering.id],
   products: productSamples[categoryIds[offering.id]],
 }))

@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { Navigate, Link, useParams } from 'react-router-dom'
 import { getProductCategory } from '../data/products'
 import NotFound from './NotFound'
 
@@ -6,6 +6,7 @@ export default function ProductCategory() {
   const { categoryId } = useParams()
   const category = getProductCategory(categoryId)
   if (!category) return <NotFound />
+  if (category.href.startsWith('/products#')) return <Navigate to={category.href} replace />
 
   return (
     <section className="min-h-[60vh] bg-slate-100 px-5 py-12 text-slate-950 sm:px-8">

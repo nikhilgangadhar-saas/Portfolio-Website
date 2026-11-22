@@ -70,7 +70,7 @@ export default function ProductCategories() {
                 </div>
               </div>
               <footer className="border-t border-slate-200 bg-slate-50 p-5 text-center">
-                <Button to={`/products/${offering.id}`} variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2">Browse products</Button>
+                <Button to={offering.href} variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2">{offering.href.includes('#') ? 'View solution' : 'Browse products'}</Button>
               </footer>
             </div>
           )}

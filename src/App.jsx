@@ -20,6 +20,10 @@ export default function App() {
   const navigationType = useNavigationType()
 
   useLayoutEffect(() => {
+    if (hash && pathname === '/products') {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' })
+      return
+    }
     if (hash && pathname === '/') {
       const target = document.getElementById(hash.slice(1))
       if (target) {
