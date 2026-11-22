@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import { services } from '../data/homepageOfferings'
+import AzureReportingPitch from '../components/sections/AzureReportingPitch'
 import NotFound from './NotFound'
 
 export default function ServiceDetail() {
@@ -8,6 +9,7 @@ export default function ServiceDetail() {
   const service = services.find(({ id }) => id === serviceId)
 
   if (!service) return <NotFound />
+  if (serviceId === 'azure-data-erp-reporting') return <AzureReportingPitch />
 
   return (
     <section className="bg-slate-100 px-5 py-12 text-slate-950 sm:px-8 lg:py-20">
