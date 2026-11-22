@@ -123,13 +123,12 @@ export default function Contact() {
         form_name: 'contact_form',
         reason: formData.reason,
         country: formData.country || 'not_provided',
-        error_message: error.message || 'unknown_error',
       })
 
       setSubmitStatus({
         type: 'error',
         message:
-          'Something went wrong. Please try again or contact me directly.',
+          'We could not confirm your submission. Your details are still here. Please try again.',
       })
     } finally {
       setIsSubmitting(false)
