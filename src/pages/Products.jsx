@@ -30,7 +30,7 @@ const auditDescription = 'Create, assign, and run audits. Raise incident reports
 const applications = [
   { name: 'HR - People Review', initials: 'HR & PR', description: 'Onboarding and L&D solution.', tone: 'bg-linear-to-br from-[#315cff] to-[#132238] text-white' },
   { name: 'Internal Audit and Control', initials: 'IA&C', description: auditDescription, tone: 'bg-linear-to-br from-[#132238] via-[#132238] to-[#a12727] text-white' },
-  { name: 'Sequence BI', initials: 'Seq BI', description: auditDescription, tone: 'bg-[#11130f] font-mono text-[#d9ff43]' },
+  { name: 'Sequence BI', initials: 'Seq BI', description: auditDescription, tone: 'bg-linear-to-br from-indigo-600 to-violet-950 font-mono text-white' },
 ]
 
 export default function Products() {
@@ -47,7 +47,7 @@ export default function Products() {
       </section>
 
       <section aria-label="Products and solutions" className="bg-slate-100 bg-linear-to-b from-slate-200/60 to-slate-50 px-5 py-8 text-slate-950 sm:px-8 lg:py-12">
-        <div className="mx-auto grid max-w-[100rem] gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-[100rem] gap-4 md:grid-cols-3">
           {assetLibraries.map(({ id, title, description, action, accent }) => (
             <article key={id} className={`flex flex-col rounded-2xl border border-slate-200 border-t-4 bg-white p-5 shadow-sm xl:p-6 ${accent}`}>
               <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
@@ -62,7 +62,7 @@ export default function Products() {
             <ul aria-label="Reporting technologies" className="my-6 flex flex-wrap gap-2">
               {technologies.map(({ name, image }) => (
                 <li key={name} className="rounded-lg border border-slate-200 bg-slate-50 p-2">
-                  <img src={`/assets/${image}`} alt={name} title={name} className="size-8 object-contain" onError={(event) => { event.currentTarget.style.display = 'none' }} />
+                  <img src={`/assets/${image}`} alt="" className="size-10 object-contain" onError={(event) => { event.currentTarget.style.display = 'none' }} />
                   <span className="text-xs font-semibold text-slate-700">{name}</span>
                 </li>
               ))}
@@ -73,14 +73,14 @@ export default function Products() {
             </div>
           </article>
 
-          <article id="business-applications" className="flex scroll-mt-24 flex-col rounded-2xl bg-slate-900 p-6 text-white sm:p-8">
+          <article id="business-applications" className="flex scroll-mt-24 flex-col rounded-2xl bg-slate-900 p-6 text-white sm:p-8 md:col-span-3">
             <h2 className="text-2xl font-bold tracking-tight">Business Applications</h2>
             <p className="mt-3 flex-1 leading-7 text-slate-300">Explore software for people operations, audit and control, and business intelligence. We can help scope and implement a solution for your workflow.</p>
-            <div className="my-5 grid gap-3">
+            <div className="my-5 grid gap-3 md:grid-cols-3">
               {applications.map(({ name, initials, description, tone, href }) => {
                 const Logo = href ? 'a' : 'button'
                 return (
-                  <div key={name} className="flex flex-col items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-3">
+                  <div key={name} className="flex flex-col items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
                     <Logo
                       {...(href ? { href } : {
                         type: 'button',
