@@ -6,13 +6,13 @@ const offerings = [
     title: 'Documents & Templates',
     enquiry: 'Tell us which document you need and whether you want a template or a version tailored to your process.',
     description: 'Word and PDF packs for teams that need to document how work gets done and how controls are checked.',
-    examples: ['Warehouse SOP packs', 'Audit plans and checklists', 'Approval matrices'],
+    examples: ['warehouse SOP packs', 'audit plans and checklists', 'approval matrices'],
   },
   {
     title: 'Excel Tools',
     enquiry: 'Tell us what you need to track, what data you have, and which workbook you would like to review.',
     description: 'Excel workbooks for recurring operational tasks, with a clear place to record inputs, review results, and follow up.',
-    examples: ['Stock count and reconciliation', 'Inventory ageing', 'Audit action tracking'],
+    examples: ['stock count and reconciliation workbooks', 'inventory ageing workbooks', 'audit action trackers'],
   },
   {
     title: 'Data & Reporting Services',
@@ -24,7 +24,7 @@ const offerings = [
     title: 'Business Applications',
     enquiry: 'Tell us which app you are interested in, who will use it, and which workflow you want to cover. You can request a walkthrough or discuss a custom deployment.',
     description: 'We build and deploy applications for people operations, internal audit, and business controls.',
-    examples: ['HR application for onboarding, learning and development', 'Audit & Control App for findings, actions, and follow-up'],
+    examples: ['an HR application for onboarding, learning and development', 'an Audit & Control App for findings, actions, and follow-up'],
   },
 ]
 
@@ -43,12 +43,12 @@ export default function ProductCategories() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {offerings.map((item) => (
-            <article key={item.title} className="relative flex flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-center transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-slate-300">
-              <header className="flex min-h-20 items-center justify-center border-b border-white/15 bg-slate-800 px-4 py-3">
+            <article key={item.title} className="relative flex flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-center transition-colors hover:border-slate-400 hover:bg-slate-800 focus-within:ring-2 focus-within:ring-slate-300">
+              <header className="flex min-h-20 items-center justify-center px-5 pt-5">
                 <h3 className="text-xl font-semibold tracking-tight">{item.title}</h3>
               </header>
-              <p className="flex-1 px-5 py-4 text-base leading-6 text-slate-300">{item.description}</p>
-              <footer className="border-t border-white/15 bg-slate-950 px-4 py-3 text-sm font-semibold">
+              <p className="flex-1 px-5 pb-5 pt-3 text-base leading-6 text-slate-300">{item.description}</p>
+              <footer className="mx-5 border-t border-white/15 py-4 text-sm font-semibold text-slate-100">
                 Explore offering
               </footer>
               <button
@@ -69,7 +69,7 @@ export default function ProductCategories() {
           onClick={(event) => {
             if (event.target === event.currentTarget) event.currentTarget.close()
           }}
-          className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
+          className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
         >
           {offering && (
             <div>
@@ -78,12 +78,7 @@ export default function ProductCategories() {
               </header>
               <div className="space-y-4 p-5 text-base leading-7 text-slate-700 sm:p-6">
                 <p>{offering.description}</p>
-                <div>
-                  <h3 className="font-semibold text-slate-950">What you can request</h3>
-                  <ul className="mt-1 list-disc space-y-1 pl-5">
-                    {offering.examples.map((example) => <li key={example}>{example}</li>)}
-                  </ul>
-                </div>
+                <p>You can request {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(offering.examples)}.</p>
                 <div>
                   <h3 className="font-semibold text-slate-950">How to enquire</h3>
                   <p className="mt-1">{offering.enquiry}</p>
