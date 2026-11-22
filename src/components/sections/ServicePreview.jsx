@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '../ui/Button'
 
 const services = [
@@ -33,57 +33,47 @@ export default function ServicePreview() {
   const carousel = useRef(null)
   const gesture = useRef(null)
   const suppressClick = useRef(false)
-  const animation = useRef(0)
+  const dialog = useRef(null)
+  const [selectedService, setSelectedService] = useState(null)
 
   useEffect(() => {
     const track = carousel.current
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    let direction = 1
-    const timer = window.setInterval(() => {
-      if (reducedMotion.matches || document.hidden || track.matches(':hover, :focus-within') || gesture.current) return
+    let frame
+    let lastTime
+    let remainder = 0
 
-      const start = track.scrollLeft
-      const end = track.scrollWidth - track.clientWidth
-      if (start >= end - 2) direction = -1
-      if (start <= 2) direction = 1
+    function advance(time) {
+      const elapsed = Math.min(time - (lastTime ?? time), 40)
+      lastTime = time
 
-      const stops = [...track.children].map((card) => Math.min(card.offsetLeft, end))
-      const target = direction === 1
-        ? stops.find((stop) => stop > start + 2)
-        : stops.findLast((stop) => stop < start - 2)
-      if (target === undefined) return
+      if (!reducedMotion.matches && !document.hidden && !dialog.current?.open &&
+          !track.matches(':hover, :focus-within') && !gesture.current) {
+        const loopWidth = track.children[services.length].offsetLeft
+        let position = track.scrollLeft
+        if (position >= loopWidth * 2) position -= loopWidth
+        if (position < loopWidth) position += loopWidth
 
-      const startedAt = performance.now()
-      track.dataset.animating = 'true'
-
-      function animate(now) {
-        const progress = Math.min((now - startedAt) / 680, 1)
-        const eased = progress * progress * (3 - 2 * progress)
-        track.scrollLeft = start + (target - start) * eased
-
-        if (progress < 1) {
-          animation.current = window.requestAnimationFrame(animate)
-          return
-        }
-
-        delete track.dataset.animating
+        remainder += elapsed * 0.036
+        const distance = Math.floor(remainder)
+        remainder -= distance
+        track.scrollLeft = position + distance
       }
 
-      animation.current = window.requestAnimationFrame(animate)
-    }, 2250)
-
-    return () => {
-      window.clearInterval(timer)
-      window.cancelAnimationFrame(animation.current)
-      delete track.dataset.animating
+      frame = window.requestAnimationFrame(advance)
     }
+
+    frame = window.requestAnimationFrame(advance)
+    return () => window.cancelAnimationFrame(frame)
   }, [])
+
+  useEffect(() => {
+    if (selectedService && !dialog.current.open) dialog.current.showModal()
+  }, [selectedService])
 
   function startDrag(event) {
     suppressClick.current = false
     if (!event.isPrimary || event.button !== 0) return
-    window.cancelAnimationFrame(animation.current)
-    delete event.currentTarget.dataset.animating
     gesture.current = {
       pointer: event.pointerId,
       x: event.clientX,
@@ -101,7 +91,6 @@ export default function ServicePreview() {
     if (!suppressClick.current) {
       suppressClick.current = true
       track.setPointerCapture(event.pointerId)
-      track.dataset.dragging = 'true'
     }
     track.scrollLeft = active.left - distance
   }
@@ -109,7 +98,6 @@ export default function ServicePreview() {
   function endDrag(event) {
     if (gesture.current?.pointer !== event.pointerId) return
     gesture.current = null
-    delete event.currentTarget.dataset.dragging
   }
 
   function preventDragClick(event) {
@@ -142,23 +130,59 @@ export default function ServicePreview() {
           }}
           onClickCapture={preventDragClick}
           onDragStart={(event) => event.preventDefault()}
-          className="relative mt-5 grid cursor-grab snap-x snap-mandatory auto-cols-[88%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 data-[animating=true]:snap-none data-[dragging=true]:cursor-grabbing data-[dragging=true]:snap-none sm:auto-cols-[46%] lg:auto-cols-[31%]"
+          className="relative mt-5 grid cursor-grab auto-cols-[88%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[46%] lg:auto-cols-[31%]"
         >
-          {services.map(({ title, description, focus }) => (
-            <li key={title} className="group relative flex min-w-0 snap-start flex-col overflow-hidden rounded-2xl border border-slate-700 bg-linear-to-br from-slate-800 to-slate-950">
-              <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{title}</h3>
-                <p className="mt-3 flex-1 text-base leading-6 text-slate-300">{description}</p>
-                <p className="mt-4 border-t border-white/15 pt-3 text-sm font-medium leading-5 text-slate-300">{focus}</p>
-              </div>
-              <div className="px-5 pb-5 [@media(hover:hover)_and_(pointer:fine)]:pointer-events-none [@media(hover:hover)_and_(pointer:fine)]:absolute [@media(hover:hover)_and_(pointer:fine)]:inset-0 [@media(hover:hover)_and_(pointer:fine)]:grid [@media(hover:hover)_and_(pointer:fine)]:place-items-center [@media(hover:hover)_and_(pointer:fine)]:bg-slate-950/45 [@media(hover:hover)_and_(pointer:fine)]:p-0 [@media(hover:hover)_and_(pointer:fine)]:opacity-0 [@media(hover:hover)_and_(pointer:fine)]:backdrop-blur-sm [@media(hover:hover)_and_(pointer:fine)]:transition-opacity [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:pointer-events-auto [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100">
-                  <Button to="/contact" variant="light" className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-                    Discuss a project
-                  </Button>
-              </div>
-            </li>
-          ))}
+          {[...services, ...services, ...services].map((service, index) => {
+            const { title, description, focus } = service
+            const duplicate = index >= services.length
+            return (
+              <li key={index} aria-hidden={duplicate || undefined} className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 text-white transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-300">
+                <header className="flex min-h-24 items-center border-b border-white/15 bg-slate-800 px-5 py-4">
+                  <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+                </header>
+                <p className="flex-1 px-5 py-4 text-base leading-6 text-slate-300">{description}</p>
+                <footer className="flex items-center justify-between gap-3 border-t border-white/15 bg-slate-950 px-5 py-3">
+                  <span className="text-sm font-medium text-slate-300">{focus}</span>
+                  <span className="shrink-0 text-sm font-semibold text-white">Details</span>
+                </footer>
+                <button
+                  type="button"
+                  tabIndex={duplicate ? -1 : 0}
+                  aria-label={`View details for ${title}`}
+                  aria-haspopup="dialog"
+                  onClick={() => setSelectedService(service)}
+                  className="absolute inset-0 cursor-pointer"
+                />
+              </li>
+            )
+          })}
         </ul>
+        <dialog
+          ref={dialog}
+          aria-labelledby="service-dialog-title"
+          onClose={() => setSelectedService(null)}
+          className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm"
+        >
+          {selectedService && (
+            <>
+              <header className="flex items-start justify-between gap-4 border-b border-white/15 bg-slate-900 p-5 text-white sm:p-6">
+                <h2 id="service-dialog-title" className="text-2xl font-semibold tracking-tight">{selectedService.title}</h2>
+                <form method="dialog">
+                  <button type="submit" className="rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold hover:bg-white/15">Close</button>
+                </form>
+              </header>
+              <div className="space-y-4 p-5 sm:p-6">
+                <p className="text-base leading-7 text-slate-700">{selectedService.description}</p>
+                <p className="text-sm font-semibold text-slate-900">{selectedService.focus}</p>
+              </div>
+              <footer className="border-t border-slate-200 bg-slate-50 p-5 sm:px-6">
+                <Button to="/contact" variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2">
+                  Discuss a project
+                </Button>
+              </footer>
+            </>
+          )}
+        </dialog>
       </div>
     </section>
   )
