@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react'
+import ApplicationLogo from '../components/ui/ApplicationLogo'
+import { applications } from '../data/applications'
 import AssetLogo from '../components/ui/AssetLogo'
 import Button from '../components/ui/Button'
 
@@ -24,14 +26,6 @@ const technologies = [
   { name: 'SQL', image: 'sql.png' },
   { name: 'ADF', image: 'adf.png' },
   { name: 'Power BI', image: 'pbi.png' },
-]
-
-const auditDescription = 'Create, assign, and run audits. Raise incident reports, assign actions, and track follow-up.'
-
-const applications = [
-  { name: 'HR - People Review', initials: 'HR', suffix: 'L&D', description: 'Onboarding and L&D solution.', tone: 'bg-linear-to-br from-[#315cff] to-[#132238] text-white' },
-  { name: 'Internal Audit and Control', initials: 'IA', suffix: '&C', description: auditDescription, tone: 'bg-linear-to-br from-[#132238] via-[#132238] to-[#a12727] text-white' },
-  { name: 'Sequence BI', initials: 'SEQ', suffix: 'BI', description: auditDescription, tone: 'bg-[linear-gradient(145deg,#240a15_5%,#641f37_39%,#a15b70_49%,#52172b_56%,#270a16_95%)] text-white' },
 ]
 
 export default function Products() {
@@ -85,11 +79,14 @@ export default function Products() {
             <h2 className="text-2xl font-bold tracking-tight">Business Applications</h2>
             <p className="mt-3 flex-1 leading-7 text-slate-300">Explore software for people operations, audit and control, and business intelligence. We can help scope and implement a solution for your workflow.</p>
             <div className="my-5 grid gap-3 md:grid-cols-3">
-              {applications.map(({ name, initials, suffix, description, tone, href }) => {
+              {applications.map((application) => {
+                const { name, description, href } = application
                 const Logo = href ? 'a' : 'button'
                 return (
                   <div key={name} className="flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-                    <Logo
+                    <ApplicationLogo
+                      as={Logo}
+                      application={application}
                       {...(href ? { href } : {
                         type: 'button',
                         'aria-haspopup': 'dialog',
@@ -99,11 +96,9 @@ export default function Products() {
                         },
                       })}
                       aria-label={name}
-                      className={`flex size-[128px] shrink-0 self-center flex-col items-center justify-center gap-1 rounded-xl border border-white/20 text-center font-[Georgia] font-bold leading-none transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 ${tone}`}
-                    >
-                      <span className="text-3xl">{initials}</span>
-                      <span className="text-sm tracking-wider">{suffix}</span>
-                    </Logo>
+                      className="size-[128px] gap-1 rounded-xl text-3xl transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2"
+                      suffixClassName="text-sm"
+                    />
                     <div>
                       <p className="text-sm font-semibold">{name}</p>
                       <p className="mt-0.5 text-sm leading-5 text-slate-300">{description}</p>

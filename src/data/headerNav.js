@@ -2,11 +2,14 @@ import { services } from './homepageOfferings'
 import { productCategories } from './products'
 
 export const homepageMenus = {
-  products: productCategories,
-  services: [
-    { id: 'all-services', title: 'All services', href: '/services' },
-    ...services,
-  ],
+  products: {
+    overview: { title: 'View all products & solutions', href: '/products' },
+    items: productCategories,
+  },
+  services: {
+    overview: { title: 'View all services', href: '/services' },
+    items: services,
+  },
 }
 
 export const headerLinks = [

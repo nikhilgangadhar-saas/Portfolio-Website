@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { homepageMenus, headerLinks } from '../../data/headerNav'
+import HeaderMenuLinks from './HeaderMenuLinks'
 import MobileNav from './MobileNav'
 
 export default function Header() {
@@ -73,22 +74,7 @@ export default function Header() {
               </button>
               {openMenu === menu && (
                 <div id={`header-menu-${menu}`} className="absolute left-1/2 top-full z-10 mt-3 w-80 -translate-x-1/2 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-black/25">
-                  <ul className="divide-y divide-slate-100">
-                    {homepageMenus[menu].map(({ id, href, title, focus, examples }) => (
-                      <li key={id}>
-                        <Link
-                          to={href ?? `/#${id}`}
-                          onClick={closeMenu}
-                          className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100"
-                        >
-                          <span className="block text-sm font-semibold text-slate-950">{title}</span>
-                          {(focus || examples?.[0]) && (
-                            <span className="mt-1 block text-sm leading-5 text-slate-600">{focus || examples[0]}</span>
-                          )}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <HeaderMenuLinks menu={menu} onNavigate={closeMenu} showDescriptions />
                 </div>
               )}
             </div>

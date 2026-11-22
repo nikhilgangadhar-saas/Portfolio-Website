@@ -1,13 +1,15 @@
+import ApplicationLogo from '../components/ui/ApplicationLogo'
+import { applications } from '../data/applications'
 import AssetLogo from '../components/ui/AssetLogo'
 import Button from '../components/ui/Button'
 import { services } from '../data/homepageOfferings'
 
 const serviceLogos = {
-  'business-analysis-strategy': ['strategy.png'],
-  'operations-sops-audit': ['word.png', 'pdf.png'],
-  'azure-data-erp-reporting': ['Azure.png', 'sql.png', 'adf.png', 'pbi.png'],
-  'custom-business-applications': ['business-apps.png'],
-  'enterprise-ai-agents': ['ai-agents.png'],
+  'business-analysis-strategy': { files: ['strategy.png', 'ppt.png', 'excel.png'] },
+  'operations-sops-audit': { files: ['word.png', 'pdf.png', 'watsapp.png'], apps: ['internal-audit'] },
+  'azure-data-erp-reporting': { files: ['Azure.png', 'sql.png', 'adf.png', 'pbi.png', 'watsapp.png', 'db.png'] },
+  'custom-business-applications': { files: ['business-apps.png', 'python.png', 'js.png', 'Azure.png', 'git.png'], apps: applications.map(({ id }) => id) },
+  'enterprise-ai-agents': { files: ['ai-agents.png', 'ms.png', 'sap.png', 'watsapp.png', 'outlook.png'] },
 }
 
 export default function Services() {
@@ -30,8 +32,11 @@ export default function Services() {
                 <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
                 <p className="mt-3 leading-7 text-slate-700">{description}</p>
                 <p className="mt-4 text-sm font-semibold text-slate-800">{focus}</p>
-                <div aria-hidden="true" className="mt-4 flex items-center gap-3 empty:hidden">
-                  {serviceLogos[id].map((file) => (
+                <div aria-hidden="true" className="mt-4 flex flex-wrap items-center gap-3 empty:hidden">
+                  {applications.filter((app) => serviceLogos[id].apps?.includes(app.id)).map((app) => (
+                    <ApplicationLogo key={app.id} application={app} className="size-10 rounded-lg text-sm" suffixClassName="text-[8px]" />
+                  ))}
+                  {serviceLogos[id].files.map((file) => (
                     <AssetLogo key={file} file={file} className="size-10 object-contain" />
                   ))}
                 </div>
