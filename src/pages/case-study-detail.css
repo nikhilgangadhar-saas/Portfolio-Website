@@ -48,10 +48,6 @@
   gap: 1rem;
 }
 
-.azure-case-study .case-study-overview > div {
-  border-top: 3px solid #60a5fa;
-}
-
 .azure-case-study .case-study-overview p {
   margin-top: .75rem;
 }
@@ -114,4 +110,15 @@
 .azure-case-study .case-study-cta {
   border-radius: 1.25rem;
   background: #101f3d;
+}
+
+.azure-case-study :is(
+  .case-study-overview > div,
+  .case-study-pipeline,
+  .case-study-section,
+  .case-study-results,
+  .case-study-tools > div,
+  .case-study-cta
+) {
+  border-top: 3px solid #60a5fa;
 }
