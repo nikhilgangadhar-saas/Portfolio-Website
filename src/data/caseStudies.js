@@ -19,18 +19,74 @@ export const caseStudies = [
     title: 'From On-Premises SAP Business One to Azure Reporting',
     tag: 'Data Engineering',
     summary: 'We rebuilt a failing data pipeline for a manufacturing and distribution business and created a shared Azure SQL reporting layer for finance, sales, inventory, and production.',
-    problem: 'SAP Business One ran on premises, and the existing data pipeline was failing. Finance and operations teams fell back on SAP exports and Excel to prepare recurring reports. We reviewed the SAP company databases, the available transaction history, and the reports people needed to produce. That gave us a list of source records and business checks to use when rebuilding the pipeline.',
-    plan: 'We grouped the work by business area and agreed what each report needed to answer. For inventory, that meant knowing which item moved, in which warehouse, against which document, and at what batch level. For finance, it meant agreeing how account mappings, opening balances, and journal activity would produce statements that could be reconciled back to SAP.',
-    solution: 'Azure Data Factory copied data from on-premises SAP Business One into Azure SQL. We built separate reporting models for manufacturing and distribution, then published views and stored procedures for the application. Scheduled loads kept the data current, and a pipeline monitoring screen let administrators inspect run status from the same application.',
+    problem: [
+      'SAP Business One ran on premises, and the existing data pipeline was failing.',
+      'Finance and operations teams fell back on SAP exports and Excel to prepare recurring reports.',
+      'We reviewed the SAP company databases, the available transaction history, and the reports people needed to produce.',
+      'That gave us a list of source records and business checks to use when rebuilding the pipeline.',
+    ],
+    plan: [
+      'We grouped the work by business area and agreed what each report needed to answer.',
+      'For inventory, that meant knowing which item moved, in which warehouse, against which document, and at what batch level.',
+      'For finance, it meant agreeing how account mappings, opening balances, and journal activity would produce statements that could be reconciled back to SAP.',
+    ],
+    solution: [
+      'Azure Data Factory copied data from on-premises SAP Business One into Azure SQL.',
+      'We built separate reporting models for manufacturing and distribution, then published views and stored procedures for the application.',
+      'Scheduled loads kept the data current, and a pipeline monitoring screen let administrators inspect run status from the same application.',
+    ],
     delivery: [
-      { title: 'Inventory and procurement', text: 'We modeled inventory movements, batch-level transactions, daily stock snapshots, and purchase order tracking. Manufacturing reporting also used bill-of-materials data. The inventory and procurement pipelines ran twice a day.' },
-      { title: 'Financial statements', text: 'We loaded the chart of accounts, opening balances, and journal entries. SQL account mappings grouped accounts into statement lines, and stored procedures returned summaries, account-level detail, and the underlying journal activity. We started with manufacturing and then built the corresponding distribution reports.' },
-      { title: 'Reporting and monitoring', text: 'We published reports through an internal FastAPI application. Sales users could review daily trends and calendar patterns. Finance users could switch between yearly and monthly views and drill into account and journal detail. Administrators could see Azure Data Factory run status from the app.' },
+      {
+        title: 'Inventory and procurement',
+        text: [
+          'We modeled inventory movements, batch-level transactions, daily stock snapshots, and purchase order tracking.',
+          'Manufacturing reporting also used bill-of-materials data.',
+          'The inventory and procurement pipelines ran twice a day.',
+        ],
+      },
+      {
+        title: 'Financial statements',
+        text: [
+          'We loaded the chart of accounts, opening balances, and journal entries.',
+          'SQL account mappings grouped accounts into statement lines, and stored procedures returned summaries, account-level detail, and the underlying journal activity.',
+          'We started with manufacturing and then built the corresponding distribution reports.',
+        ],
+      },
+      {
+        title: 'Reporting and monitoring',
+        text: [
+          'We published reports through an internal FastAPI application.',
+          'Sales users could review daily trends and calendar patterns.',
+          'Finance users could switch between yearly and monthly views and drill into account and journal detail.',
+          'Administrators could see Azure Data Factory run status from the app.',
+        ],
+      },
     ],
     challenges: [
-      { title: 'Finding changes across two SAP company databases', text: 'Manufacturing loads used the source activity date to select changes. Distribution used a query for documents changed in a rolling two-day window. This let scheduled loads process updated documents without reloading all inventory history.' },
-      { title: 'Keeping reporting totals traceable', text: 'We combined opening balances with posted activity and checked that journal debits and credits balanced. The report drill-down let finance trace statement lines back to their accounts and entries. Cash-flow entries without a confirmed classification were surfaced as an unclassified difference for review.' },
-      { title: 'Fixing a slow monthly drill-down', text: 'Distribution’s detailed monthly profit and loss view failed while the yearly view loaded. We traced the failure to an expensive SQL execution plan and corrected it. The detailed monthly view then loaded successfully.' },
+      {
+        title: 'Finding changes across two SAP company databases',
+        text: [
+          'Manufacturing loads used the source activity date to select changes.',
+          'Distribution used a query for documents changed in a rolling two-day window.',
+          'This let scheduled loads process updated documents without reloading all inventory history.',
+        ],
+      },
+      {
+        title: 'Keeping reporting totals traceable',
+        text: [
+          'We combined opening balances with posted activity and checked that journal debits and credits balanced.',
+          'The report drill-down let finance trace statement lines back to their accounts and entries.',
+          'Cash-flow entries without a confirmed classification were surfaced as an unclassified difference for review.',
+        ],
+      },
+      {
+        title: 'Fixing a slow monthly drill-down',
+        text: [
+          'Distribution’s detailed monthly profit and loss view failed while the yearly view loaded.',
+          'We traced the failure to an expensive SQL execution plan and corrected it.',
+          'The detailed monthly view then loaded successfully.',
+        ],
+      },
     ],
     tools: ['SAP Business One', 'SQL Server', 'Azure Data Factory', 'Azure SQL', 'T-SQL', 'Python / FastAPI', 'Azure Container Apps'],
     pipeline: [

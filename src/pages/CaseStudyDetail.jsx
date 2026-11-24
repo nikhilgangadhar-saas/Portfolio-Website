@@ -140,8 +140,20 @@ function CaseBlock({ title, text }) {
       <h2 className="case-study-heading text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
         {title}
       </h2>
-      <p className="mt-5 text-base leading-7 text-slate-700">{text}</p>
+      <CaseCopy text={text} className="mt-5" />
     </div>
+  )
+}
+
+function CaseCopy({ text, className }) {
+  const copyClass = `${className} text-base leading-7 text-slate-700`
+
+  if (!Array.isArray(text)) return <p className={copyClass}>{text}</p>
+
+  return (
+    <ul className={`${copyClass} list-disc space-y-2 pl-5 marker:text-blue-600`}>
+      {text.map(point => <li key={point}>{point}</li>)}
+    </ul>
   )
 }
 
@@ -153,7 +165,7 @@ function CaseSection({ title, entries }) {
         {entries.map(({ title, text }) => (
           <div key={title} className="border-t border-slate-200 pt-4">
             <h3 className="font-semibold text-slate-950">{title}</h3>
-            <p className="mt-2 leading-7 text-slate-700">{text}</p>
+            <CaseCopy text={text} className="mt-2" />
           </div>
         ))}
       </div>
