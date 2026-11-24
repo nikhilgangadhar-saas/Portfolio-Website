@@ -1,0 +1,117 @@
+.azure-case-study {
+  --case-border: #dbe4ef;
+  --case-spacing: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.azure-case-study .case-study-hero {
+  background: linear-gradient(120deg, #020617, #101f3d);
+}
+
+.azure-case-study .case-study-hero .motion-blob-two,
+.azure-case-study .case-study-body > .absolute {
+  display: none;
+}
+
+.azure-case-study .case-study-intro {
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+
+.azure-case-study .case-study-intro h1 {
+  text-wrap: balance;
+  line-height: 1.08;
+}
+
+.azure-case-study .case-study-body {
+  background: #f5f7fb;
+}
+
+.azure-case-study .case-study-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--case-spacing);
+  padding-block: var(--case-spacing);
+}
+
+.azure-case-study .case-study-content > * {
+  margin-block: 0;
+}
+
+.azure-case-study .case-study-overview > div,
+.azure-case-study .case-study-section,
+.azure-case-study .case-study-results,
+.azure-case-study .case-study-tools > div {
+  border-color: var(--case-border);
+  border-radius: 1.25rem;
+}
+
+.azure-case-study .case-study-overview {
+  gap: 1rem;
+}
+
+.azure-case-study .case-study-overview > div {
+  border-top: 3px solid #60a5fa;
+}
+
+.azure-case-study .case-study-overview p {
+  margin-top: .75rem;
+}
+
+.azure-case-study .case-study-heading {
+  color: #0f172a;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  text-transform: none;
+}
+
+.azure-case-study .case-study-overview .case-study-heading {
+  font-size: 1.125rem;
+}
+
+.azure-case-study .case-study-pipeline {
+  border: 1px solid #233656;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #020617, #132340);
+}
+
+.azure-case-study .case-study-pipeline .case-study-heading {
+  color: #fff;
+}
+
+.azure-case-study .case-study-pipeline li {
+  border-color: #33486a;
+  background: #14243e;
+}
+
+.azure-case-study .case-study-results .case-study-table {
+  overflow-x: auto;
+  margin-top: 1.25rem;
+  border: 1px solid var(--case-border);
+  border-radius: .75rem;
+}
+
+.azure-case-study .case-study-table:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.azure-case-study .case-study-table table {
+  min-width: 32rem;
+  margin-top: 0;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.azure-case-study .case-study-table thead {
+  background: #eaf1fc;
+}
+
+.azure-case-study .case-study-table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.azure-case-study .case-study-cta {
+  border-radius: 1.25rem;
+  background: #101f3d;
+}

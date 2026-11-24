@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import AssetLogo from '../components/ui/AssetLogo'
 import Button from '../components/ui/Button'
 import { getCaseStudy, serviceCaseStudies } from '../data/caseStudies'
+import './case-study-detail.css'
 
 export default function CaseStudyDetail() {
   const { caseStudySlug } = useParams()
@@ -22,13 +23,13 @@ export default function CaseStudyDetail() {
   }
 
   return (
-    <>
-      <section className="relative overflow-hidden bg-slate-950 text-white">
+    <div className={study.pipeline ? "azure-case-study" : undefined}>
+      <section className="case-study-hero relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0 bg-premium-grid opacity-70" />
         <div className="motion-blob-one absolute -left-32 top-10 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
         <div className="motion-blob-two absolute right-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <div className="case-study-intro relative mx-auto max-w-7xl px-5 py-20 md:py-24">
           <Link
             to="/case-studies"
             className="mb-5 inline-block text-sm font-semibold text-blue-300 hover:text-blue-200"
@@ -59,13 +60,13 @@ export default function CaseStudyDetail() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#f4f7fb]">
+      <section className="case-study-body relative overflow-hidden bg-[#f4f7fb]">
         <div className="absolute inset-0 bg-soft-grid opacity-70" />
         <div className="absolute -left-32 top-40 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
         <div className="absolute right-0 bottom-40 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-16">
-          <div className={`grid gap-6 ${study.plan ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+        <div className="case-study-content relative mx-auto max-w-7xl px-5 py-16">
+          <div className={`case-study-overview grid gap-6 ${study.plan ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
             <CaseBlock title={study.plan ? "What we found" : "Business problem"} text={study.problem} />
             {study.plan && <CaseBlock title="How we planned the work" text={study.plan} />}
             <CaseBlock title="What we built" text={study.solution} />
@@ -77,11 +78,11 @@ export default function CaseStudyDetail() {
 
           {study.results && <ResultsTable rows={study.results} />}
 
-          <div className={`mt-8 grid gap-6 ${study.impact ? "lg:grid-cols-[0.8fr_1.2fr]" : ""}`}>
+          <div className={`case-study-tools mt-8 grid gap-6 ${study.impact ? "lg:grid-cols-[0.8fr_1.2fr]" : ""}`}>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+              <h2 className="case-study-heading text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
                 Tools Used
-              </div>
+              </h2>
 
               <div className="mt-5 flex flex-wrap gap-2">
                 {study.tools.map((tool) => (
@@ -113,7 +114,7 @@ export default function CaseStudyDetail() {
             </div>}
           </div>
 
-          <div className="mt-12 rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-900/20 md:p-12">
+          <div className="case-study-cta mt-12 rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-900/20 md:p-12">
             <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
                 <h2 className="text-3xl font-extrabold">
@@ -129,16 +130,16 @@ export default function CaseStudyDetail() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 
 function CaseBlock({ title, text }) {
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-      <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+      <h2 className="case-study-heading text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
         {title}
-      </div>
+      </h2>
       <p className="mt-5 text-base leading-7 text-slate-700">{text}</p>
     </div>
   )
@@ -146,8 +147,8 @@ function CaseBlock({ title, text }) {
 
 function CaseSection({ title, entries }) {
   return (
-    <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-2xl font-bold tracking-tight text-slate-950">{title}</h2>
+    <section className="case-study-section mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <h2 className="case-study-heading text-2xl font-bold tracking-tight text-slate-950">{title}</h2>
       <div className="mt-6 grid gap-6 md:grid-cols-3">
         {entries.map(({ title, text }) => (
           <div key={title} className="border-t border-slate-200 pt-4">
@@ -160,11 +161,10 @@ function CaseSection({ title, entries }) {
   )
 }
 
-
 function PipelineDiagram({ stages }) {
   return (
-    <figure className="mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
-      <figcaption className="text-2xl font-bold tracking-tight">How data reaches the reports</figcaption>
+    <figure className="case-study-pipeline mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
+      <figcaption><h2 className="case-study-heading text-2xl font-bold tracking-tight">How data reaches the reports</h2></figcaption>
       <ol className="mt-6 grid gap-8 lg:grid-cols-4">
         {stages.map(({ title, detail, logo }, index) => (
           <li key={title} className="relative rounded-2xl border border-white/15 bg-slate-900 p-5">
@@ -185,31 +185,33 @@ function PipelineDiagram({ stages }) {
 
 function ResultsTable({ rows }) {
   return (
-    <section aria-labelledby="case-study-results" className="mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
-      <h2 id="case-study-results" className="text-2xl font-bold tracking-tight text-slate-950">Results by team</h2>
-      <table aria-labelledby="case-study-results" className="mt-5 w-full table-fixed border-collapse text-left text-xs leading-5 text-slate-700 sm:text-sm sm:leading-6">
-        <colgroup>
-          <col className="w-[26%] sm:w-1/5" />
-          <col className="w-[37%] sm:w-2/5" />
-          <col className="w-[37%] sm:w-2/5" />
-        </colgroup>
-        <thead className="bg-blue-50 text-slate-950">
-          <tr>
-            {['Team', 'What we delivered', 'How they use it'].map(label => (
-              <th key={label} scope="col" className="px-2 py-3 sm:px-4">{label}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(({ area, delivered, use }) => (
-            <tr key={area} className="border-b border-slate-200 align-top last:border-0">
-              <th scope="row" className="wrap-break-word px-2 py-3 font-semibold text-slate-950 sm:px-4">{area}</th>
-              <td className="px-2 py-3 sm:px-4">{delivered}</td>
-              <td className="px-2 py-3 sm:px-4">{use}</td>
+    <section aria-labelledby="case-study-results" className="case-study-results mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
+      <h2 id="case-study-results" className="case-study-heading text-2xl font-bold tracking-tight text-slate-950">Results by team</h2>
+      <div className="case-study-table" role="region" aria-labelledby="case-study-results" tabIndex={0}>
+        <table aria-labelledby="case-study-results" className="mt-5 w-full table-fixed border-collapse text-left text-xs leading-5 text-slate-700 sm:text-sm sm:leading-6">
+          <colgroup>
+            <col className="w-[26%] sm:w-1/5" />
+            <col className="w-[37%] sm:w-2/5" />
+            <col className="w-[37%] sm:w-2/5" />
+          </colgroup>
+          <thead className="bg-blue-50 text-slate-950">
+            <tr>
+              {['Team', 'What we delivered', 'How they use it'].map(label => (
+                <th key={label} scope="col" className="px-2 py-3 sm:px-4">{label}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map(({ area, delivered, use }) => (
+              <tr key={area} className="border-b border-slate-200 align-top last:border-0">
+                <th scope="row" className="wrap-break-word px-2 py-3 font-semibold text-slate-950 sm:px-4">{area}</th>
+                <td className="px-2 py-3 sm:px-4">{delivered}</td>
+                <td className="px-2 py-3 sm:px-4">{use}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   )
 }
