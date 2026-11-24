@@ -17,7 +17,7 @@ export default function Hero() {
         <div className="motion-orbit h-3 w-3 rounded-full bg-emerald-300 shadow-lg shadow-emerald-300/40" />
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-[100rem] gap-10 px-5 py-14 sm:px-8 lg:gap-12 lg:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div className="relative grid w-full gap-10 px-5 py-14 sm:px-8 lg:gap-12 lg:py-24 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
         <div>
           <h1 className="max-w-4xl text-4xl font-extrabold tracking-tight text-white md:text-6xl">
             Business advisory, operational improvement, and technology implementation
@@ -60,7 +60,7 @@ export default function Hero() {
 
           <div className="rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-blue-950/40 backdrop-blur-xl">
             <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/90 p-5">
-              <div className="mb-6 flex items-center justify-between">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <div className="text-sm font-bold text-white">
                     Business Control Dashboard

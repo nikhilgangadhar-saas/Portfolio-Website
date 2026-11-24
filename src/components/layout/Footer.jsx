@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-blue-500/15 blur-3xl" />
       <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
 
-      <div className="relative mx-auto w-full max-w-[100rem] px-5 sm:px-8 py-10">
+      <div className="relative w-full px-5 sm:px-8 py-10">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-3">

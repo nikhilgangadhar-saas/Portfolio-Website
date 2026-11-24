@@ -20,7 +20,7 @@ export default function ProductCategories() {
 
   return (
     <section aria-labelledby="home-offerings-title" className="bg-slate-950 text-white">
-      <div className="mx-auto w-full max-w-[100rem] px-5 py-10 sm:px-8 lg:py-12">
+      <div className="w-full px-5 py-10 sm:px-8 lg:py-12">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h2 id="home-offerings-title" className="text-3xl font-extrabold tracking-tight md:text-5xl">Products &amp; Solutions</h2>
           <Button to="/products" variant="glass">View all products</Button>

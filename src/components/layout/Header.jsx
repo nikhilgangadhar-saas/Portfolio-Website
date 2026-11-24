@@ -40,7 +40,7 @@ export default function Header() {
       ref={headerRef}
       className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl"
     >
-      <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-4 px-5 py-3 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+      <div className="flex w-full items-center justify-between gap-4 px-5 py-3 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
         <Link to="/" onClick={closeMenu} className="min-w-0 lg:justify-self-start">
           <div className="flex items-center gap-3">
             <BrandMark size="header" />

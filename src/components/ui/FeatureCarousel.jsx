@@ -20,32 +20,27 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
   useEffect(() => {
     const track = carousel.current
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    let frame
-    let lastTime
-    let remainder = 0
-
-    function advance(time) {
-      const elapsed = Math.min(time - (lastTime ?? time), 40)
-      lastTime = time
-
-      if (!reducedMotion.matches && !document.hidden && !dialog.current?.open &&
-          (resumedAfterDialog.current || !track.matches(':focus-visible, :has(:focus-visible)')) && !gesture.current) {
-        const loopWidth = track.children[items.length].offsetLeft
-        let position = track.scrollLeft
-        if (position >= loopWidth * 2) position -= loopWidth
-        if (position < loopWidth) position += loopWidth
-
-        remainder += elapsed * 0.036
-        const distance = Math.floor(remainder)
-        remainder -= distance
-        track.scrollLeft = position + distance
+    const timer = window.setInterval(() => {
+      if (reducedMotion.matches || document.hidden || dialog.current?.open || gesture.current ||
+          (!resumedAfterDialog.current && track.matches(':focus-visible, :has(:focus-visible)'))) {
+        return
       }
 
-      frame = window.requestAnimationFrame(advance)
-    }
+      const firstRepeatedCard = track.children[items.length]
+      if (!firstRepeatedCard) return
 
-    frame = window.requestAnimationFrame(advance)
-    return () => window.cancelAnimationFrame(frame)
+      const loopWidth = firstRepeatedCard.offsetLeft
+      if (!loopWidth) return
+
+      const position = track.scrollLeft
+      const wraps = Math.floor((position + 1) / loopWidth)
+      const normalizedPosition = Math.max(0, position - wraps * loopWidth)
+      const nextCard = Array.from(track.children).find((card) => card.offsetLeft > normalizedPosition + 1)
+      if (wraps) track.scrollTo({ left: normalizedPosition, behavior: 'instant' })
+      if (nextCard) track.scrollTo({ left: nextCard.offsetLeft, behavior: 'smooth' })
+    }, 4000)
+
+    return () => window.clearInterval(timer)
   }, [items.length])
 
   useEffect(() => {
@@ -71,6 +66,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
     const track = event.currentTarget
     if (!suppressClick.current) {
       suppressClick.current = true
+      track.dataset.dragging = ''
       track.setPointerCapture(event.pointerId)
     }
     track.scrollLeft = active.left - distance
@@ -79,6 +75,16 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
   function endDrag(event) {
     if (gesture.current?.pointer !== event.pointerId) return
     gesture.current = null
+
+    const track = event.currentTarget
+    if (track.dataset.dragging === undefined) return
+
+    const position = track.scrollLeft
+    const nearestCard = Array.from(track.children).reduce((nearest, card) =>
+      Math.abs(card.offsetLeft - position) < Math.abs(nearest.offsetLeft - position) ? card : nearest,
+    )
+    delete track.dataset.dragging
+    track.scrollTo({ left: nearestCard.offsetLeft, behavior: 'instant' })
   }
 
   function preventDragClick(event) {
@@ -91,7 +97,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
 
   return (
     <section aria-labelledby={`${id}-title`} className="bg-[#f4f7fb]">
-      <div className="mx-auto w-full max-w-[100rem] px-5 py-8 sm:px-8 lg:py-10">
+      <div className="w-full px-5 py-8 sm:px-8 lg:py-10">
         <h2 id={`${id}-title`} className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
           {heading}
         </h2>
@@ -112,13 +118,13 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
           }}
           onClickCapture={preventDragClick}
           onDragStart={(event) => event.preventDefault()}
-          className="relative mt-5 grid cursor-grab auto-cols-[88%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[46%] lg:auto-cols-[31%]"
+          className="relative mt-5 grid cursor-grab auto-cols-[100%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory data-[dragging]:snap-none select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[calc((100%-0.75rem)/2)] lg:auto-cols-[calc((100%-1.5rem)/3)]"
         >
           {[...items, ...items, ...items, ...items].map((service, index) => {
             const { title, description, focus } = service
             const duplicate = index >= items.length
             return (
-              <li id={duplicate ? undefined : service.id} key={index} aria-hidden={duplicate || undefined} className={`relative flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-500 ${light ? "border-slate-300 bg-white text-slate-950" : "border-slate-700 bg-slate-900 text-white"}`}>
+              <li id={duplicate ? undefined : service.id} key={index} aria-hidden={duplicate || undefined} className={`relative flex min-w-0 snap-start flex-col overflow-hidden rounded-2xl border transition-colors hover:border-slate-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-slate-500 ${light ? "border-slate-300 bg-white text-slate-950" : "border-slate-700 bg-slate-900 text-white"}`}>
                 <header className={`flex min-h-24 items-center justify-center border-b px-5 py-4 text-center ${light ? "border-slate-200 bg-slate-100" : "border-white/15 bg-slate-800"}`}>
                   <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
                 </header>
