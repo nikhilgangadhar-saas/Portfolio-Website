@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 
-export default function FeatureCarousel({ id, heading, items, actionLabel, allLink, allLinkLabel = 'View all case studies', light = false }) {
+export default function FeatureCarousel({ id, heading, items, renderCardLogos, actionLabel, allLink, allLinkLabel = 'View all case studies', light = false }) {
   const carousel = useRef(null)
   const gesture = useRef(null)
   const suppressClick = useRef(false)
@@ -137,7 +137,8 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
                 </header>
                 <p className={`flex-1 px-5 py-4 text-base leading-6 ${light ? "text-slate-700" : "text-slate-300"}`}>{description}</p>
                 <footer className={`border-t px-5 py-3 text-center ${light ? "border-slate-200 bg-slate-50 text-slate-700" : "border-white/15 bg-slate-950 text-slate-300"}`}>
-                  <span className="text-sm font-medium">{focus}</span>
+                  <span className={renderCardLogos ? 'text-sm font-semibold' : 'text-sm font-medium'}>{focus}</span>
+                  {renderCardLogos?.(service)}
                 </footer>
                 <button
                   type="button"

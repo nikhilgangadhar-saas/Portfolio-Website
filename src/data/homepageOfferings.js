@@ -1,3 +1,5 @@
+import { applications } from './applications'
+
 export const offerings = [
   {
     id: 'documents-templates',
@@ -35,29 +37,37 @@ export const services = [
     title: 'Business Analysis & Strategy',
     description: 'We assess markets, customers, and competitors to help you decide which opportunities to pursue. We turn that research into a SWOT analysis, clear priorities, and a go-to-market plan.',
     focus: 'Market research · SWOT · Go-to-market',
+    logos: { files: ['ppt.png', 'excel.png'] },
   },
   {
     id: 'operations-sops-audit',
     title: 'Operations, SOPs & Audit',
     description: 'We map how work moves through your business, identify gaps in inventory controls and approvals, and document who owns each step. We build SOPs and audit plans your team can use to check that controls are working.',
     focus: 'Inventory controls · SOPs · Internal audit',
+    logos: { files: ['word.png', 'pdf.png', 'WhatsApp.png'], apps: ['internal-audit'] },
   },
   {
     id: 'azure-data-erp-reporting',
     title: 'Azure Data & ERP Reporting',
     description: 'We connect ERP data to Azure databases and pipelines, then build reporting for finance, sales, inventory, and operations. We can deliver reports and alerts in dashboards, WhatsApp, Microsoft Teams, or Slack.',
     focus: 'Azure databases · Data pipelines · Reporting',
+    logos: { files: ['Azure.png', 'sql.png', 'adf.png', 'pbi.png', 'WhatsApp.png', 'Database.png'] },
   },
   {
     id: 'custom-business-applications',
     title: 'Custom Business Applications',
     description: 'We build and deploy applications around the way your teams work. Examples include HR onboarding, learning and development, audit action tracking, and approval workflows.',
     focus: 'HR onboarding · Learning & development · Audit',
+    logos: {
+      files: ['Python.png', 'JavaScript.png', 'Azure.png', 'Git.png'],
+      apps: applications.map(({ id }) => id),
+    },
   },
   {
     id: 'enterprise-ai-agents',
     title: 'Enterprise AI Agents',
     description: 'We build AI agents that use ERP data to answer business questions, flag exceptions, and guide teams through defined workflows. We design them around a specific use case and the data each team is allowed to access.',
     focus: 'ERP data · Exception monitoring · Workflow support',
+    logos: { files: ['Microsoft.png', 'SAP.png', 'WhatsApp.png', 'Outlook.png'] },
   },
 ].map((service) => ({ ...service, href: `/services/${service.id}` }))
