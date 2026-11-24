@@ -1,11 +1,10 @@
-ErrorDocument 503 /coming-soon.html
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  RewriteRule ^coming-soon\.html$ - [L]
-  RewriteRule ^(?:assets|downloads|api)(?:/|$) - [L]
-  RewriteRule ^(?:favicon\.svg|icons\.svg|robots\.txt|sitemap\.xml)$ - [L]
-  RewriteRule ^ - [R=503,L]
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^ index.html [L]
 </IfModule>
