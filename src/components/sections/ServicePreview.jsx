@@ -8,7 +8,7 @@ export default function ServicePreview() {
       id="home-services"
       heading="How we help"
       items={services}
-      renderCardLogos={({ logos }) => <ServiceLogos logos={logos} className="mt-3 justify-center" />}
+      renderLogos={({ logos }) => <ServiceLogos logos={logos} className="justify-center" />}
       actionLabel="View service"
       allLink="/services"
       allLinkLabel="View all services"
