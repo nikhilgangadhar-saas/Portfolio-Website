@@ -20,27 +20,44 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
   useEffect(() => {
     const track = carousel.current
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const timer = window.setInterval(() => {
-      if (reducedMotion.matches || document.hidden || dialog.current?.open || gesture.current ||
-          (!resumedAfterDialog.current && track.matches(':focus-visible, :has(:focus-visible)'))) {
+    let frame
+    let previousTime
+    let remainder = 0
+
+    function advance(time) {
+      frame = window.requestAnimationFrame(advance)
+      const elapsed = Math.min(time - (previousTime ?? time), 40)
+      previousTime = time
+
+      if (document.hidden || dialog.current?.open || gesture.current) return
+
+      if (reducedMotion.matches || (!resumedAfterDialog.current && track.matches(':focus-visible, :has(:focus-visible)'))) {
+        delete track.dataset.moving
         return
       }
 
-      const firstRepeatedCard = track.children[items.length]
-      if (!firstRepeatedCard) return
-
-      const loopWidth = firstRepeatedCard.offsetLeft
+      const loopWidth = track.children[items.length]?.offsetLeft
       if (!loopWidth) return
 
-      const position = track.scrollLeft
-      const wraps = Math.floor((position + 1) / loopWidth)
-      const normalizedPosition = Math.max(0, position - wraps * loopWidth)
-      const nextCard = Array.from(track.children).find((card) => card.offsetLeft > normalizedPosition + 1)
-      if (wraps) track.scrollTo({ left: normalizedPosition, behavior: 'instant' })
-      if (nextCard) track.scrollTo({ left: nextCard.offsetLeft, behavior: 'smooth' })
-    }, 4000)
+      // Scroll snap would pull each animation frame back to the nearest card.
+      if (track.dataset.moving === undefined) track.dataset.moving = ''
 
-    return () => window.clearInterval(timer)
+      remainder += elapsed * 0.036
+      const distance = Math.floor(remainder)
+      if (!distance) return
+      remainder -= distance
+
+      let position = track.scrollLeft
+      if (position >= loopWidth * 2) position -= loopWidth
+      if (position < loopWidth) position += loopWidth
+      track.scrollLeft = position + distance
+    }
+
+    frame = window.requestAnimationFrame(advance)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      delete track.dataset.moving
+    }
   }, [items.length])
 
   useEffect(() => {
@@ -66,7 +83,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
     const track = event.currentTarget
     if (!suppressClick.current) {
       suppressClick.current = true
-      track.dataset.dragging = ''
+      track.dataset.moving = ''
       track.setPointerCapture(event.pointerId)
     }
     track.scrollLeft = active.left - distance
@@ -75,16 +92,6 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
   function endDrag(event) {
     if (gesture.current?.pointer !== event.pointerId) return
     gesture.current = null
-
-    const track = event.currentTarget
-    if (track.dataset.dragging === undefined) return
-
-    const position = track.scrollLeft
-    const nearestCard = Array.from(track.children).reduce((nearest, card) =>
-      Math.abs(card.offsetLeft - position) < Math.abs(nearest.offsetLeft - position) ? card : nearest,
-    )
-    delete track.dataset.dragging
-    track.scrollTo({ left: nearestCard.offsetLeft, behavior: 'instant' })
   }
 
   function preventDragClick(event) {
@@ -118,7 +125,7 @@ export default function FeatureCarousel({ id, heading, items, actionLabel, allLi
           }}
           onClickCapture={preventDragClick}
           onDragStart={(event) => event.preventDefault()}
-          className="relative mt-5 grid cursor-grab auto-cols-[100%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory data-[dragging]:snap-none select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[calc((100%-0.75rem)/2)] lg:auto-cols-[calc((100%-1.5rem)/3)]"
+          className="relative mt-5 grid cursor-grab auto-cols-[100%] grid-flow-col gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory data-[moving]:snap-none select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-slate-500 active:cursor-grabbing sm:auto-cols-[calc((100%-0.75rem)/2)] lg:auto-cols-[calc((100%-1.5rem)/3)]"
         >
           {[...items, ...items, ...items, ...items].map((service, index) => {
             const { title, description, focus } = service
