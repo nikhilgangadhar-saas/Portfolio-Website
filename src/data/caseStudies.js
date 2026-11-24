@@ -33,11 +33,17 @@ export const caseStudies = [
       { title: 'Fixing a slow monthly drill-down', text: 'Distribution’s detailed monthly profit and loss view failed while the yearly view loaded. We traced the failure to an expensive SQL execution plan and corrected it. The detailed monthly view then loaded successfully.' },
     ],
     tools: ['SAP Business One', 'SQL Server', 'Azure Data Factory', 'Azure SQL', 'T-SQL', 'Python / FastAPI', 'Azure Container Apps'],
-    impact: [
-      'Finance could review profit and loss, balance sheet, and cash-flow reports for both businesses, with drill-down to source entries.',
-      'Inventory teams gained scheduled views of stock movements, batch activity, stock on hand, and purchase order status.',
-      'Sales and production reporting could use a common reporting layer, reducing reliance on individual SAP exports.',
-      'Administrators could check whether scheduled refreshes succeeded from within the reporting application.',
+    pipeline: [
+      { title: 'SAP Business One', detail: 'On-premises manufacturing and distribution data', logo: 'SAP.png' },
+      { title: 'Azure Data Factory', detail: 'Scheduled extraction and refresh', logo: 'adf.png' },
+      { title: 'Azure SQL', detail: 'Reporting tables, views, and stored procedures', logo: 'sql.png' },
+      { title: 'Reporting app', detail: 'Business reports, drill-downs, and pipeline monitoring', logo: 'WebReports.png' },
+    ],
+    results: [
+      { area: 'Finance', delivered: 'Profit and loss, balance sheet, and cash flow reports for both businesses', use: 'Drill from a statement line into accounts and source journal entries.' },
+      { area: 'Inventory and procurement', delivered: 'Inventory movements, batch activity, stock snapshots, and purchase order tracking', use: 'Review stock and open orders using data refreshed twice daily.' },
+      { area: 'Sales and production', delivered: 'A shared reporting layer fed by SAP', use: 'Review sales trends and build production reporting with fewer manual exports.' },
+      { area: 'Administration', delivered: 'Azure Data Factory run status inside the reporting app', use: 'Check whether scheduled refreshes succeeded and identify failed runs.' },
     ],
   },
   {
