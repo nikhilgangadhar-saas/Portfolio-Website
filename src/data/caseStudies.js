@@ -1,3 +1,5 @@
+import { services } from './homepageOfferings'
+
 export const caseStudies = [
   {
     slug: 'operational-audit-control-roadmap',
@@ -14,20 +16,18 @@ export const caseStudies = [
   },
   {
     slug: 'sap-b1-to-azure-data-warehouse',
-    title: 'SAP B1 to Azure Data Warehouse',
+    title: 'From On-Premises SAP Business One to Azure Reporting',
     tag: 'Data Engineering',
-    summary:
-      'Built a reporting-ready data warehouse layer from SAP Business One using SQL, pipelines, and structured reporting models.',
-    problem:
-      'Management reporting was dependent on SAP extracts, manual Excel files, and repeated data preparation work.',
-    solution:
-      'Designed a structured Azure SQL reporting layer fed from SAP B1 data, with domain schemas, fact tables, and reporting-ready views.',
-    tools: ['SAP Business One', 'SQL Server', 'Azure SQL', 'ADF', 'Power BI'],
+    summary: 'We rebuilt a failing data pipeline for a manufacturing and distribution business and created a shared Azure SQL reporting layer for finance, sales, inventory, and production.',
+    problem: 'SAP Business One ran on premises, and the existing data pipeline was failing. Teams depended on SAP exports and Excel files to prepare recurring reports. We reviewed the pipeline, the available SAP data, and the reports teams needed to run the business.',
+    plan: 'We planned the work around reporting priorities and the SAP tables each report needed. We defined which records to bring into Azure, how to identify changes, and which totals to reconcile against SAP before making each report available.',
+    solution: 'We used Azure Data Factory to load on-premises SAP Business One data into Azure SQL on a schedule. We built SQL models and reporting views for each business area, used incremental loads for inventory movements, and published warehouse snapshots and purchase order tracking. We built finance reporting from account, opening balance, and journal data.',
+    tools: ['SAP Business One', 'SQL Server', 'Azure SQL', 'Azure Data Factory', 'Power BI'],
     impact: [
-      'Reduced dependency on manual SAP extracts',
-      'Created a stable reporting layer for management reports',
-      'Improved consistency across sales, inventory, payment, and production reporting',
-      'Prepared the foundation for automation and dashboarding',
+      'Finance could review profit and loss, balance sheet, and cash flow reporting from a common source.',
+      'Sales reporting supported trend analysis, and inventory teams could review movements, snapshots, and purchasing activity.',
+      'Production reporting and scheduled report delivery reduced reliance on manual SAP extracts.',
+      'Pipeline run monitoring gave administrators a way to check refresh status and spot failures.',
     ],
   },
   {
@@ -107,3 +107,26 @@ export const caseStudies = [
 export function getCaseStudy(slug) {
   return caseStudies.find((study) => study.slug === slug)
 }
+
+const serviceCaseStudyMap = [
+  { serviceId: 'business-analysis-strategy', title: 'Profitability & Assortment Across Retail, Wholesale and E-commerce', description: 'Channel profitability and the customer, product, and market data behind assortment decisions.' },
+  { serviceId: 'operations-sops-audit', slug: 'operational-audit-control-roadmap' },
+  { serviceId: 'azure-data-erp-reporting', slug: 'sap-b1-to-azure-data-warehouse', published: true },
+  { serviceId: 'custom-business-applications', slug: 'incident-observation-management-app' },
+  { serviceId: 'enterprise-ai-agents', title: 'Sequence BI · Business Q&A Over Company Data', description: 'A walkthrough of how an agent answers business questions using company data.' },
+]
+
+export const serviceCaseStudies = serviceCaseStudyMap.map(({ serviceId, slug, title, description, published }) => {
+  const service = services.find(({ id }) => id === serviceId)
+  const study = getCaseStudy(slug)
+  return {
+    id: `case-study-${serviceId}`,
+    serviceHref: service.href,
+    title: study?.title ?? title,
+    description: study?.summary ?? description,
+    focus: service.title,
+    status: published ? undefined : 'Case study coming soon',
+    href: published ? `/case-studies/${slug}` : service.href,
+    actionLabel: published ? 'Read the case study' : 'View service',
+  }
+})

@@ -1,10 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import Button from '../components/ui/Button'
-import { getCaseStudy } from '../data/caseStudies'
+import { getCaseStudy, serviceCaseStudies } from '../data/caseStudies'
 
 export default function CaseStudyDetail() {
   const { caseStudySlug } = useParams()
   const study = getCaseStudy(caseStudySlug)
+  const service = serviceCaseStudies.find(({ href }) => href === `/case-studies/${caseStudySlug}`)
 
   if (!study) {
     return (
@@ -49,9 +50,9 @@ export default function CaseStudyDetail() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button to="/contact">Discuss Similar Work</Button>
-              <Button to="/case-studies" variant="glass">
-                View All Case Studies
-              </Button>
+              {service && (
+                <Button to={service.serviceHref} variant="glass">View service</Button>
+              )}
             </div>
           </div>
         </div>
@@ -64,8 +65,9 @@ export default function CaseStudyDetail() {
 
         <div className="relative mx-auto max-w-7xl px-5 py-16">
           <div className="grid gap-6 lg:grid-cols-2">
-            <CaseBlock title="Business Problem" text={study.problem} />
-            <CaseBlock title="Solution Built" text={study.solution} />
+            <CaseBlock title={study.plan ? "What we found" : "Business problem"} text={study.problem} />
+            {study.plan && <CaseBlock title="How we planned the work" text={study.plan} />}
+            <CaseBlock title="What we built" text={study.solution} />
           </div>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
@@ -88,7 +90,7 @@ export default function CaseStudyDetail() {
 
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
               <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Business Impact
+                What it enabled
               </div>
 
               <div className="mt-5 grid gap-3">
@@ -111,12 +113,11 @@ export default function CaseStudyDetail() {
                   Want to build something similar?
                 </h2>
                 <p className="mt-4 max-w-2xl text-slate-300">
-                  Share the problem. I can help define the SOP, data model,
-                  reporting layer, app workflow, or implementation path.
+                  Tell us what your team needs to improve and how you work today.
                 </p>
               </div>
 
-              <Button to="/contact">Discuss Your Problem</Button>
+              <Button to="/contact">Discuss a project</Button>
             </div>
           </div>
         </div>

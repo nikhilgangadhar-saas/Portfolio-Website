@@ -60,7 +60,10 @@ export default function AzureReportingPitch() {
             <Link to="/services" className="text-sm font-semibold text-slate-300 underline underline-offset-4 hover:text-white">All services</Link>
             <h1 className="mt-5 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl">Azure Data &amp; ERP Reporting</h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">Give teams reliable access to the ERP data they need. See how we’d scope your project and what we built for a manufacturing and distribution business using SAP Business One.</p>
-            <Button to="/contact" variant="light" className="mt-6">Discuss a similar project</Button>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button to="/case-studies/sap-b1-to-azure-data-warehouse" variant="light">Read the case study</Button>
+              <Button to="/contact" variant="glass">Discuss a similar project</Button>
+            </div>
           </div>
           <ul aria-label="Core project technologies" className="grid grid-cols-2 gap-2 rounded-2xl border border-white/15 bg-white/5 p-3">
             {technologies.map(([name, file]) => (

@@ -135,7 +135,7 @@ export default function FeatureCarousel({ id, heading, items, renderLogos, actio
                 <header className={`flex min-h-24 items-center justify-center border-b px-5 py-4 text-center ${light ? "border-slate-200 bg-slate-100" : "border-white/15 bg-slate-800"}`}>
                   <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
                 </header>
-                <p className={`flex-1 px-5 py-4 text-base leading-6 ${light ? "text-slate-700" : "text-slate-300"}`}>{description}</p>
+                <p className={`flex-1 px-5 py-4 text-base leading-6 ${light ? "text-slate-700" : "text-slate-300"}`}>{description}{service.status && <span className="mt-3 block text-sm font-medium">{service.status}</span>}</p>
                 <footer className={`space-y-3 border-t px-5 py-3 text-center ${light ? "border-slate-200 bg-slate-50 text-slate-700" : "border-white/15 bg-slate-950 text-slate-300"}`}>
                   <span className={renderLogos ? 'block text-sm font-semibold' : 'text-sm font-medium'}>{focus}</span>
                   {renderLogos?.(service)}
@@ -172,11 +172,12 @@ export default function FeatureCarousel({ id, heading, items, renderLogos, actio
               <div className="space-y-4 p-5 sm:p-6">
                 <p className="text-base leading-7 text-slate-700">{selectedItem.details ?? selectedItem.description}</p>
                 <p className="text-sm font-semibold text-slate-900">{selectedItem.focus}</p>
+                {selectedItem.status && <p className="text-sm text-slate-600">{selectedItem.status}</p>}
                 {renderLogos?.(selectedItem)}
               </div>
               <footer className="border-t border-slate-200 bg-slate-50 p-5 text-center sm:px-6">
                 <Button to={selectedItem.href ?? "/contact"} variant="dark" className="focus-visible:outline-2 focus-visible:outline-offset-2">
-                  {actionLabel}
+                  {selectedItem.actionLabel ?? actionLabel}
                 </Button>
               </footer>
             </div>
