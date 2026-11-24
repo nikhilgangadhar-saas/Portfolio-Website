@@ -51,7 +51,7 @@ export default function CaseStudyDetail() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button to="/contact">Discuss Similar Work</Button>
               {service && (
-                <Button to={service.serviceHref} variant="glass">View service</Button>
+                <Button to={service.serviceHref} variant="glass">View {service.focus} service</Button>
               )}
             </div>
           </div>
@@ -69,6 +69,9 @@ export default function CaseStudyDetail() {
             {study.plan && <CaseBlock title="How we planned the work" text={study.plan} />}
             <CaseBlock title="What we built" text={study.solution} />
           </div>
+
+          {study.delivery && <CaseSection title="What we delivered" entries={study.delivery} />}
+          {study.challenges && <CaseSection title="Challenges and how we handled them" entries={study.challenges} />}
 
           <div className="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
@@ -90,7 +93,7 @@ export default function CaseStudyDetail() {
 
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
               <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                What it enabled
+                Results
               </div>
 
               <div className="mt-5 grid gap-3">
@@ -134,5 +137,21 @@ function CaseBlock({ title, text }) {
       </div>
       <p className="mt-5 text-base leading-7 text-slate-700">{text}</p>
     </div>
+  )
+}
+
+function CaseSection({ title, entries }) {
+  return (
+    <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <h2 className="text-2xl font-bold tracking-tight text-slate-950">{title}</h2>
+      <div className="mt-6 grid gap-6 md:grid-cols-3">
+        {entries.map(({ title, text }) => (
+          <div key={title} className="border-t border-slate-200 pt-4">
+            <h3 className="font-semibold text-slate-950">{title}</h3>
+            <p className="mt-2 leading-7 text-slate-700">{text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }
