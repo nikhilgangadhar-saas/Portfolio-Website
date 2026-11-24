@@ -3,6 +3,10 @@ import AssetLogo from '../components/ui/AssetLogo'
 import Button from '../components/ui/Button'
 import { getCaseStudy, serviceCaseStudies } from '../data/caseStudies'
 
+const panelClass = 'min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7'
+const headingClass = 'text-xl font-bold tracking-tight text-slate-950 sm:text-2xl'
+const bodyClass = 'text-base leading-7 text-slate-700'
+
 export default function CaseStudyDetail() {
   const { caseStudySlug } = useParams()
   const study = getCaseStudy(caseStudySlug)
@@ -26,14 +30,13 @@ export default function CaseStudyDetail() {
       <section className="relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0 bg-premium-grid opacity-70" />
         <div className="motion-blob-one absolute -left-32 top-10 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
-        <div className="motion-blob-two absolute right-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <div className="relative mx-auto max-w-7xl px-5 py-12 sm:px-8 md:py-16">
           <Link
             to="/case-studies"
-            className="mb-5 inline-block text-sm font-semibold text-blue-300 hover:text-blue-200"
+            className="mb-6 inline-block text-sm font-semibold text-blue-300 hover:text-blue-200"
           >
-            ← Back to Case Studies
+            ← Back to case studies
           </Link>
 
           <div className="max-w-4xl">
@@ -50,7 +53,7 @@ export default function CaseStudyDetail() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button to="/contact">Discuss Similar Work</Button>
+              <Button to="/contact">Discuss similar work</Button>
               {service && (
                 <Button to={service.serviceHref} variant="glass">View {service.focus} service</Button>
               )}
@@ -59,12 +62,8 @@ export default function CaseStudyDetail() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#f4f7fb]">
-        <div className="absolute inset-0 bg-soft-grid opacity-70" />
-        <div className="absolute -left-32 top-40 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
-        <div className="absolute right-0 bottom-40 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-5 py-16">
+      <div className="bg-slate-50">
+        <div className="mx-auto max-w-7xl space-y-6 px-5 py-10 sm:px-8 sm:py-14">
           <div className={`grid gap-6 ${study.plan ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
             <CaseBlock title={study.plan ? "What we found" : "Business problem"} text={study.problem} />
             {study.plan && <CaseBlock title="How we planned the work" text={study.plan} />}
@@ -77,49 +76,35 @@ export default function CaseStudyDetail() {
 
           {study.results && <ResultsTable rows={study.results} />}
 
-          <div className={`mt-8 grid gap-6 ${study.impact ? "lg:grid-cols-[0.8fr_1.2fr]" : ""}`}>
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Tools Used
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                {study.tools.map((tool) => (
-                  <span
-                    key={tool}
-                    className="rounded-full border border-slate-200 bg-[#f4f7fb] px-3 py-1 text-xs font-semibold text-slate-700"
-                  >
+          <div className={`grid gap-6 ${study.impact ? 'lg:grid-cols-[0.8fr_1.2fr]' : ''}`}>
+            <section className={panelClass}>
+              <h2 className={headingClass}>Tools used</h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {study.tools.map(tool => (
+                  <li key={tool} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
                     {tool}
-                  </span>
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </section>
 
-            {study.impact && <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-              <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-                Results
-              </div>
-
-              <div className="mt-5 grid gap-3">
-                {study.impact.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <div className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400" />
-                    <div className="text-sm leading-6 text-slate-700">
-                      {item}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>}
+            {study.impact && (
+              <section className={panelClass}>
+                <h2 className={headingClass}>Results</h2>
+                <ul className={`mt-4 list-disc space-y-2 pl-5 marker:text-blue-600 ${bodyClass}`}>
+                  {study.impact.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              </section>
+            )}
           </div>
 
-          <div className="mt-12 rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-900/20 md:p-12">
+          <div className="rounded-2xl bg-slate-950 p-5 text-white sm:p-7">
             <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                <h2 className="text-3xl font-extrabold">
+                <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
                   Want to build something similar?
                 </h2>
-                <p className="mt-4 max-w-2xl text-slate-300">
+                <p className="mt-3 max-w-2xl leading-7 text-slate-300">
                   Tell us what your team needs to improve and how you work today.
                 </p>
               </div>
@@ -128,29 +113,27 @@ export default function CaseStudyDetail() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </>
   )
 }
 
 function CaseBlock({ title, text }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-900/5">
-      <div className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-        {title}
-      </div>
-      <p className="mt-5 text-base leading-7 text-slate-700">{text}</p>
-    </div>
+    <section className={panelClass}>
+      <h2 className={headingClass}>{title}</h2>
+      <p className={`mt-3 ${bodyClass}`}>{text}</p>
+    </section>
   )
 }
 
 function CaseSection({ title, entries }) {
   return (
-    <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-2xl font-bold tracking-tight text-slate-950">{title}</h2>
+    <section className={panelClass}>
+      <h2 className={headingClass}>{title}</h2>
       <div className="mt-6 grid gap-6 md:grid-cols-3">
         {entries.map(({ title, text }) => (
-          <div key={title} className="border-t border-slate-200 pt-4">
+          <div key={title} className="border-t border-blue-100 pt-4">
             <h3 className="font-semibold text-slate-950">{title}</h3>
             <p className="mt-2 leading-7 text-slate-700">{text}</p>
           </div>
@@ -160,21 +143,20 @@ function CaseSection({ title, entries }) {
   )
 }
 
-
 function PipelineDiagram({ stages }) {
   return (
-    <figure className="mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
-      <figcaption className="text-2xl font-bold tracking-tight">How data reaches the reports</figcaption>
+    <figure className={panelClass}>
+      <figcaption><h2 className={headingClass}>How data reaches the reports</h2></figcaption>
       <ol className="mt-6 grid gap-8 lg:grid-cols-4">
         {stages.map(({ title, detail, logo }, index) => (
-          <li key={title} className="relative rounded-2xl border border-white/15 bg-slate-900 p-5">
-            <div className="mb-4 grid size-11 place-items-center rounded-lg bg-white p-2">
+          <li key={title} className="relative min-w-0 rounded-xl border border-blue-100 bg-blue-50/50 p-4">
+            <div className="mb-4 grid size-11 place-items-center rounded-lg border border-blue-100 bg-white p-2">
               <AssetLogo file={logo} className="size-full object-contain" />
             </div>
-            <h3 className="font-semibold">{title}</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{detail}</p>
+            <h3 className="font-semibold text-slate-950">{title}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{detail}</p>
             {index < stages.length - 1 && (
-              <span aria-hidden="true" className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-2xl leading-8 text-blue-300 lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-auto lg:translate-x-[calc(100%+0.25rem)] lg:-translate-y-1/2 lg:-rotate-90">↓</span>
+              <span aria-hidden="true" className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-2xl leading-8 text-blue-700 lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-auto lg:translate-x-[calc(100%+0.25rem)] lg:-translate-y-1/2 lg:-rotate-90">↓</span>
             )}
           </li>
         ))}
@@ -185,9 +167,9 @@ function PipelineDiagram({ stages }) {
 
 function ResultsTable({ rows }) {
   return (
-    <section aria-labelledby="case-study-results" className="mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
-      <h2 id="case-study-results" className="text-2xl font-bold tracking-tight text-slate-950">Results by team</h2>
-      <table aria-labelledby="case-study-results" className="mt-5 w-full table-fixed border-collapse text-left text-xs leading-5 text-slate-700 sm:text-sm sm:leading-6">
+    <section aria-labelledby="case-study-results" className={panelClass}>
+      <h2 id="case-study-results" className={headingClass}>Results by team</h2>
+      <table aria-labelledby="case-study-results" className="mt-5 w-full table-fixed wrap-break-word border-collapse text-left text-xs leading-5 text-slate-700 sm:text-sm sm:leading-6">
         <colgroup>
           <col className="w-[26%] sm:w-1/5" />
           <col className="w-[37%] sm:w-2/5" />
@@ -202,7 +184,7 @@ function ResultsTable({ rows }) {
         </thead>
         <tbody>
           {rows.map(({ area, delivered, use }) => (
-            <tr key={area} className="border-b border-slate-200 align-top last:border-0">
+            <tr key={area} className="border-b border-slate-200 align-top even:bg-slate-50 last:border-0">
               <th scope="row" className="wrap-break-word px-2 py-3 font-semibold text-slate-950 sm:px-4">{area}</th>
               <td className="px-2 py-3 sm:px-4">{delivered}</td>
               <td className="px-2 py-3 sm:px-4">{use}</td>
