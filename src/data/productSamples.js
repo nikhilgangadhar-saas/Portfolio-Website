@@ -27,6 +27,8 @@ export const productSamples = {
       "slug": "stock-reconciliation-template",
       "name": "Stock Count & Reconciliation Workbook",
       "description": "Compare book stock against a physical count and review variances.",
+      "workflow": "Enter expected book units and counted units by SKU, review the variance, and record a disposition such as a recount or investigation. The sample shows the workflow with an illustrative SKU.",
+      "requirements": "Microsoft Excel or a compatible XLSX editor, a book-stock extract, and physical count quantities using the same units of measure.",
       "format": "XLSX",
       "file": "/downloads/stock-reconciliation-template-sample.xlsx"
     },
@@ -34,6 +36,8 @@ export const productSamples = {
       "slug": "inventory-ageing-template",
       "name": "Inventory Ageing Workbook",
       "description": "Group inventory by days since receipt.",
+      "workflow": "Enter the receipt date and an as-of date to review days held and the ageing bucket for each stock line. Use the view to identify older stock for follow-up.",
+      "requirements": "Microsoft Excel or a compatible XLSX editor, SKU-level receipt dates from an inventory report, and a reporting date.",
       "format": "XLSX",
       "file": "/downloads/inventory-ageing-template-sample.xlsx"
     },
@@ -41,6 +45,8 @@ export const productSamples = {
       "slug": "internal-audit-action-tracker",
       "name": "Audit Action Tracker",
       "description": "Track owners, due dates, and evidence for follow-up.",
+      "workflow": "Log findings, assign owners and due dates, update their status, and record the evidence needed for follow-up or closure.",
+      "requirements": "Microsoft Excel or a compatible XLSX editor, a list of audit findings, named action owners, and access to supporting evidence.",
       "format": "XLSX",
       "file": "/downloads/internal-audit-action-tracker-sample.xlsx"
     }

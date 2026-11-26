@@ -26,8 +26,8 @@ export const offerings = [
     id: 'business-applications',
     title: 'Business Applications',
     enquiry: 'Tell us which app you are interested in, who will use it, and which workflow you want to cover. You can request a walkthrough or discuss a custom deployment.',
-    description: 'We build and deploy applications for people operations, internal audit, and business controls.',
-    examples: ['an HR application for onboarding, learning and development', 'an Audit & Control App for findings, actions, and follow-up'],
+    description: 'Explore applications for hiring and training employees, running audits and tracking corrective actions, and getting on-demand reports from ERP data.',
+    examples: ['HR - People Review', 'Internal Audit and Control', 'Sequence BI'],
   },
 ]
 

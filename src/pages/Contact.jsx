@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Button from '../components/ui/Button'
+import { useSearchParams } from 'react-router-dom'
+import { productSamples } from '../data/productSamples'
 import { trackEvent } from '../lib/analytics'
 
 const contactReasons = [
@@ -40,13 +41,19 @@ const nextSteps = [
 ]
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    country: '',
-    reason: 'Advisory Call',
-    message: '',
+  const [searchParams] = useSearchParams()
+  const [formData, setFormData] = useState(() => {
+    const purchaseSlug = searchParams.get('product')
+    const product = Object.values(productSamples).flat().find(({ slug }) => slug === purchaseSlug)
+
+    return {
+      name: '',
+      email: '',
+      company: '',
+      country: '',
+      reason: product ? 'Product Access' : 'Advisory Call',
+      message: product ? `I'd like pricing and purchase details for ${product.name}.` : '',
+    }
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)

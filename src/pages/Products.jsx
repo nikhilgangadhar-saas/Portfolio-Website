@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ApplicationLogo from '../components/ui/ApplicationLogo'
 import { applications } from '../data/applications'
 import AssetLogo from '../components/ui/AssetLogo'
@@ -29,8 +29,12 @@ const technologies = [
 ]
 
 export default function Products() {
-  const announcement = useRef(null)
-  const [selectedApp, setSelectedApp] = useState('')
+  const appDialog = useRef(null)
+  const [selectedApp, setSelectedApp] = useState(null)
+
+  useEffect(() => {
+    if (selectedApp && !appDialog.current.open) appDialog.current.showModal()
+  }, [selectedApp])
 
   return (
     <>
@@ -77,33 +81,29 @@ export default function Products() {
 
           <article id="business-applications" className="flex scroll-mt-24 flex-col rounded-2xl bg-slate-900 p-6 text-white sm:p-8 md:col-span-3">
             <h2 className="text-2xl font-bold tracking-tight">Business Applications</h2>
-            <p className="mt-3 flex-1 leading-7 text-slate-300">Explore software for people operations, audit and control, and business intelligence. We can help scope and implement a solution for your workflow.</p>
+            <p className="mt-3 max-w-3xl leading-7 text-slate-300">Hire and train staff, run audits and close corrective actions, or get reports from your ERP data. Select an application to see what it does and discuss how it could fit your workflow.</p>
             <div className="my-5 grid gap-3 md:grid-cols-3">
               {applications.map((application) => {
-                const { name, description, href } = application
-                const Logo = href ? 'a' : 'button'
+                const { id, name, description } = application
                 return (
-                  <div key={name} className="flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                  <button
+                    key={id}
+                    type="button"
+                    aria-haspopup="dialog"
+                    onClick={() => setSelectedApp(application)}
+                    className="flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 text-center transition hover:border-white/60 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
                     <ApplicationLogo
-                      as={Logo}
                       application={application}
-                      {...(href ? { href } : {
-                        type: 'button',
-                        'aria-haspopup': 'dialog',
-                        onClick: () => {
-                          setSelectedApp(name)
-                          announcement.current.showModal()
-                        },
-                      })}
-                      aria-label={name}
-                      className="size-[128px] gap-1 rounded-xl text-3xl transition hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2"
+                      aria-hidden="true"
+                      className="size-[128px] gap-1 rounded-xl text-3xl"
                       suffixClassName="text-sm"
                     />
-                    <div>
-                      <p className="text-sm font-semibold">{name}</p>
-                      <p className="mt-0.5 text-sm leading-5 text-slate-300">{description}</p>
-                    </div>
-                  </div>
+                    <span>
+                      <span className="block text-sm font-semibold">{name}</span>
+                      <span className="mt-0.5 block text-sm leading-5 text-slate-300">{description}</span>
+                    </span>
+                  </button>
                 )
               })}
             </div>
@@ -114,16 +114,31 @@ export default function Products() {
         </div>
       </section>
 
-      <dialog ref={announcement} aria-labelledby="app-announcement-title" onClick={(event) => {
-        if (event.target === event.currentTarget) event.currentTarget.close()
-      }} className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-2xl bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65">
-        <div className="p-6">
-          <h2 id="app-announcement-title" className="text-2xl font-bold">{selectedApp}</h2>
-          <p className="mt-2 text-slate-700">Product site coming soon.</p>
-          <form method="dialog" className="mt-5">
-            <button className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100">Close</button>
-          </form>
-        </div>
+      <dialog
+        ref={appDialog}
+        aria-labelledby="application-dialog-title"
+        aria-describedby="application-dialog-overview"
+        onClose={() => setSelectedApp(null)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) event.currentTarget.close()
+        }}
+        className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto rounded-2xl bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65"
+      >
+        {selectedApp && (
+          <div className="p-5 sm:p-7">
+            <div className="flex items-center gap-4">
+              <ApplicationLogo application={selectedApp} aria-hidden="true" className="size-18 gap-1 rounded-xl text-xl" suffixClassName="text-xs" />
+              <h2 id="application-dialog-title" className="text-2xl font-bold">{selectedApp.name}</h2>
+            </div>
+            <p id="application-dialog-overview" className="mt-4 leading-7 text-slate-700">{selectedApp.overview}</p>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
+              {selectedApp.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button to="/contact" variant="dark">Discuss a Project</Button>
+            </div>
+          </div>
+        )}
       </dialog>
     </>
   )

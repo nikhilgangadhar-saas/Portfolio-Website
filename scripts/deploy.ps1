@@ -33,6 +33,7 @@ Copy-Item -Path "dist\*" -Destination $tempDeploy -Recurse -Force
 
 New-Item -ItemType Directory -Path "$tempDeploy\api" -Force | Out-Null
 Copy-Item -Path "api\submit-lead.php" -Destination "$tempDeploy\api\submit-lead.php" -Force
+Copy-Item -Path "api\request-sample.php" -Destination "$tempDeploy\api\request-sample.php" -Force
 Copy-Item -Path "api\config.example.php" -Destination "$tempDeploy\api\config.example.php" -Force
 
 @"
