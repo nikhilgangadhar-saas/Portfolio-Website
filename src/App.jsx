@@ -21,7 +21,7 @@ export default function App() {
   const navigationType = useNavigationType()
 
   useLayoutEffect(() => {
-    if (hash && (pathname === '/products' || pathname === '/services/azure-data-erp-reporting')) {
+    if (hash && (pathname === '/products' || pathname.startsWith('/services/') || pathname.startsWith('/case-studies/'))) {
       document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' })
       return
     }

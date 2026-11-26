@@ -86,7 +86,7 @@ export default function AzureReportingPitch() {
       <header className="azure-service-hero bg-slate-950 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 px-5 py-10 text-white sm:px-8 sm:py-16">
         <div className={`${contentClass} relative grid items-center gap-10 lg:grid-cols-[1fr_19rem]`}>
           <div className="azure-pitch-intro">
-            <Link to="/services" className="text-sm font-semibold text-slate-300 underline underline-offset-4 hover:text-white">All services</Link>
+            <Link to="/services" className="inline-block text-sm font-semibold text-blue-300 hover:text-blue-200">← Back to Services</Link>
             <h1 className="mt-5 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl">Azure Data &amp; ERP Reporting</h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">Bring data from ERP systems, spreadsheets, and business apps into Azure. We build and operate pipelines that turn source data into reports, dashboards, application data, and scheduled updates.</p>
             <div className="mt-6 flex flex-wrap gap-3">

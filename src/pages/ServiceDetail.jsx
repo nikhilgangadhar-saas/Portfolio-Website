@@ -2,6 +2,10 @@ import { useParams } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import { services } from '../data/homepageOfferings'
 import AzureReportingPitch from '../components/sections/AzureReportingPitch'
+import OperationsAuditService from '../components/sections/OperationsAuditService'
+import BusinessApplicationsService from '../components/sections/BusinessApplicationsService'
+import BusinessStrategyService from '../components/sections/BusinessStrategyService'
+import EnterpriseAgentsService from '../components/sections/EnterpriseAgentsService'
 import NotFound from './NotFound'
 
 export default function ServiceDetail() {
@@ -10,6 +14,10 @@ export default function ServiceDetail() {
 
   if (!service) return <NotFound />
   if (serviceId === 'azure-data-erp-reporting') return <AzureReportingPitch />
+  if (serviceId === 'operations-sops-audit') return <OperationsAuditService />
+  if (serviceId === 'custom-business-applications') return <BusinessApplicationsService caseStudyHref="/case-studies/incident-observation-management-app" />
+  if (serviceId === 'business-analysis-strategy') return <BusinessStrategyService />
+  if (serviceId === 'enterprise-ai-agents') return <EnterpriseAgentsService />
 
   return (
     <section className="bg-slate-100 px-5 py-12 text-slate-950 sm:px-8 lg:py-20">

@@ -1,6 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import AssetLogo from '../components/ui/AssetLogo'
 import Button from '../components/ui/Button'
+import OperationsTimeline from '../components/sections/OperationsTimeline'
+import OperationsSectionNav from '../components/sections/OperationsSectionNav'
 import { getCaseStudy, serviceCaseStudies } from '../data/caseStudies'
 import './case-study-detail.css'
 
@@ -22,6 +24,15 @@ export default function CaseStudyDetail() {
     )
   }
 
+  const sectionLinks = [
+    ['pipeline', study.pipelineLabel ?? 'Pipeline'],
+    ...(study.showOperationsTimeline ? [['project-timeline', 'Timeline']] : []),
+    ['delivery', 'Delivery'],
+    ...(study.challenges ? [['challenges', study.challengesTitle ?? 'Challenges']] : []),
+    ...(study.traceability ? [['traceability', 'Traceability']] : []),
+    ['case-study-results', 'Results'],
+  ]
+
   return (
     <div className={study.pipeline ? "azure-case-study" : undefined}>
       <section className="case-study-hero relative overflow-hidden bg-slate-950 text-white">
@@ -38,7 +49,7 @@ export default function CaseStudyDetail() {
           </Link>
 
           <div className="max-w-4xl">
-            {study.slug !== 'sap-b1-to-azure-data-warehouse' && (
+            {study.tag && study.slug !== 'sap-b1-to-azure-data-warehouse' && (
               <div className="mb-4 inline-flex rounded-full border border-blue-300/25 bg-blue-400/10 px-4 py-2 text-sm font-bold text-blue-200">
                 {study.tag}
               </div>
@@ -62,15 +73,7 @@ export default function CaseStudyDetail() {
         </div>
       </section>
 
-      {study.client && (
-        <nav aria-label="On this page" className="border-b border-slate-200 bg-white">
-          <ul className="mx-auto flex max-w-7xl flex-wrap gap-x-6 gap-y-2 px-5 py-4">
-            {[['pipeline', 'Pipeline'], ['delivery', 'Delivery'], ['challenges', 'Challenges'], ['case-study-results', 'Results']].map(([id, label]) => (
-              <li key={id}><a className="text-sm font-semibold text-blue-800 hover:underline" href={'#' + id}>{label}</a></li>
-            ))}
-          </ul>
-        </nav>
-      )}
+      {study.client && <OperationsSectionNav sections={sectionLinks} wide />}
 
       <section className="case-study-body relative overflow-hidden bg-[#f4f7fb]">
         <div className="absolute inset-0 bg-soft-grid opacity-70" />
@@ -81,18 +84,16 @@ export default function CaseStudyDetail() {
           {study.client && (
             <section className="grid gap-5 rounded-3xl bg-blue-100 p-6 sm:p-8 lg:grid-cols-[1.25fr_1fr]">
               <div>
-                <h2 className="case-study-heading">A manufacturing and distribution business</h2>
+                <h2 className="case-study-heading">{study.clientTitle}</h2>
                 <CaseCopy text={study.client} className="mt-3" />
               </div>
               <dl className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white p-4">
-                  <dt className="text-sm font-semibold text-blue-950">SAP company databases</dt>
-                  <dd className="mt-2 text-3xl font-bold text-blue-900">2</dd>
-                </div>
-                <div className="rounded-2xl bg-white p-4">
-                  <dt className="text-sm font-semibold text-blue-950">Inventory and procurement refresh</dt>
-                  <dd className="mt-2 text-2xl font-bold text-blue-900">Twice daily</dd>
-                </div>
+                {study.facts.map(([label, value]) => (
+                  <div key={label} className="rounded-2xl bg-white p-4">
+                    <dt className="text-sm font-semibold text-blue-950">{label}</dt>
+                    <dd className="mt-2 text-2xl font-bold text-blue-900">{value}</dd>
+                  </div>
+                ))}
               </dl>
             </section>
           )}
@@ -103,9 +104,36 @@ export default function CaseStudyDetail() {
             <CaseBlock title="What we built" text={study.solution} />
           </div>
 
-          {study.pipeline && <PipelineDiagram stages={study.pipeline} />}
+          {study.pipeline && <PipelineDiagram stages={study.pipeline} title={study.pipelineTitle} />}
+          {study.showOperationsTimeline && <OperationsTimeline caseStudy />}
           {study.delivery && <CaseSection id="delivery" title="What we delivered" entries={study.delivery} />}
-          {study.challenges && <CaseSection id="challenges" title="Challenges and how we handled them" entries={study.challenges} />}
+          {study.challenges && <CaseSection id="challenges" title={study.challengesTitle ?? "Challenges and how we handled them"} entries={study.challenges} />}
+
+          {study.traceability && (
+            <section id="traceability" aria-labelledby="traceability-heading" className="case-study-results scroll-mt-24 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
+              <h2 id="traceability-heading" className="case-study-heading">{study.traceabilityTitle ?? 'How evidence shaped the SOP'}</h2>
+              <div role="region" aria-labelledby="traceability-heading" tabIndex={0} className="case-study-table">
+                <table aria-labelledby="traceability-heading" className="w-full table-fixed border-collapse text-left text-sm leading-6">
+                  <thead className="text-slate-950">
+                    <tr>
+                      <th scope="col" className="w-1/3 p-3">Input or evidence</th>
+                      <th scope="col" className="w-1/3 p-3">Project artifact</th>
+                      <th scope="col" className="p-3">Decision or outcome</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {study.traceability.map(([input, artifact, outcome]) => (
+                      <tr key={input} className="align-top">
+                        <th scope="row" className="p-3 font-semibold text-slate-950">{input}</th>
+                        <td className="p-3 text-slate-700">{artifact}</td>
+                        <td className="p-3 text-slate-700">{outcome}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
 
           {study.results && <ResultsTable rows={study.results} />}
 
@@ -204,10 +232,10 @@ function CaseSection({ id, title, entries }) {
   )
 }
 
-function PipelineDiagram({ stages }) {
+function PipelineDiagram({ stages, title = 'How data reaches the reports' }) {
   return (
     <figure id="pipeline" className="case-study-pipeline scroll-mt-24 mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
-      <figcaption><h2 className="case-study-heading text-2xl font-bold tracking-tight">How data reaches the reports</h2></figcaption>
+      <figcaption><h2 className="case-study-heading text-2xl font-bold tracking-tight">{title}</h2></figcaption>
       <ol className="mt-6 grid gap-8 lg:grid-cols-4">
         {stages.map(({ title, detail, logo }, index) => (
           <li key={title} className="relative rounded-2xl border border-white/15 bg-slate-900 p-5">
