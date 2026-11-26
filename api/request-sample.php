@@ -94,21 +94,60 @@ try {
     }
 
     $boundary = 'ng-' . bin2hex(random_bytes(16));
+    $alternative = $boundary . '-body';
     $type = substr($filename, -5) === '.xlsx'
         ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    $text = "Hello,\r\n\r\nYour requested sample is attached.\r\n\r\n"
+    $contactUrl = "https://nikhilgangadhar.com/contact?product=$slug";
+    $text = "Your sample is ready\r\n\r\n"
         . "$title\r\n$description\r\n\r\n"
-        . "This sample uses illustrative data and is intended to preview the workflow. "
-        . "Open it with a compatible Office editor.\r\n\r\n"
-        . "For pricing or access to the full version, visit:\r\n"
-        . "https://nikhilgangadhar.com/contact?product=$slug\r\n\r\n"
+        . "Open the attached file in a compatible Office editor. It contains illustrative data so you can try the workflow before using your own records.\r\n\r\n"
+        . "Ask about pricing and access to the full version:\r\n$contactUrl\r\n\r\n"
         . "NG Advisory Co.\r\n";
+    $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $safeDescription = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+    $safeFilename = htmlspecialchars($filename, ENT_QUOTES, 'UTF-8');
+    $safeContactUrl = htmlspecialchars($contactUrl, ENT_QUOTES, 'UTF-8');
+    $html = <<<HTML
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;background:#eef3f9;color:#0f172a;font-family:Arial,sans-serif">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#eef3f9">
+    <tr><td align="center" style="padding:24px 12px">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#ffffff;border:1px solid #dbe5f1">
+        <tr><td style="padding:22px 24px;background:#102442;color:#ffffff;font-size:16px;font-weight:bold">NG Advisory Co.</td></tr>
+        <tr><td style="padding:26px 24px">
+          <h1 style="margin:0 0 12px;font-size:26px;line-height:1.2">Your sample is ready</h1>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#334155">Open the attached file in a compatible Office editor to try the workflow with illustrative data.</p>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f0f6ff;border-left:4px solid #2563eb">
+            <tr><td style="padding:16px">
+              <h2 style="margin:0 0 6px;font-size:17px;line-height:1.4">$safeTitle</h2>
+              <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:#334155">$safeDescription</p>
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#475569;word-break:break-word">$safeFilename</p>
+            </td></tr>
+          </table>
+          <p style="margin:20px 0 12px;font-size:15px;line-height:1.6;color:#334155">Need the full version? Contact us for pricing and access.</p>
+          <a href="$safeContactUrl" style="display:inline-block;background:#102442;color:#ffffff;padding:12px 16px;text-decoration:none;font-size:14px;font-weight:bold">Ask About the Full Version</a>
+        </td></tr>
+        <tr><td style="padding:16px 24px;border-top:1px solid #dbe5f1;font-size:12px;line-height:1.5;color:#475569">You received this email because a sample was requested on our website.</td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+HTML;
+    $html = str_replace(["\r\n", "\r"], "\n", $html);
+    $html = str_replace("\n", "\r\n", $html);
     $headers = "From: NG Advisory Co. <no-reply@nikhilgangadhar.com>\r\n"
         . "MIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=\"$boundary\"";
-    $message = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\n"
+    $message = "--$boundary\r\nContent-Type: multipart/alternative; boundary=\"$alternative\"\r\n\r\n"
+        . "--$alternative\r\nContent-Type: text/plain; charset=UTF-8\r\n"
         . "Content-Transfer-Encoding: quoted-printable\r\n\r\n"
         . quoted_printable_encode($text) . "\r\n"
+        . "--$alternative\r\nContent-Type: text/html; charset=UTF-8\r\n"
+        . "Content-Transfer-Encoding: quoted-printable\r\n\r\n"
+        . quoted_printable_encode($html) . "\r\n--$alternative--\r\n"
         . "--$boundary\r\nContent-Type: $type; name=\"$filename\"\r\n"
         . "Content-Disposition: attachment; filename=\"$filename\"\r\n"
         . "Content-Transfer-Encoding: base64\r\n\r\n"
