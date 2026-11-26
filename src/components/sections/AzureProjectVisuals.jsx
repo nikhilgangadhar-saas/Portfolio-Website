@@ -27,15 +27,15 @@ const phases = [
 ]
 
 const warehouseFlow = [
-  ['SAP Business One', 'Source transactions and master data', 'SAP.png'],
-  ['Azure Data Factory', 'Scheduled extraction and loading', 'adf.png'],
-  ['Azure SQL', 'Curated warehouse and reporting views', 'sql.png'],
+  ['Source systems', 'Microsoft Dynamics, SAP, Excel, Zoho, Odoo, and other sources', 'Database.png'],
+  ['Azure Data Factory', 'Scheduled extraction, loading, and workflow orchestration', 'adf.png'],
+  ['Azure SQL', 'Validated data models and reporting views', 'sql.png'],
 ]
 
 const delivery = [
-  ['Power BI', 'Management dashboards', 'pbi.png'],
-  ['Web reports', 'Operational reports and drill-downs', 'WebReports.png'],
-  ['Logic Apps', 'Scheduled email distribution', 'LogicApps.png'],
+  ['Power BI or Tableau', 'Dashboards from the reporting database', 'pbi.png'],
+  ['Websites and apps', 'Reports and drill-downs served through views or APIs', 'WebReports.png'],
+  ['Email and WhatsApp', 'Scheduled reports and alerts', 'LogicApps.png'],
 ]
 
 export function AzureArchitecture() {
@@ -50,7 +50,7 @@ export function AzureArchitecture() {
         </ul>
       </div>
       <figcaption className="mt-5 border-t border-white/15 pt-4 text-sm text-slate-300">
-        SAP data flows through Data Factory into Azure SQL. The warehouse feeds dashboards, web reports, and scheduled email.
+        Example Azure setup using Data Factory to load source data and Azure SQL to serve curated data to delivery channels.
       </figcaption>
     </figure>
   )

@@ -19,6 +19,7 @@ export const caseStudies = [
     title: 'From On-Premises SAP Business One to Azure Reporting',
     tag: 'Data Engineering',
     summary: 'We rebuilt a failing data pipeline for a manufacturing and distribution business and created a shared Azure SQL reporting layer for finance, sales, inventory, and production.',
+    client: 'The client ran manufacturing and distribution operations. Each side had its own SAP Business One company database. Finance needed statements it could reconcile to SAP, while operations needed to trace stock by item, warehouse, and batch.',
     problem: [
       'SAP Business One ran on premises, and the existing data pipeline was failing.',
       'Finance and operations teams fell back on SAP exports and Excel to prepare recurring reports.',

@@ -49,7 +49,7 @@ export const services = [
   {
     id: 'azure-data-erp-reporting',
     title: 'Azure Data & ERP Reporting',
-    description: 'We connect ERP data to Azure databases and pipelines, then build reporting for finance, sales, inventory, and operations. We can deliver reports and alerts in dashboards, WhatsApp, Microsoft Teams, or Slack.',
+    description: 'We bring ERP, spreadsheet, and application data into Azure, then build pipelines and reporting for finance, sales, inventory, and operations. We can serve that data through dashboards, web apps, and scheduled reports or alerts.',
     focus: 'Azure databases · Data pipelines · Reporting',
     logos: { files: ['Azure.png', 'sql.png', 'adf.png', 'pbi.png', 'WhatsApp.png', 'Database.png'] },
   },

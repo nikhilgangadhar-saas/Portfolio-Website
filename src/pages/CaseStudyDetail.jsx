@@ -62,12 +62,41 @@ export default function CaseStudyDetail() {
         </div>
       </section>
 
+      {study.client && (
+        <nav aria-label="On this page" className="border-b border-slate-200 bg-white">
+          <ul className="mx-auto flex max-w-7xl flex-wrap gap-x-6 gap-y-2 px-5 py-4">
+            {[['pipeline', 'Pipeline'], ['delivery', 'Delivery'], ['challenges', 'Challenges'], ['case-study-results', 'Results']].map(([id, label]) => (
+              <li key={id}><a className="text-sm font-semibold text-blue-800 hover:underline" href={'#' + id}>{label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
       <section className="case-study-body relative overflow-hidden bg-[#f4f7fb]">
         <div className="absolute inset-0 bg-soft-grid opacity-70" />
         <div className="absolute -left-32 top-40 h-80 w-80 rounded-full bg-blue-200/35 blur-3xl" />
         <div className="absolute right-0 bottom-40 h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
 
         <div className="case-study-content relative mx-auto max-w-7xl px-5 py-16">
+          {study.client && (
+            <section className="grid gap-5 rounded-3xl bg-blue-100 p-6 sm:p-8 lg:grid-cols-[1.25fr_1fr]">
+              <div>
+                <h2 className="case-study-heading">A manufacturing and distribution business</h2>
+                <CaseCopy text={study.client} className="mt-3" />
+              </div>
+              <dl className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl bg-white p-4">
+                  <dt className="text-sm font-semibold text-blue-950">SAP company databases</dt>
+                  <dd className="mt-2 text-3xl font-bold text-blue-900">2</dd>
+                </div>
+                <div className="rounded-2xl bg-white p-4">
+                  <dt className="text-sm font-semibold text-blue-950">Inventory and procurement refresh</dt>
+                  <dd className="mt-2 text-2xl font-bold text-blue-900">Twice daily</dd>
+                </div>
+              </dl>
+            </section>
+          )}
+
           <div className={`case-study-overview grid gap-6 ${study.plan ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
             <CaseBlock title={study.plan ? "What we found" : "Business problem"} text={study.problem} />
             {study.plan && <CaseBlock title="How we planned the work" text={study.plan} />}
@@ -75,8 +104,8 @@ export default function CaseStudyDetail() {
           </div>
 
           {study.pipeline && <PipelineDiagram stages={study.pipeline} />}
-          {study.delivery && <CaseSection title="What we delivered" entries={study.delivery} />}
-          {study.challenges && <CaseSection title="Challenges and how we handled them" entries={study.challenges} />}
+          {study.delivery && <CaseSection id="delivery" title="What we delivered" entries={study.delivery} />}
+          {study.challenges && <CaseSection id="challenges" title="Challenges and how we handled them" entries={study.challenges} />}
 
           {study.results && <ResultsTable rows={study.results} />}
 
@@ -159,13 +188,13 @@ function CaseCopy({ text, className }) {
   )
 }
 
-function CaseSection({ title, entries }) {
+function CaseSection({ id, title, entries }) {
   return (
-    <section className="case-study-section mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+    <section id={id} className="case-study-section scroll-mt-24 mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <h2 className="case-study-heading text-2xl font-bold tracking-tight text-slate-950">{title}</h2>
       <div className="mt-6 grid gap-6 md:grid-cols-3">
         {entries.map(({ title, text }) => (
-          <div key={title} className="border-t border-slate-200 pt-4">
+          <div key={title} className="rounded-2xl bg-slate-50 p-4">
             <h3 className="font-semibold text-slate-950">{title}</h3>
             <CaseCopy text={text} className="mt-2" />
           </div>
@@ -177,7 +206,7 @@ function CaseSection({ title, entries }) {
 
 function PipelineDiagram({ stages }) {
   return (
-    <figure className="case-study-pipeline mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
+    <figure id="pipeline" className="case-study-pipeline scroll-mt-24 mt-8 rounded-3xl bg-slate-950 p-6 text-white sm:p-8">
       <figcaption><h2 className="case-study-heading text-2xl font-bold tracking-tight">How data reaches the reports</h2></figcaption>
       <ol className="mt-6 grid gap-8 lg:grid-cols-4">
         {stages.map(({ title, detail, logo }, index) => (
@@ -200,7 +229,7 @@ function PipelineDiagram({ stages }) {
 function ResultsTable({ rows }) {
   return (
     <section aria-labelledby="case-study-results" className="case-study-results mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
-      <h2 id="case-study-results" className="case-study-heading text-2xl font-bold tracking-tight text-slate-950">Results by team</h2>
+      <h2 id="case-study-results" className="case-study-heading scroll-mt-24 text-2xl font-bold tracking-tight text-slate-950">Results by team</h2>
       <div className="case-study-table" role="region" aria-labelledby="case-study-results" tabIndex={0}>
         <table aria-labelledby="case-study-results" className="mt-5 w-full table-fixed border-collapse text-left text-xs leading-5 text-slate-700 sm:text-sm sm:leading-6">
           <colgroup>
