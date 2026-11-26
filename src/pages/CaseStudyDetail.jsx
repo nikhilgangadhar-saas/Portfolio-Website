@@ -38,9 +38,11 @@ export default function CaseStudyDetail() {
           </Link>
 
           <div className="max-w-4xl">
-            <div className="mb-4 inline-flex rounded-full border border-blue-300/25 bg-blue-400/10 px-4 py-2 text-sm font-bold text-blue-200">
-              {study.tag}
-            </div>
+            {study.slug !== 'sap-b1-to-azure-data-warehouse' && (
+              <div className="mb-4 inline-flex rounded-full border border-blue-300/25 bg-blue-400/10 px-4 py-2 text-sm font-bold text-blue-200">
+                {study.tag}
+              </div>
+            )}
 
             <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
               {study.title}
