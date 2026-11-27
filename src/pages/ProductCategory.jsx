@@ -13,7 +13,7 @@ const topics = {
   'approval-matrix-template': 'Approvals',
   'stock-reconciliation-template': 'Inventory',
   'inventory-ageing-template': 'Inventory',
-  'internal-audit-action-tracker': 'Audit',
+  'inventory-movement-workbook': 'Inventory',
 }
 
 export default function ProductCategory() {
@@ -53,6 +53,14 @@ function AssetLibrary({ category }) {
         <Link to="/products" className="font-semibold text-blue-900 hover:underline">All products &amp; solutions</Link>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight">{category.title}</h1>
         <p className="mt-3 max-w-2xl text-slate-700">{category.description}</p>
+
+        <section aria-labelledby="request-asset-title" className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-5">
+          <div>
+            <h2 id="request-asset-title" className="font-bold text-blue-950">Can’t find what you need?</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-700">Tell us what you’re looking for or ask about a version tailored to your workflow.</p>
+          </div>
+          <Link to="/contact" className={primaryAction}>Get in Touch</Link>
+        </section>
 
         <div className="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 sm:grid-cols-[2fr_1fr_1fr]">
           <label className="grid gap-2 text-sm font-semibold">
@@ -102,7 +110,7 @@ function AssetLibrary({ category }) {
         onClick={(event) => {
           if (event.target === event.currentTarget) event.currentTarget.close()
         }}
-        className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg overflow-auto rounded-2xl bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65"
+        className="m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-2xl overflow-auto rounded-2xl bg-white text-slate-950 shadow-2xl backdrop:bg-slate-950/65"
       >
         {offer && (
           <div className="p-5 sm:p-7">
@@ -124,6 +132,7 @@ function AssetLibrary({ category }) {
                 </div>
               </dl>
             )}
+            {offer.product.sheets && <WorkbookDetails product={offer.product} />}
             {offer.mode === 'sample' && (
               <SampleRequest product={offer.product} onSent={() => trackProductAction('sample_email_sent', offer.product)} />
             )}
@@ -141,6 +150,29 @@ function AssetLibrary({ category }) {
         )}
       </dialog>
     </section>
+  )
+}
+
+function WorkbookDetails({ product }) {
+  return (
+    <div className="mt-5 space-y-4 text-sm leading-6 text-slate-700">
+      <section>
+        <h3 className="font-bold text-slate-950">Sheets in the current workbook</h3>
+        <dl className="mt-2">
+          {product.sheets.map(([name, detail]) => (
+            <div key={name}>
+              <dt className="font-semibold text-slate-950">{name}</dt>
+              <dd>{detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      <section className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+        <h3 className="font-bold text-blue-950">Current sample and full workbook</h3>
+        <p><strong>Sample.</strong> {product.sampleLimit ?? '12 input rows with illustrative records. Calculations cover those 12 rows.'}</p>
+        <p><strong>Full workbook.</strong> {product.fullLimit ?? '500 prepared input rows for your own data.'}</p>
+      </section>
+    </div>
   )
 }
 
@@ -171,16 +203,34 @@ function SampleRequest({ product, onSent }) {
         setStatus('error')
         return
       }
-      setStatus('ready')
-      if (result.newDelivery) onSent()
+      if (result.newDelivery) {
+        setStatus('sent')
+        onSent()
+      } else {
+        setStatus('already-sent')
+      }
     } catch {
       setMessage('Sample email is temporarily unavailable. Please try again later.')
       setStatus('error')
     }
   }
 
-  if (status === 'ready') {
-    return <p role="status" className="mt-5 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-950">{message}</p>
+  if (status === 'sent') {
+    return (
+      <div role="status" className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950">
+        <p className="font-bold">Sample email sent</p>
+        <p className="mt-1 text-sm">Check your inbox or spam folder for the attachment.</p>
+      </div>
+    )
+  }
+
+  if (status === 'already-sent') {
+    return (
+      <div role="status" className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-950">
+        <p className="font-bold">Already sent today</p>
+        <p className="mt-1 text-sm">No new email was sent. Check your inbox or spam folder for the earlier message.</p>
+      </div>
+    )
   }
 
   return (
@@ -191,7 +241,12 @@ function SampleRequest({ product, onSent }) {
         <input id="sample-email" name="email" type="email" autoComplete="email" aria-describedby="sample-email-help" required className="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2" />
         <button type="submit" disabled={status === 'pending'} className={`${primaryAction} disabled:opacity-60`}>{status === 'pending' ? 'Sending…' : 'Email Me the Sample'}</button>
       </div>
-      {status === 'error' && <p role="alert" className="mt-2 text-sm text-red-700">{message}</p>}
+      {status === 'error' && (
+        <div role="alert" className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-950">
+          <p className="font-bold">Couldn’t confirm a new send</p>
+          <p className="mt-1 text-sm">{message}</p>
+        </div>
+      )}
     </form>
   )
 }
