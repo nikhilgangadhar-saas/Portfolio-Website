@@ -21,6 +21,7 @@ $slug = is_string($body['product'] ?? null) ? $body['product'] : '';
 $samples = [
     'stock-reconciliation-template' => ['Stock Count & Reconciliation Workbook', 'stock-reconciliation-template-sample.xlsx', 'Compare book stock with your physical count and record how you plan to resolve each variance.'],
     'inventory-ageing-template' => ['Inventory Ageing Workbook', 'inventory-ageing-template-sample.xlsx', 'Review days held and ageing buckets from stock receipt dates and a reporting date.'],
+    'inventory-movement-workbook' => ['Inventory Movement Workbook', 'inventory-movement-workbook-sample.xlsx', 'Track receipts, issues, and warehouse transfers and calculate closing stock for a selected SKU and warehouse.'],
     'internal-audit-action-tracker' => ['Audit Action Tracker', 'internal-audit-action-tracker-sample.xlsx', 'Record findings, assign action owners and due dates, and track evidence through follow-up.'],
     'warehouse-sop-starter-pack' => ['Warehouse SOP Starter Pack', 'warehouse-sop-starter-pack-sample.docx', 'Review the checks and handoffs in a warehouse receiving procedure.'],
     'internal-audit-plan-checklist' => ['Internal Audit Plan & Checklist Pack', 'internal-audit-plan-checklist-sample.docx', 'See how to plan an audit and record evidence against each control.'],
